@@ -1,30 +1,33 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
+import StudentWarView from './views/StudentWarView.vue';
+import NavbarSide from './components/NavbarSide.vue';
 </script>
 
 <template>
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
-  </div>
-  <HelloWorld msg="Vite + Vue" />
+  <div class="app-container">
+    <div class="sidebar"><NavbarSide/></div>
+    <div class="main-item">
+      <StudentWarView/>
+
+    </div>
+</div>
 </template>
 
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+
+.app-container{
+  display: flex;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+
+.sidebar{
+  width: 25%;
+    margin-left: 3.5%;
+
 }
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
+
+.main-item{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  }
 </style>
