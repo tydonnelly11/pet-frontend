@@ -1,25 +1,30 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
 import LoginPageView from './views/LoginPageView.vue'
+import StudentWarView from './views/StudentWarView.vue';
+import NavbarSide from './components/NavbarSide.vue';
 </script>
 
 <template>
-  <LoginPageView></LoginPageView>
-  
-  
+  <div class="app-container">
+      <router-view> </router-view>
+    </div>
 </template>
 
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+
+.app-container{
+  display: flex;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+
+.sidebar{
+  width: 25%;
+    margin-left: 3.5%;
+
 }
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
+
+.main-item{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  }
 </style>

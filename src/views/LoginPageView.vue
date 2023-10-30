@@ -29,8 +29,13 @@ export default {
     },
     methods: {
         login() {
-            // Perform login logic here - Ty Donnelly
-            console.log('Logging in with email:', this.email, 'and password:', this.password);
+            this.$router.push('/home')
+    //         if (isAuthenticated) {
+    //             this.$router.push('/dashboard')
+    //         } else 
+    //         {
+    //             this.$router.push('/login')
+    //   }
         }
     }
 }
