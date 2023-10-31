@@ -29,7 +29,7 @@ export default {
     },
     methods: {
         login() {
-            this.$router.push('/home')
+            this.$router.push('/studenthome')
     //         if (isAuthenticated) {
     //             this.$router.push('/dashboard')
     //         } else 
@@ -43,7 +43,9 @@ export default {
 
 <style scoped>
 .login-container{
-
+    display: flex;
+    width: 50%;
+    flex-direction: column;
 }
 .form-container{
     display: flex;

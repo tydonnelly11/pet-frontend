@@ -3,7 +3,8 @@
         <div class="profile">
             Profile
         </div>
-        <TeamCarousel/>
+        <TeamCarousel/> <!--This might be moved to team page depending on how we want to do it, just can option for now-->
+                        <!--Could also be made a dropdown but idk-->
         <WarList/>
     </div>
 

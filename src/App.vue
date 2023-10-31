@@ -5,26 +5,15 @@ import NavbarSide from './components/NavbarSide.vue';
 </script>
 
 <template>
-  <div class="app-container">
-      <router-view> </router-view>
-    </div>
+      <router-view></router-view>
 </template>
 
 <style scoped>
 
 .app-container{
   display: flex;
+  justify-content: space-between;
 }
 
-.sidebar{
-  width: 25%;
-    margin-left: 3.5%;
 
-}
-
-.main-item{
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  }
 </style>

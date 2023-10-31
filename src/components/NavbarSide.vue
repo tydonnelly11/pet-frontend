@@ -7,7 +7,7 @@
       <router-link to="/StudentPeerEval" >PeerEval</router-link>
     </li>
     <li class="nav-item">
-      <router-link to="/home/StudentWAR" >War</router-link>
+      <router-link to="/studenthome/studentwar" >War</router-link>
     </li>
     <li class="nav-item flex-end" >
       <router-link to="/">Logout</router-link>
