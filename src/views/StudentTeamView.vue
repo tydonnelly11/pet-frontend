@@ -3,15 +3,30 @@
       <div class="profile">Team Profile</div>
       <div class="team-members">
         <div class="team-member">
-          <img src="src/img/detective.jpg" alt="Member 1" class="avatar" />
+            <img src="@/img/detective.jpg" alt="Member 1" class="avatar">
           <div class="name">John Doe</div>
         </div>
   
         <div class="team-member">
-          <img src="path-to-profile-pic2.jpg" alt="Member 2" class="avatar" />
-          <div class="name">Jane Smith</div>
+            <img src="@/img/detective.jpg" alt="Member 1" class="avatar">
+          <div class="name">Darth Vader</div>
         </div>
-  
+
+        <div class="team-member">
+            <img src="@/img/detective.jpg" alt="Member 1" class="avatar">
+          <div class="name">Batman</div>
+        </div>
+
+        <div class="team-member">
+            <img src="@/img/detective.jpg" alt="Member 1" class="avatar">
+          <div class="name">Iron Man</div>
+        </div>
+
+        <div class="team-member">
+            <img src="@/img/detective.jpg" alt="Member 1" class="avatar">
+          <div class="name">Spiderman</div>
+        </div>
+
         <!-- Add more team members as needed -->
     </div>
       <!-- <TeamCarousel /> -->
@@ -74,3 +89,49 @@
   }
   </style>
   
+<!-- 
+  For when backend is ready:
+  <template>
+  <div class="container">
+    <div class="profile">Team Profile</div>
+    <div class="team-members">
+      <div v-for="member in teamMembers" :key="member.id" class="team-member">
+        <img :src="member.avatar" :alt="member.name" class="avatar">
+        <div class="name">{{ member.name }}</div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import NavbarSide from '../components/NavbarSide.vue';
+
+export default {
+  name: 'StudentTeamView',
+  components: {
+    NavbarSide,
+  },
+  data() {
+    return {
+      teamMembers: [],
+    };
+  },
+  mounted() {
+    
+    fetch('https://team.member.url')
+      .then(response => response.json())
+      .then(data => {
+        this.teamMembers = data;
+      })
+      .catch(error => {
+        console.error('Error fetching team members:', error);
+      });
+  },
+};
+</script>
+
+<style scoped>
+existing styles
+</style>
+
+ -->
