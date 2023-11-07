@@ -3,7 +3,7 @@
       <div class="profile">Team Profile</div>
       <div class="team-members">
         <div class="team-member">
-          <img src="path-to-profile-pic1.jpg" alt="Member 1" class="avatar" />
+          <img src="src/img/detective.jpg" alt="Member 1" class="avatar" />
           <div class="name">John Doe</div>
         </div>
   
