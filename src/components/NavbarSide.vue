@@ -1,7 +1,7 @@
 <template>
     <ul class="nav nav-pills flex-column justify-content">
         <li class="nav-item">
-            <router-link to="/StudentTeam">Team</router-link>
+            <router-link to="/studenthome/team">Team</router-link>
         </li>
         <li class="nav-item">
             <router-link to="/StudentPeerEval">PeerEval</router-link>
