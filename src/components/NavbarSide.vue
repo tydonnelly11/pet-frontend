@@ -4,7 +4,9 @@
             <router-link to="/studenthome/team">Team</router-link>
         </li>
         <li class="nav-item">
-            <router-link to="/StudentPeerEval">PeerEval</router-link>
+            <router-link to="/studenthome/studentpeereval"
+                >PeerEval</router-link
+            >
         </li>
         <li class="nav-item">
             <router-link to="/studenthome/studentwar">War</router-link>
