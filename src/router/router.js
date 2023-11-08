@@ -3,6 +3,7 @@ import LoginPageView from '../views/LoginPageView.vue'
 import App from '../App.vue'
 import StudentWarView from '../views/StudentWarView.vue'
 import StudentHomePageView from '../views/StudentHomePageView.vue'
+import StudentPeerEvalView from '../views/StudentPeerEvalView.vue'
 const routes = [
     {
         path: '/', //This is the parent route
@@ -21,6 +22,10 @@ const routes = [
             {
                 path: '',
                 component: StudentWarView,
+            },
+            {
+                path: 'studentpeereval',
+                component: StudentPeerEvalView,
             },
         ],
     },

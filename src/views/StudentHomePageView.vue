@@ -20,7 +20,7 @@ export default {
 
 <style scoped>
 .sidebar {
-    width: 25%;
+    width: 20%;
     margin-left: 3.5%;
 }
 
