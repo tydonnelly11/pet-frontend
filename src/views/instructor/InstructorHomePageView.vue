@@ -4,22 +4,20 @@
    </div>
 
    <div class="main-item">
-      <router-view></router-view>
+      <router-view> </router-view>
    </div>
 </template>
 
-<script>
+<script setup>
 import NavbarSide from '../components/NavbarSide.vue'
+</script>
+
+<script>
 export default {
-   name: 'StudentHomePageView',
+   name: 'InstructorHomePageView',
    components: {
       NavbarSide,
    },
-   data() {
-      return {}
-   },
-   methods: {},
-   computed: {},
 }
 </script>
 
