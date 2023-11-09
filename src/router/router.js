@@ -35,6 +35,10 @@ const routes = [
       ],
    },
    {
+      path: '/instructorhome',
+      component: StudentHomePageView,
+   },
+   {
       //Any other route will redirect to login
       path: '/:catchAll(.*)',
       name: 'not-found',

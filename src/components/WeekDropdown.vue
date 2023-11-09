@@ -8,12 +8,17 @@
          aria-expanded="false"
          :style="'width: 30%;'"
       >
-         Weeks
+         {{ hasSelectedWeek ? this.selectWeek : this.currentWeek }}
       </a>
 
       <ul class="dropdown-menu" :style="'columns : 3;'">
-         <li v-for="date in dates">
-            <a class="dropdown-item" href="#">{{ date }}</a>
+         <li
+            v-for="week in weeks"
+            :value="week.value"
+            @click="$emit('selectWeek', week)"
+         >
+            <!--Sends week to parent-->
+            <a class="dropdown-item" href="#">{{ week }}</a>
          </li>
       </ul>
    </div>
@@ -23,7 +28,37 @@
 export default {
    name: 'WeekDropdown',
    props: {
-      dates: Array,
+      weeks: Array,
+      selectWeek: String,
+      currentWeek: String,
+   },
+   data() {
+      return {
+         hasSelectedWeek: hasSelectedWeek(),
+      }
+   },
+   methods: {
+      selectWeek(week) {
+         return week
+      },
+      getCurrentWeek() {
+         var today = new Date()
+         var dd = String(today.getDate()).padStart(2, '0')
+         var mm = String(today.getMonth() + 1).padStart(2, '0') //January is 0!
+         var yyyy = today.getFullYear()
+         today = yyyy + '-' + mm + '-' + dd
+         var currentWeek = this.weeks.find((week) => {
+            var weekStart = week.split(' ')[0]
+            var weekEnd = week.split(' ')[2]
+            return today >= weekStart && today <= weekEnd
+         })
+         return currentWeek
+      },
+   },
+   computed: {
+      hasSelectedWeek() {
+         return this.selectWeek ? true : false
+      },
    },
 
    //Note for future self while doing visual only, so i think I
