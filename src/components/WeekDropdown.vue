@@ -8,16 +8,17 @@
          aria-expanded="false"
          :style="'width: 30%;'"
       >
-         {{ hasSelectedWeek ? this.selectWeek : this.currentWeek }}
+         {{ selectWeek ? this.selectWeek : this.currentWeek }}
       </a>
 
       <ul class="dropdown-menu" :style="'columns : 3;'">
          <li
-            v-for="week in weeks"
+            v-for="week in displayedWeeks"
             :value="week.value"
-            @click="$emit('selectWeek', week)"
+            @click="$emit('selectWeek', week), userSelectsWeek()"
          >
-            <!--Sends week to parent-->
+            <!--@Click Sends week to parent-->
+
             <a class="dropdown-item" href="#">{{ week }}</a>
          </li>
       </ul>
@@ -25,21 +26,22 @@
 </template>
 
 <script>
+import { ref } from 'vue'
 export default {
    name: 'WeekDropdown',
    props: {
-      weeks: Array,
+      displayedWeeks: Array,
       selectWeek: String,
       currentWeek: String,
    },
    data() {
       return {
-         hasSelectedWeek: hasSelectedWeek(),
+         hasSelectedWeek: ref(false),
       }
    },
    methods: {
-      selectWeek(week) {
-         return week
+      userSelectsWeek() {
+         this.hasSelectedWeek = true
       },
       getCurrentWeek() {
          var today = new Date()
@@ -55,11 +57,7 @@ export default {
          return currentWeek
       },
    },
-   computed: {
-      hasSelectedWeek() {
-         return this.selectWeek ? true : false
-      },
-   },
+   computed: {},
 
    //Note for future self while doing visual only, so i think I
    //should try to emit event to warList which I think will handle what week is

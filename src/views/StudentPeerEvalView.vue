@@ -2,12 +2,13 @@
    <div class="student-pe-container">
       <WeekDropdown
          :currentWeek="currentWeekVar"
-         :selectWeek="selectedWeek"
-         :weeks="weeks"
+         :selectWeek="this.selectedWeek"
+         :displayedWeeks="weeks"
          @select-week="setSelectedWeek"
       />
       <!--@select-week is the emit from child component with week as first arg of the func-->
-      <PeerEvalTable />
+
+      <PeerEvalTable :peerEvalEntries="peerEvalEntriesForWeek" />
    </div>
 </template>
 
@@ -17,8 +18,16 @@ import WeekDropdown from '../components/WeekDropdown.vue'
 import { ref } from 'vue'
 export default {
    name: 'StudentPeerEvalView',
+   props: {},
    data() {
       return {
+         peerEvalEntriesForWeek: [
+            {
+               id: 1,
+               name: 'John Doe',
+               email: '',
+            },
+         ],
          weeks: [
             '2023-09-01 to 2023-09-03',
             '2023-09-04 to 2023-09-10',
@@ -54,7 +63,6 @@ export default {
    },
    methods: {
       setSelectedWeek(week) {
-         console.log(week)
          if (this.selectedWeek == null) {
             this.selectedWeek = this.getCurrentWeek()
          } else {
@@ -81,7 +89,7 @@ export default {
       },
    },
    mounted() {
-      this.selectedWeek = this.setSelectedWeek()
+      this.setSelectedWeek()
    },
 }
 </script>

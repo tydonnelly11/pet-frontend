@@ -15,6 +15,11 @@ export default {
    components: {
       NavbarSide,
    },
+   data() {
+      return {}
+   },
+   methods: {},
+   computed: {},
 }
 </script>
 
