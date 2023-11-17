@@ -5,6 +5,8 @@ import StudentWarView from '../views/StudentWarView.vue'
 import StudentHomePageView from '../views/StudentHomePageView.vue'
 import StudentPeerEvalView from '../views/StudentPeerEvalView.vue'
 import StudentTeamView from '..//views/StudentTeamView.vue'
+import InstructorPeerEvalView from '../views/instructor/InstructorPeerEvalView.vue';
+
 const routes = [
    {
       path: '/', //This is the parent route
@@ -37,6 +39,11 @@ const routes = [
    {
       path: '/instructorhome',
       component: StudentHomePageView,
+   },
+   {
+      path: '/instructorpeereval', 
+      name: 'InstructorPeerEval',  
+      component: InstructorPeerEvalView, 
    },
    {
       //Any other route will redirect to login
