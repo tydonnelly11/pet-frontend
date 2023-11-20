@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import NavbarSide from '../components/NavbarSide.vue'
+import NavbarSide from '../components/student/NavbarSide.vue'
 import WeekDropdown from '../components/WeekDropdown.vue'
 import WarList from '../components/WarList.vue'
 import WarTable from '../components/WarTable.vue'

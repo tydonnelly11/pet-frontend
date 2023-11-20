@@ -1,7 +1,6 @@
 <script setup>
 import LoginPageView from './views/LoginPageView.vue'
 import StudentWarView from './views/StudentWarView.vue'
-import NavbarSide from './components/NavbarSide.vue'
 </script>
 
 <template>

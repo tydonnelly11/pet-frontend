@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import NavbarSide from '../components/NavbarSide.vue'
+import NavbarSide from '../components/student/NavbarSide.vue'
 </script>
 
 <script>
