@@ -5,6 +5,9 @@ import StudentWarView from '../views/StudentWarView.vue'
 import StudentHomePageView from '../views/StudentHomePageView.vue'
 import StudentPeerEvalView from '../views/StudentPeerEvalView.vue'
 import StudentTeamView from '..//views/StudentTeamView.vue'
+import InstructorHomePage from '../views/instructor/InstructorHomePageView.vue'
+import InstructorPeerEvalView from '../views/instructor/InstructorPeerEvalView.vue';
+
 const routes = [
    {
       path: '/', //This is the parent route
@@ -36,8 +39,16 @@ const routes = [
    },
    {
       path: '/instructorhome',
-      component: StudentHomePageView,
-   },
+      component: InstructorHomePage,
+      children: [
+         {
+            path: 'instructorpeereval', // No leading slash for child routes
+            name: 'InstructorPeerEval',
+            component: InstructorPeerEvalView,
+         },
+         // The Instructor WAR is going to be added later
+      ],
+   },   
    {
       //Any other route will redirect to login
       path: '/:catchAll(.*)',

@@ -1,6 +1,6 @@
 <template>
    <div class="sidebar">
-      <NavbarSide />
+      <InstructorNavbarSide/>
    </div>
 
    <div class="main-item">
@@ -9,14 +9,16 @@
 </template>
 
 <script setup>
-import NavbarSide from '../components/student/NavbarSide.vue'
+
+import InstructorNavbarSide from '../../components/InstructorNavbarSide.vue'
+
 </script>
 
 <script>
 export default {
    name: 'InstructorHomePageView',
    components: {
-      NavbarSide,
+      InstructorNavbarSide,
    },
    data() {
       return {}
