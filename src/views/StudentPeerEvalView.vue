@@ -42,32 +42,32 @@ export default {
          ],
          selectedWeek: ref(null),
          evaluationData: [
-         {
-         evaluateeFirstName: "Jonathan",
-         evaluateeMiddleName: null,
-         evaluateeLastName: "Doe",
-         week: "week1",
-         comment: "Great teamwork and communication.",
-         ratings: [
             {
-               score: 5,
-               criterion: {
-               criterionDesc: "Teamwork",
-               maxScore: 5
-               }
+               evaluateeFirstName: 'Jonathan',
+               evaluateeMiddleName: null,
+               evaluateeLastName: 'Doe',
+               week: 'week1',
+               comment: 'Great teamwork and communication.',
+               ratings: [
+                  {
+                     score: 5,
+                     criterion: {
+                        criterionDesc: 'Teamwork',
+                        maxScore: 5,
+                     },
+                  },
+                  {
+                     score: 5,
+                     criterion: {
+                        criterionDesc: 'Communication',
+                        maxScore: 5,
+                     },
+                  },
+               ],
             },
-            {
-               score: 5,
-               criterion: {
-               criterionDesc: "Communication",
-               maxScore: 5
-               }
-            }
-         ]
-         }
-      ]
-   }
-},
+         ],
+      }
+   },
    /*
                                 Logic for this container might be to have weeks as dropdown, 
                                 when you select Week, it will load the PeerEvalTable component for 
@@ -94,14 +94,13 @@ export default {
             .catch((error) => {
                console.log(error)
             })
-         },
+      },
       setSelectedWeek(week) {
          if (this.selectedWeek == null) {
             this.selectedWeek = this.getCurrentWeek()
          } else {
             this.selectedWeek = week
          }
-
       },
       getCurrentWeek() {
          var today = new Date()

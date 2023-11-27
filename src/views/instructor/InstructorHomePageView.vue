@@ -19,7 +19,7 @@ export default {
       NavbarSide,
    },
    data() {
-      return{}
+      return {}
    },
    methods: {},
    computed: {},

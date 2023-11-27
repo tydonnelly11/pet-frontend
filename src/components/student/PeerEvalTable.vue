@@ -12,14 +12,11 @@
          </thead>
          <tbody>
             <tr v-for="student in peerEval">
-               <td scope="col">{{ student.evaluateeFirstName + student.evaluateeLastName }}</td>
+               <td scope="col">
+                  {{ student.evaluateeFirstName + student.evaluateeLastName }}
+               </td>
                <td scope="col" v-for="item in student.ratings">
-                  <input
-                     type="number"
-                     v-model="item.score"
-                     min="1"
-                     max="10"
-                  />
+                  <input type="number" v-model="item.score" min="1" max="10" />
                </td>
                <!-- <td scope="col">
                   {{
@@ -38,12 +35,11 @@ export default {
    name: 'PeerEvalTable',
    props: {
       peerEval: Object,
-      },
+   },
 
    data() {
       return {
-         rubric: []
-         
+         rubric: [],
       }
    },
    methods: {
@@ -53,17 +49,15 @@ export default {
       },
       getRubric() {
          var rubric = []
-         for(const item of this.peerEval){
-            for(const rating of item.ratings){
+         for (const item of this.peerEval) {
+            for (const rating of item.ratings) {
                rubric.push(rating.criterion.criterionDesc)
             }
          }
          return rubric
       },
    },
-   computed: {
-      
-   },
+   computed: {},
    mounted() {
       this.rubric = this.getRubric()
    },
