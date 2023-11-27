@@ -8,6 +8,7 @@ export default defineConfig({
    resolve: {
       alias: {
          '@': '/src',
+         '@api': 'apitbaseurl',
       },
       test: {
          globals: true,

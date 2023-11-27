@@ -9,7 +9,9 @@
 </template>
 
 <script setup>
+
 import InstructorNavbarSide from '../../components/InstructorNavbarSide.vue'
+
 </script>
 
 <script>
@@ -19,7 +21,7 @@ export default {
       InstructorNavbarSide,
    },
    data() {
-      return{}
+      return {}
    },
    methods: {},
    computed: {},

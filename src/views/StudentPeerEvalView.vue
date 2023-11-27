@@ -8,11 +8,12 @@
       />
       <!--@select-week is the emit from child component with week as first arg of the func-->
 
-      <PeerEvalTable :peerEvalEntries="peerEvalEntriesForWeek" />
+      <PeerEvalTable :peerEval="evaluationData" />
    </div>
 </template>
 
 <script>
+import axios from 'axios'
 import PeerEvalTable from '../components/student/PeerEvalTable.vue'
 import WeekDropdown from '../components/WeekDropdown.vue'
 import { ref } from 'vue'
@@ -21,13 +22,6 @@ export default {
    props: {},
    data() {
       return {
-         peerEvalEntriesForWeek: [
-            {
-               id: 1,
-               name: 'John Doe',
-               email: '',
-            },
-         ],
          weeks: [
             '2023-09-01 to 2023-09-03',
             '2023-09-04 to 2023-09-10',
@@ -47,6 +41,31 @@ export default {
             '2023-12-11 to 2023-12-15',
          ],
          selectedWeek: ref(null),
+         evaluationData: [
+            {
+               evaluateeFirstName: 'Jonathan',
+               evaluateeMiddleName: null,
+               evaluateeLastName: 'Doe',
+               week: 'week1',
+               comment: 'Great teamwork and communication.',
+               ratings: [
+                  {
+                     score: 5,
+                     criterion: {
+                        criterionDesc: 'Teamwork',
+                        maxScore: 5,
+                     },
+                  },
+                  {
+                     score: 5,
+                     criterion: {
+                        criterionDesc: 'Communication',
+                        maxScore: 5,
+                     },
+                  },
+               ],
+            },
+         ],
       }
    },
    /*
@@ -62,6 +81,20 @@ export default {
       WeekDropdown,
    },
    methods: {
+      getPeerEvalEntriesForWeek(week) {
+         axios
+            .get('http://localhost:3000/peer-eval-entries', {
+               params: {
+                  week: week,
+               },
+            })
+            .then((response) => {
+               this.peerEvalEntriesForWeek = response.data
+            })
+            .catch((error) => {
+               console.log(error)
+            })
+      },
       setSelectedWeek(week) {
          if (this.selectedWeek == null) {
             this.selectedWeek = this.getCurrentWeek()
