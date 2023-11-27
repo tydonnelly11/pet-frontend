@@ -10,8 +10,8 @@
           </thead>
           <tbody>
              <tr v-for="student in students" :key="student.id">
-                <td>{{ student.name }}</td>
-                <td>{{ student.grade }}</td>
+                <td> {{ student.name }} </td>
+                <td> {{ student.grade }} </td>
              </tr>
           </tbody>
        </table>
