@@ -1,6 +1,6 @@
 <template>
    <div class="sidebar">
-      <InstructorNavbarSide/>
+      <InstructorNavbarSide />
    </div>
 
    <div class="main-item">
@@ -9,9 +9,7 @@
 </template>
 
 <script setup>
-
 import InstructorNavbarSide from '../../components/InstructorNavbarSide.vue'
-
 </script>
 
 <script>

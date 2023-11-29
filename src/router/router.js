@@ -6,7 +6,7 @@ import StudentHomePageView from '../views/StudentHomePageView.vue'
 import StudentPeerEvalView from '../views/StudentPeerEvalView.vue'
 import StudentTeamView from '..//views/StudentTeamView.vue'
 import InstructorHomePage from '../views/instructor/InstructorHomePageView.vue'
-import InstructorPeerEvalView from '../views/instructor/InstructorPeerEvalView.vue';
+import InstructorPeerEvalView from '../views/instructor/InstructorPeerEvalView.vue'
 
 const routes = [
    {
@@ -48,7 +48,7 @@ const routes = [
          },
          // The Instructor WAR is going to be added later
       ],
-   },   
+   },
    {
       //Any other route will redirect to login
       path: '/:catchAll(.*)',

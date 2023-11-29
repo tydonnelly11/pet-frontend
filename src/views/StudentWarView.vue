@@ -7,8 +7,18 @@
          @select-week="setSelectedWeek"
       />
 
-      <WarList :tasks="tasks" />
-      <AddWarTask @add-task="addTask" />
+      <WarList
+         :isTeamWar="false"
+         :tasks="tasks"
+         @editTask="editTaskStart"
+         @deleteTask="deleteTask"
+      />
+      <EditWarTask
+         v-if="isEditTaskTrue"
+         @editTaskComplete="editTaskComplete"
+         :editTaskProp="this.editTask"
+      />
+      <AddWarTask v-else @add-task="addTask" />
    </div>
 </template>
 
@@ -23,6 +33,8 @@ send it to the backend
 import WarList from '../components/WarList.vue'
 import WeekDropdown from '../components/WeekDropdown.vue'
 import AddWarTask from '../components/student/AddWarTask.vue'
+import ErrorPopUp from '../components/utilities/ErrorPopUp.vue'
+import EditWarTask from '../components/student/EditWarTask.vue'
 import { ref } from 'vue'
 
 export default {
@@ -31,6 +43,7 @@ export default {
       WarList,
       WeekDropdown,
       AddWarTask,
+      EditWarTask,
    },
    data() {
       return {
@@ -54,21 +67,71 @@ export default {
             '2023-12-04 to 2023-12-10',
             '2023-12-11 to 2023-12-15',
          ],
+         editTask: null,
+         isEditTaskTrue: false,
+         editTaskIndex: 0,
       }
    },
    methods: {
       addTask(task) {
          this.tasks.push(task)
       },
+      editTaskStart(task, index) {
+         this.editTask = task
+         this.isEditTaskTrue = true
+         this.editTaskIndex = index
+      },
+      editTaskComplete(task) {
+         this.tasks[this.editTaskIndex] = task
+         this.isEditTaskTrue = false
+      },
+      deleteTask(task, index) {
+         this.tasks.splice(index, 1)
+      },
 
       getStudentWar() {
          // Get the student's war from the database
       },
+      setWeekList() {
+         const startDate = new Date('August 21, 2023') // Start date
+         const endDate = new Date('May 6, 2024') // End date
+         const weeks = []
+
+         let currentDate = new Date(startDate)
+
+         let weekId = 1
+         while (currentDate <= endDate) {
+            const startOfWeek = new Date(currentDate)
+            const endOfWeek = new Date(currentDate)
+            endOfWeek.setDate(endOfWeek.getDate() + 6)
+
+            weeks.push({
+               id: weekId,
+               start: this.formatDate(startOfWeek),
+               end: this.formatDate(endOfWeek),
+            })
+
+            currentDate.setDate(currentDate.getDate() + 7) // Move to the next week
+            weekId++
+         }
+         this.weeks = weeks
+      },
+      formatDate(date) {
+         const day = String(date.getDate()).padStart(2, '0')
+         const month = String(date.getMonth() + 1).padStart(2, '0')
+         const year = date.getFullYear()
+
+         return `${month}-${day}-${year}`
+      },
+
       setSelectedWeek(week) {
          if (this.selectedWeek == null) {
-            this.selectedWeek = this.getCurrentWeek()
+            const currentWeek = this.getCurrentWeek()
+            this.selectedWeek = currentWeek.start + ' to ' + currentWeek.end
+            this.selectedWeekId = currentWeek.id
          } else {
-            this.selectedWeek = week
+            this.selectedWeek = week.start + ' to ' + week.end
+            this.selectedWeekId = week.id
          }
       },
       getCurrentWeek() {
@@ -76,12 +139,13 @@ export default {
          var dd = String(today.getDate()).padStart(2, '0')
          var mm = String(today.getMonth() + 1).padStart(2, '0') //January is 0!
          var yyyy = today.getFullYear()
-         today = yyyy + '-' + mm + '-' + dd
+         today = mm + '-' + dd + '-' + yyyy
          var currentWeek = this.weeks.find((week) => {
-            var weekStart = week.split(' ')[0]
-            var weekEnd = week.split(' ')[2]
+            var weekStart = week.start
+            var weekEnd = week.end
             return today >= weekStart && today <= weekEnd
          })
+         this.currentWeekId = currentWeek.id
          return currentWeek
       },
    },
@@ -90,7 +154,8 @@ export default {
          return this.getCurrentWeek()
       },
    },
-   mounted() {
+   created() {
+      this.setWeekList()
       this.setSelectedWeek()
    },
 }

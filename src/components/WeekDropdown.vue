@@ -8,18 +8,22 @@
          aria-expanded="false"
          :style="'width: 30%;'"
       >
-         {{ selectWeek ? this.selectWeek : this.currentWeek }}
+         {{
+            selectWeek
+               ? this.selectWeek
+               : this.currentWeek.start + '-' + this.currentWeek.end
+         }}
       </a>
 
       <ul class="dropdown-menu" :style="'columns : 3;'">
          <li
             v-for="week in displayedWeeks"
-            :value="week.value"
+            :value="week.id"
             @click="$emit('selectWeek', week), userSelectsWeek()"
          >
             <!--@Click Sends week to parent-->
 
-            <a class="dropdown-item" href="#">{{ week }}</a>
+            <a class="dropdown-item" href="#">{{ convertWeekFormat(week) }}</a>
          </li>
       </ul>
    </div>
@@ -32,7 +36,7 @@ export default {
    props: {
       displayedWeeks: Array,
       selectWeek: String,
-      currentWeek: String,
+      currentWeek: Object,
    },
    data() {
       return {
@@ -55,6 +59,11 @@ export default {
             return today >= weekStart && today <= weekEnd
          })
          return currentWeek
+      },
+      convertWeekFormat(week) {
+         var weekStart = week.start
+         var weekEnd = week.end
+         return weekStart + ' to ' + weekEnd
       },
    },
    computed: {},

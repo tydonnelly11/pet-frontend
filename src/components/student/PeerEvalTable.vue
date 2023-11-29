@@ -1,5 +1,5 @@
 <template>
-   <form onsubmit="submitEvaluation">
+   <form @submit.prevent="submitEvaluation">
       <table class="table">
          <thead>
             <tr>
@@ -7,6 +7,7 @@
                <th scope="col" v-for="item in rubric">
                   {{ item }}
                </th>
+               <th scope="col">Comments</th>
                <th>Total</th>
             </tr>
          </thead>
@@ -18,9 +19,12 @@
                <td scope="col" v-for="item in student.ratings">
                   <input type="number" v-model="item.score" min="1" max="10" />
                </td>
+               <td scope="col">
+                  <input type="text" v-model="student.comment" />
+               </td>
                <!-- <td scope="col">
                   {{
-                     // student.peerEval.ratings.reduce((a, b) => a + b.score, 0)
+                      student.ratings.reduce((a, b) => a + b.score, 0)
                   }}
                </td> -->
             </tr>
@@ -31,25 +35,51 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
    name: 'PeerEvalTable',
    props: {
-      peerEval: Object,
+      peerEvalProp: Object,
+      user: Object,
    },
 
    data() {
       return {
-         rubric: [],
+         rubric: null,
+         peerEval: this.peerEvalProp,
+         userID: '3',
       }
    },
    methods: {
       submitEvaluation() {
-         return 2
-         console.log('Evaluation submitted')
+         const targetPayload = {
+            evaluatorId: '1',
+            evaluateeId: '2',
+            week: '1',
+            ratings: this.peerEval[0].ratings,
+            comment: 'test',
+            oldScore: 0,
+         }
+
+         // for (const item of this.peerEval) {
+         //    payload
+
+         // }
+         console.log(targetPayload)
+
+         axios
+            .post('http://localhost:8080/api/v1/submitEval', targetPayload, {})
+            .then((response) => {
+               console.log(response)
+            })
+            .catch((error) => {
+               console.log(error)
+            })
       },
       getRubric() {
          var rubric = []
-         for (const item of this.peerEval) {
+         for (const item of this.peerEvalProp) {
+            console.log(item.ratings)
             for (const rating of item.ratings) {
                rubric.push(rating.criterion.criterionDesc)
             }
@@ -58,7 +88,7 @@ export default {
       },
    },
    computed: {},
-   mounted() {
+   created() {
       this.rubric = this.getRubric()
    },
 }
