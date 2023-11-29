@@ -12,7 +12,24 @@
             </tr>
          </thead>
          <tbody>
-            <tr v-for="student in peerEval">
+            <tr v-if="this.isPastWeek" v-for="student in this.peerEval">
+               <td scope="col">
+                  {{ student.evaluateeFirstName + student.evaluateeLastName }}
+               </td>
+               <td scope="col" v-for="item in student.ratings">
+                  <p type="number" min="1" max="10">{{ item.score }}</p>
+               </td>
+               <td scope="col">
+                  <p type="text">{{ student.comment }}</p>
+               </td>
+
+               <!-- <td scope="col">
+                  {{
+                      student.ratings.reduce((a, b) => a + b.score, 0)
+                  }}
+               </td> -->
+            </tr>
+            <tr v-else v-for="student in this.peerEval">
                <td scope="col">
                   {{ student.evaluateeFirstName + student.evaluateeLastName }}
                </td>
@@ -22,11 +39,6 @@
                <td scope="col">
                   <input type="text" v-model="student.comment" />
                </td>
-               <!-- <td scope="col">
-                  {{
-                      student.ratings.reduce((a, b) => a + b.score, 0)
-                  }}
-               </td> -->
             </tr>
          </tbody>
       </table>
@@ -41,34 +53,44 @@ export default {
    props: {
       peerEvalProp: Object,
       user: Object,
+      isPastWeek: Boolean,
    },
 
    data() {
       return {
          rubric: null,
          peerEval: this.peerEvalProp,
-         userID: '3',
+         userID: '1',
       }
+   },
+   watch: {
+      peerEvalProp: {
+         handler(newVal) {
+            this.peerEval = newVal
+         },
+         deep: true, // Watch nested properties of peerEvalProp
+      },
    },
    methods: {
       submitEvaluation() {
-         const targetPayload = {
-            evaluatorId: '1',
-            evaluateeId: '2',
-            week: '1',
-            ratings: this.peerEval[0].ratings,
-            comment: 'test',
-            oldScore: 0,
+         const targetPayload = []
+
+         for (const item of this.peerEval) {
+            targetPayload.push({
+               evaluatorId: this.userID,
+               evaluateeId: item.evaluateeId,
+               week: item.week,
+               ratings: item.ratings,
+               comment: item.comment,
+               oldScore: item.oldScore,
+            })
          }
-
-         // for (const item of this.peerEval) {
-         //    payload
-
-         // }
+         const testPayload = this.peerEval[1]
+         testPayload.evaluatorId = '1'
          console.log(targetPayload)
 
          axios
-            .post('http://localhost:8080/api/v1/submitEval', targetPayload, {})
+            .post('http://localhost:8080/api/v1/submitEval', testPayload, {})
             .then((response) => {
                console.log(response)
             })
@@ -78,12 +100,12 @@ export default {
       },
       getRubric() {
          var rubric = []
-         for (const item of this.peerEvalProp) {
-            console.log(item.ratings)
-            for (const rating of item.ratings) {
-               rubric.push(rating.criterion.criterionDesc)
-            }
+         const item = this.peerEvalProp[0]
+         console.log(item.ratings)
+         for (const rating of item.ratings) {
+            rubric.push(rating.criterion.criterionDesc)
          }
+
          return rubric
       },
    },
