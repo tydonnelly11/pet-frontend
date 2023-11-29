@@ -1,6 +1,10 @@
 <template>
    <div class="war-table-container">
-      <WarList v-for="student in team" :tasks="student.tasks" />
+      <WarList
+         :isTeamWar="true"
+         v-for="student in team"
+         :tasks="student.tasks"
+      />
    </div>
 </template>
 
@@ -12,12 +16,10 @@ may be changed and some of the logic may be moved to the view
 if it is easier
  */
 import WarList from './WarList.vue'
-import AddWarTask from './student/AddWarTask.vue'
 export default {
-   name: 'WarTable',
+   name: 'WarTeamTable',
    components: {
       WarList,
-      AddWarTask,
    },
    props: {
       team: Array,
@@ -86,11 +88,7 @@ export default {
          ],
       }
    },
-   methods: {
-      addTask(newTask) {
-         this.tasks.push(newTask)
-      },
-   },
+   methods: {},
    computed: {},
 }
 </script>

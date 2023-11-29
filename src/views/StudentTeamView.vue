@@ -6,7 +6,7 @@
          :displayedWeeks="weeks"
          @select-week="setSelectedWeek"
       ></WeekDropdown>
-      <WarTable :team="team"></WarTable>
+      <WarTeamTable :team="team"></WarTeamTable>
    </div>
 </template>
 
@@ -14,7 +14,7 @@
 import NavbarSide from '../components/student/NavbarSide.vue'
 import WeekDropdown from '../components/WeekDropdown.vue'
 import WarList from '../components/WarList.vue'
-import WarTable from '../components/WarTable.vue'
+import WarTeamTable from '../components/WarTeamTable.vue'
 import { ref } from 'vue'
 export default {
    name: 'StudentTeamView',
@@ -25,7 +25,7 @@ export default {
    components: {
       NavbarSide,
       WeekDropdown,
-      WarTable,
+      WarTeamTable,
    },
    data() {
       return {
@@ -89,46 +89,67 @@ export default {
                ],
             },
          ],
+         selectedWeekId: null,
+         currentWeekId: null,
          selectedWeek: ref(null),
-         weeks: [
-            '2023-09-01 to 2023-09-03',
-            '2023-09-04 to 2023-09-10',
-            '2023-09-11 to 2023-09-17',
-            '2023-09-18 to 2023-09-24',
-            '2023-09-25 to 2023-10-01',
-            '2023-10-02 to 2023-10-08',
-            '2023-10-09 to 2023-10-15',
-            '2023-10-16 to 2023-10-22', //This will prolly be
-            '2023-10-23 to 2023-10-29',
-            '2023-10-30 to 2023-11-05',
-            '2023-11-06 to 2023-11-12',
-            '2023-11-13 to 2023-11-19',
-            '2023-11-20 to 2023-11-26',
-            '2023-11-27 to 2023-12-03',
-            '2023-12-04 to 2023-12-10',
-            '2023-12-11 to 2023-12-15',
-         ],
       }
    },
    methods: {
+      setWeekList() {
+         const startDate = new Date('August 21, 2023') // Start date
+         const endDate = new Date('May 6, 2024') // End date
+         const weeks = []
+
+         let currentDate = new Date(startDate)
+
+         let weekId = 1
+         while (currentDate <= endDate) {
+            const startOfWeek = new Date(currentDate)
+            const endOfWeek = new Date(currentDate)
+            endOfWeek.setDate(endOfWeek.getDate() + 6)
+
+            weeks.push({
+               id: weekId,
+               start: this.formatDate(startOfWeek),
+               end: this.formatDate(endOfWeek),
+            })
+
+            currentDate.setDate(currentDate.getDate() + 7) // Move to the next week
+            weekId++
+         }
+         this.weeks = weeks
+      },
+      formatDate(date) {
+         const day = String(date.getDate()).padStart(2, '0')
+         const month = String(date.getMonth() + 1).padStart(2, '0')
+         const year = date.getFullYear()
+
+         return `${month}-${day}-${year}`
+      },
+
       setSelectedWeek(week) {
          if (this.selectedWeek == null) {
-            this.selectedWeek = this.getCurrentWeek()
+            const currentWeek = this.getCurrentWeek()
+            this.selectedWeek = currentWeek.start + ' to ' + currentWeek.end
+            this.selectedWeekId = currentWeek.id
          } else {
-            this.selectedWeek = week
+            this.selectedWeek = week.start + ' to ' + week.end
+            this.selectedWeekId = week.id
          }
+         //Add war entry api call
       },
       getCurrentWeek() {
          var today = new Date()
          var dd = String(today.getDate()).padStart(2, '0')
          var mm = String(today.getMonth() + 1).padStart(2, '0') //January is 0!
          var yyyy = today.getFullYear()
-         today = yyyy + '-' + mm + '-' + dd
+         today = mm + '-' + dd + '-' + yyyy
          var currentWeek = this.weeks.find((week) => {
-            var weekStart = week.split(' ')[0]
-            var weekEnd = week.split(' ')[2]
+            var weekStart = week.start
+            var weekEnd = week.end
             return today >= weekStart && today <= weekEnd
          })
+         this.currentWeekId = currentWeek.id
          return currentWeek
       },
    },
@@ -137,7 +158,8 @@ export default {
          return this.getCurrentWeek()
       },
    },
-   mounted() {
+   created() {
+      this.setWeekList()
       this.setSelectedWeek()
    },
 }

@@ -1,11 +1,11 @@
 <template>
    <!-- Task Form (conditionally rendered based on isFormVisible) -->
-   <form v-if="isFormVisible" @submit.prevent="addTask" class="war-form">
+   <form @submit.prevent="" class="war-form">
       <div class="task">
          <label for="task">Task:</label>
          <input
             class="input-field"
-            v-model="newTask.task"
+            v-model="editTask.task"
             type="text"
             required
          />
@@ -15,7 +15,7 @@
          <label for="plannedTask">Planned Task:</label>
          <input
             class="input-field"
-            v-model="newTask.plannedTask"
+            v-model="editTask.plannedTask"
             type="text"
             required
          />
@@ -25,7 +25,7 @@
          <label for="description">Description:</label>
          <textarea
             class="text-area"
-            v-model="newTask.description"
+            v-model="editTask.description"
             required
          ></textarea>
       </div>
@@ -34,7 +34,7 @@
          <label for="plannedHours">Planned Hours:</label>
          <input
             class="input-field"
-            v-model="newTask.plannedHours"
+            v-model="editTask.plannedHours"
             type="number"
             required
          />
@@ -44,7 +44,7 @@
          <label for="actualHours">Actual Hours:</label>
          <input
             class="input-field"
-            v-model="newTask.actualHours"
+            v-model="editTask.actualHours"
             type="number"
             required
          />
@@ -54,57 +54,38 @@
          <label for="status">Status:</label>
          <input
             class="input-field"
-            v-model="newTask.status"
+            v-model="editTask.status"
             type="text"
             required
          />
       </div>
-
-      <button @click="$emit('addTask', { ...newTask }), resetForm()">
-         Add
-      </button>
    </form>
-   <button v-if="!isFormVisible" @click="toggleFormVisibility">Add Task</button>
-   <button v-else @click="toggleFormVisibility">Done</button>
+   <button @click="$emit('editTaskComplete', editTask)">Edit</button>
 </template>
 
 <script>
 /*
-Moved logic and look of adding task to this component
-from WarList.vue
-
-*/
+ Moved logic and look of adding task to this component
+ from WarList.vue
+ 
+ */
 export default {
-   name: 'AddWarTask',
+   name: 'EditWarTask',
+   props: {
+      editTaskProp: Object,
+   },
    data() {
       return {
-         newTask: {
-            task: '',
-            plannedTask: '',
-            description: '',
-            plannedHours: '',
-            actualHours: '',
-            status: '',
-         },
+         editTask: { ...this.editTaskProp },
          isFormVisible: false,
       }
    },
-   emits: ['addTask'],
+   emits: ['editTaskComplete'],
 
    methods: {
       toggleFormVisibility() {
          // Toggle the visibility of the form
          this.isFormVisible = !this.isFormVisible
-      },
-      resetForm() {
-         this.newTask = {
-            task: '',
-            plannedTask: '',
-            description: '',
-            plannedHours: '',
-            actualHours: '',
-            status: '',
-         }
       },
    },
 }

@@ -25,6 +25,12 @@
                <td>{{ task.plannedHours }}</td>
                <td>{{ task.actualHours }}</td>
                <td>{{ task.status }}</td>
+               <div v-if="!isTeamWar" class="button-group">
+                  <button @click="$emit('deleteTask', task, index)">
+                     Remove
+                  </button>
+                  <button @click="$emit('editTask', task, index)">Edit</button>
+               </div>
             </tr>
          </tbody>
       </table>
@@ -43,6 +49,7 @@ export default {
    name: 'WarList',
    props: {
       tasks: Array,
+      isTeamWar: Boolean,
    },
    components: {
       WeekDropdown,
@@ -80,36 +87,8 @@ export default {
          isFormVisible: false, // Flag to control form visibility
       }
    },
-   methods: {
-      addTask() {
-         // Validate the new task object, add it to the tasks array, and reset the form
-         if (this.validateTask()) {
-            this.tasks.push({ ...this.newTask })
-            this.resetForm()
-         }
-      },
-      validateTask() {
-         // Implement your validation logic here
-         // Return true if the task is valid, false otherwise
-         return true
-      },
-      resetForm() {
-         // Reset the form by creating a new task object
-         this.newTask = {
-            user: 'John Doe', // Replace with the actual user information
-            task: '',
-            plannedTask: '',
-            description: '',
-            plannedHours: 0,
-            actualHours: 0,
-            status: '',
-         }
-      },
-      toggleFormVisibility() {
-         // Toggle the visibility of the form
-         this.isFormVisible = !this.isFormVisible
-      },
-   },
+   emits: ['deleteTask', 'editTask'],
+   methods: {},
 }
 </script>
 <style scoped>
@@ -120,22 +99,7 @@ export default {
    background-color: #f5f5f5;
    border-radius: 10px;
    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.add-task-btn {
-   background-color: #3498db;
-   color: #fff;
-   padding: 10px;
-   margin-bottom: 10px;
-   border: none;
-   border-radius: 5px;
-   cursor: pointer;
-}
-
-.task-form {
-   display: flex;
-   flex-direction: column;
-   gap: 10px;
+   margin-bottom: 10%;
 }
 
 table {
