@@ -6,7 +6,7 @@
          role="button"
          data-bs-toggle="dropdown"
          aria-expanded="false"
-         :style="'width: 30%;'"
+         :style="'width: 40%;'"
       >
          {{
             selectWeek
@@ -45,6 +45,7 @@ export default {
    },
    methods: {
       userSelectsWeek() {
+         console.log(this.displayedWeeks)
          this.hasSelectedWeek = true
       },
       getCurrentWeek() {

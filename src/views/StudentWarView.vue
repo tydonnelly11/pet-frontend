@@ -18,7 +18,7 @@
          @editTaskComplete="editTaskComplete"
          :editTaskProp="this.editTask"
       />
-      <AddWarTask v-else @add-task="addTask" />
+      <AddWarTask v-else-if="!isPastWeek & !isFutureWeek" @add-task="addTask" />
    </div>
 </template>
 
@@ -49,27 +49,11 @@ export default {
       return {
          selectedWeek: ref(null),
          tasks: [],
-         weeks: [
-            '2023-09-01 to 2023-09-03',
-            '2023-09-04 to 2023-09-10',
-            '2023-09-11 to 2023-09-17',
-            '2023-09-18 to 2023-09-24',
-            '2023-09-25 to 2023-10-01',
-            '2023-10-02 to 2023-10-08',
-            '2023-10-09 to 2023-10-15',
-            '2023-10-16 to 2023-10-22', //This will prolly be
-            '2023-10-23 to 2023-10-29',
-            '2023-10-30 to 2023-11-05',
-            '2023-11-06 to 2023-11-12',
-            '2023-11-13 to 2023-11-19',
-            '2023-11-20 to 2023-11-26',
-            '2023-11-27 to 2023-12-03',
-            '2023-12-04 to 2023-12-10',
-            '2023-12-11 to 2023-12-15',
-         ],
          editTask: null,
          isEditTaskTrue: false,
          editTaskIndex: 0,
+         isFutureWeek: false,
+         isPastWeek: false,
       }
    },
    methods: {
@@ -122,6 +106,25 @@ export default {
          const year = date.getFullYear()
 
          return `${month}-${day}-${year}`
+      },
+      setWARVisibility(currentWeekId, selectedWeekId) {
+         //Sets the visibility of the peer eval table and is used in
+         //getPeerEvalEntriesForWeek() and createNewPeerEvalEntry() to
+         //determine if the table should be displayed/editable
+
+         if (currentWeekId == selectedWeekId) {
+            this.hasEntry = true
+            this.isPastWeek = false
+            this.isFutureWeek = false
+         } else if (currentWeekId < selectedWeekId) {
+            this.hasEntry = false
+            this.isFutureWeek = true
+            this.isPastWeek = false
+         } else {
+            this.hasEntry = true
+            this.isPastWeek = true
+            this.isFutureWeek = false
+         }
       },
 
       setSelectedWeek(week) {
