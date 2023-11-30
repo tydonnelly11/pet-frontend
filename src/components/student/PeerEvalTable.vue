@@ -42,7 +42,7 @@
             </tr>
          </tbody>
       </table>
-      <button type="submit">Submit</button>
+      <button v-if="!(this.isPastWeek)" type="submit">Submit</button>
    </form>
    <div v-if="this.submissionStatus == 200" class="submit-message">
       <p>Submitted!</p>
