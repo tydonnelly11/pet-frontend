@@ -1,6 +1,6 @@
 <template>
    <div class="sidebar">
-      <InstructorNavbarSide/>
+      <InstructorNavbarSide />
    </div>
 
    <div class="main-item">
@@ -19,7 +19,7 @@ export default {
       InstructorNavbarSide,
    },
    data() {
-      return{}
+      return {}
    },
    methods: {},
    computed: {},

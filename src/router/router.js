@@ -9,6 +9,7 @@ import InstructorHomePage from '../views/instructor/InstructorHomePageView.vue'
 import InstructorPeerEvalView from '../views/instructor/InstructorPeerEvalView.vue'
 import InstructorTeamView from '../views/instructor/InstructorTeamView.vue';
 
+
 const routes = [
    {
       path: '/', //This is the parent route
@@ -55,7 +56,7 @@ const routes = [
          },
          // The Instructor WAR is going to be added later
       ],
-   },   
+   },
    {
       //Any other route will redirect to login
       path: '/:catchAll(.*)',

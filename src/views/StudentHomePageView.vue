@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import NavbarSide from '../components/NavbarSide.vue'
+import NavbarSide from '../components/student/NavbarSide.vue'
 export default {
    name: 'StudentHomePageView',
    components: {

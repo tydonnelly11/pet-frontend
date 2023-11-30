@@ -1,31 +1,32 @@
 <template>
-   <form onsubmit="submitEvaluation">
+   <form @submit.prevent="submitEvaluation">
       <table class="table">
          <thead>
             <tr>
                <th scope="col">Team member</th>
                <th scope="col" v-for="item in rubric">
-                  {{ item.description }}
+                  {{ item }}
                </th>
+               <th scope="col">Comments</th>
                <th>Total</th>
             </tr>
          </thead>
          <tbody>
-            <tr v-for="student in team.students">
-               <td scope="col">{{ student.studentName }}</td>
-               <td scope="col" v-for="criteria in student.peerEval.ratings">
-                  <input
-                     type="number"
-                     v-model="criteria.score"
-                     min="1"
-                     max="10"
-                  />
+            <tr v-for="student in peerEval">
+               <td scope="col">
+                  {{ student.evaluateeFirstName + student.evaluateeLastName }}
+               </td>
+               <td scope="col" v-for="item in student.ratings">
+                  <input type="number" v-model="item.score" min="1" max="10" />
                </td>
                <td scope="col">
-                  {{
-                     student.peerEval.ratings.reduce((a, b) => a + b.score, 0)
-                  }}
+                  <input type="text" v-model="student.comment" />
                </td>
+               <!-- <td scope="col">
+                  {{
+                      student.ratings.reduce((a, b) => a + b.score, 0)
+                  }}
+               </td> -->
             </tr>
          </tbody>
       </table>
@@ -34,202 +35,62 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
    name: 'PeerEvalTable',
+   props: {
+      peerEvalProp: Object,
+      user: Object,
+   },
 
    data() {
       return {
-         rubric: [
-            {
-               description:
-                  'How do you rate the quality of this teammate’s work? (1-10)',
-               maxScore: 10,
-            },
-            {
-               description: 'How productive is this teammate? (1-10)',
-               maxScore: 10,
-            },
-
-            {
-               description: 'How proactive is this teammate? (1-10)',
-               maxScore: 10,
-            },
-            {
-               description:
-                  'Does this teammate treat others with respect? (1-10)',
-               maxScore: 10,
-            },
-            {
-               description:
-                  'How well does this teammate handle criticism of their work? (1-10)',
-               maxScore: 10,
-            },
-            {
-               description:
-                  'How do you rate the quality of this teammate’s work? (1-10) 1 is Poor, 10 is Excellent',
-               maxScore: 10,
-            },
-         ],
-
-         team: {
-            students: [
-               {
-                  studentName: 'John Doe',
-                  studentId: 1,
-                  peerEval: this.generatePeerEval(),
-               },
-               {
-                  studentName: 'Jane Doe',
-                  studentId: 2,
-                  peerEval: this.generatePeerEval(),
-               },
-               {
-                  studentName: 'John Smith',
-                  studentId: 3,
-                  peerEval: this.generatePeerEval(),
-               },
-               {
-                  studentName: 'Jane Smith',
-                  studentId: 4,
-                  peerEval: this.generatePeerEval(),
-               },
-            ],
-         },
-         peerEval: {
-            PeId: 1,
-            evaluatorId: 1,
-            evaluateeId: 2,
-            teamId: 1,
-            sectionId: 1,
-            weekId: 1,
-            ratings: [
-               {
-                  score: 0,
-                  criteria: {
-                     criteriaId: 1,
-                     description:
-                        'How do you rate the quality of this teammate’s work? (1-10)', //This might be just the link to entry in rubric table
-                     maxScore: 10,
-                  },
-               },
-               {
-                  score: 0,
-                  criteria: {
-                     criteriaId: 2,
-                     description: 'How productive is this teammate? (1-10)',
-                     maxScore: 10,
-                  },
-               },
-               {
-                  score: 0,
-                  criteria: {
-                     criteriaId: 3,
-                     description: 'How proactive is this teammate? (1-10)',
-                     maxScore: 10,
-                  },
-               },
-               {
-                  score: 0,
-                  criteria: {
-                     criteriaId: 4,
-                     description:
-                        'Does this teammate treat others with respect? (1-10)',
-                     maxScore: 10,
-                  },
-               },
-               {
-                  score: 0,
-                  criteria: {
-                     criteriaId: 5,
-                     description:
-                        'How well does this teammate handle criticism of their work? (1-10)',
-                     maxScore: 10,
-                  },
-               },
-               {
-                  score: 0,
-                  criteria: {
-                     criteriaId: 6,
-                     description:
-                        'How do you rate the quality of this teammate’s work? (1-10)',
-                     maxScore: 10,
-                  },
-               },
-            ],
-         },
+         rubric: null,
+         peerEval: this.peerEvalProp,
+         userID: '3',
       }
    },
    methods: {
       submitEvaluation() {
-         return 2
-         console.log('Evaluation submitted')
-      },
-      generatePeerEval() {
-         return {
-            PeId: 1,
-            evaluatorId: 1,
-            evaluateeId: 2,
-            teamId: 1,
-            sectionId: 1,
-            weekId: 1,
-            ratings: [
-               {
-                  score: 0,
-                  criteria: {
-                     criteriaId: 1,
-                     description:
-                        'How do you rate the quality of this teammate’s work? (1-10)', //This might be just the link to entry in rubric table
-                     maxScore: 10,
-                  },
-               },
-               {
-                  score: 0,
-                  criteria: {
-                     criteriaId: 2,
-                     description: 'How productive is this teammate? (1-10)',
-                     maxScore: 10,
-                  },
-               },
-               {
-                  score: 0,
-                  criteria: {
-                     criteriaId: 3,
-                     description: 'How proactive is this teammate? (1-10)',
-                     maxScore: 10,
-                  },
-               },
-               {
-                  score: 0,
-                  criteria: {
-                     criteriaId: 4,
-                     description:
-                        'Does this teammate treat others with respect? (1-10)',
-                     maxScore: 10,
-                  },
-               },
-               {
-                  score: 0,
-                  criteria: {
-                     criteriaId: 5,
-                     description:
-                        'How well does this teammate handle criticism of their work? (1-10)',
-                     maxScore: 10,
-                  },
-               },
-               {
-                  score: 0,
-                  criteria: {
-                     criteriaId: 6,
-                     description:
-                        'How do you rate the quality of this teammate’s work? (1-10)',
-                     maxScore: 10,
-                  },
-               },
-            ],
+         const targetPayload = {
+            evaluatorId: '1',
+            evaluateeId: '2',
+            week: '1',
+            ratings: this.peerEval[0].ratings,
+            comment: 'test',
+            oldScore: 0,
          }
+
+         // for (const item of this.peerEval) {
+         //    payload
+
+         // }
+         console.log(targetPayload)
+
+         axios
+            .post('http://localhost:8080/api/v1/submitEval', targetPayload, {})
+            .then((response) => {
+               console.log(response)
+            })
+            .catch((error) => {
+               console.log(error)
+            })
+      },
+      getRubric() {
+         var rubric = []
+         for (const item of this.peerEvalProp) {
+            console.log(item.ratings)
+            for (const rating of item.ratings) {
+               rubric.push(rating.criterion.criterionDesc)
+            }
+         }
+         return rubric
       },
    },
    computed: {},
+   created() {
+      this.rubric = this.getRubric()
+   },
 }
 </script>
 

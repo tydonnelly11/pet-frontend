@@ -8,11 +8,21 @@
       />
       <!--@select-week is the emit from child component with week as first arg of the func-->
 
-      <PeerEvalTable :peerEvalEntries="peerEvalEntriesForWeek" />
+      <PeerEvalTable :peerEvalProp="evaluationData" v-if="hasEntry" />
+      <div v-else>
+         <h1>No Peer Evaluation for this week</h1>
+      </div>
+      <ErrorPopUp
+         v-if="errorFlag"
+         :responseFlag="responseFlag"
+         :errorMessageProp="errorMessage"
+      />
    </div>
 </template>
 
 <script>
+import axios from 'axios'
+import ErrorPopUp from '../components/utilities/ErrorPopUp.vue'
 import PeerEvalTable from '../components/student/PeerEvalTable.vue'
 import WeekDropdown from '../components/WeekDropdown.vue'
 import { ref } from 'vue'
@@ -21,32 +31,59 @@ export default {
    props: {},
    data() {
       return {
-         peerEvalEntriesForWeek: [
+         evaluationData: [
             {
-               id: 1,
-               name: 'John Doe',
-               email: '',
+               evaluateeFirstName: 'Jonathan',
+               evaluateeLastName: 'Doe',
+               week: 1,
+               comment: 'Great teamwork and communication.',
+               ratings: [
+                  {
+                     score: 5,
+                     criterion: {
+                        criterionDesc: 'Quality of Work',
+                        maxScore: 10,
+                     },
+                  },
+                  {
+                     score: 5,
+                     criterion: {
+                        criterionDesc: 'Productiveness',
+                        maxScore: 10,
+                     },
+                  },
+                  {
+                     score: 5,
+                     criterion: {
+                        criterionDesc: 'Proactiveness',
+                        maxScore: 10,
+                     },
+                  },
+                  {
+                     score: 5,
+                     criterion: {
+                        criterionDesc: 'Respectfulness',
+                        maxScore: 10,
+                     },
+                  },
+                  {
+                     score: 5,
+                     criterion: {
+                        criterionDesc: 'Meeting Performance',
+                        maxScore: 10,
+                     },
+                  },
+               ],
             },
          ],
-         weeks: [
-            '2023-09-01 to 2023-09-03',
-            '2023-09-04 to 2023-09-10',
-            '2023-09-11 to 2023-09-17',
-            '2023-09-18 to 2023-09-24',
-            '2023-09-25 to 2023-10-01',
-            '2023-10-02 to 2023-10-08',
-            '2023-10-09 to 2023-10-15',
-            '2023-10-16 to 2023-10-22', //This will prolly be
-            '2023-10-23 to 2023-10-29',
-            '2023-10-30 to 2023-11-05',
-            '2023-11-06 to 2023-11-12',
-            '2023-11-13 to 2023-11-19',
-            '2023-11-20 to 2023-11-26',
-            '2023-11-27 to 2023-12-03',
-            '2023-12-04 to 2023-12-10',
-            '2023-12-11 to 2023-12-15',
-         ],
+
+         selectedWeekId: null,
+         currentWeekId: null,
          selectedWeek: ref(null),
+         peerEvalEntriesForSelectedWeek: null,
+         hasEntry: false,
+         errorFlag: false,
+         responseFlag: null,
       }
    },
    /*
@@ -60,26 +97,108 @@ export default {
    components: {
       PeerEvalTable,
       WeekDropdown,
+      ErrorPopUp,
    },
    methods: {
+      getPeerEvalEntriesForWeek() {
+         axios
+            .get(
+               `http://localhost:8080/api/v1/peerEvaluation/1/${this.selectedWeekId}`,
+               {
+                  crossdomain: true,
+                  // params: {
+                  //    week: 1,
+                  //    id : 1
+                  // },
+               }
+            )
+            .then((response) => {
+               if (response.data.code == 200) {
+                  this.errorFlag = false
+                  this.hasEntry = true
+                  const peerEvalEntriesForWeek = response.data.data
+                  this.peerEvalEntriesForSelectedWeek = peerEvalEntriesForWeek
+               } else if (response.data.code == 404) {
+                  //Will be changed to new code
+                  this.errorFlag = false
+                  this.hasEntry = false
+                  createNewPeerEvalEntry() // Make this function create an empty peer eval entry for the week then pass to table for completion
+               } else {
+                  this.responseFlag = response.data.status
+                  this.errorFlag = true
+                  this.errorMessage = response.data.message
+               }
+            })
+            .catch((error) => {
+               // if(error)
+               if (error.response.status != 404) {
+                  this.errorFlag = false
+                  this.hasEntry = false
+                  createNewPeerEvalEntry()
+               } else {
+                  this.responseFlag = error.response.data.status
+                  this.errorFlag = true
+                  this.errorMessage = error.response.data.message
+               }
+            })
+      },
+      createNewPeerEvalEntry() {},
+
+      setWeekList() {
+         const startDate = new Date('August 21, 2023') // Start date
+         const endDate = new Date('May 6, 2024') // End date
+         const weeks = []
+
+         let currentDate = new Date(startDate)
+
+         let weekId = 1
+         while (currentDate <= endDate) {
+            const startOfWeek = new Date(currentDate)
+            const endOfWeek = new Date(currentDate)
+            endOfWeek.setDate(endOfWeek.getDate() + 6)
+
+            weeks.push({
+               id: weekId,
+               start: this.formatDate(startOfWeek),
+               end: this.formatDate(endOfWeek),
+            })
+
+            currentDate.setDate(currentDate.getDate() + 7) // Move to the next week
+            weekId++
+         }
+         this.weeks = weeks
+      },
+      formatDate(date) {
+         const day = String(date.getDate()).padStart(2, '0')
+         const month = String(date.getMonth() + 1).padStart(2, '0')
+         const year = date.getFullYear()
+
+         return `${month}-${day}-${year}`
+      },
+
       setSelectedWeek(week) {
          if (this.selectedWeek == null) {
-            this.selectedWeek = this.getCurrentWeek()
+            const currentWeek = this.getCurrentWeek()
+            this.selectedWeek = currentWeek.start + ' to ' + currentWeek.end
+            this.selectedWeekId = currentWeek.id
          } else {
-            this.selectedWeek = week
+            this.selectedWeek = week.start + ' to ' + week.end
+            this.selectedWeekId = week.id
          }
+         this.getPeerEvalEntriesForWeek()
       },
       getCurrentWeek() {
          var today = new Date()
          var dd = String(today.getDate()).padStart(2, '0')
          var mm = String(today.getMonth() + 1).padStart(2, '0') //January is 0!
          var yyyy = today.getFullYear()
-         today = yyyy + '-' + mm + '-' + dd
+         today = mm + '-' + dd + '-' + yyyy
          var currentWeek = this.weeks.find((week) => {
-            var weekStart = week.split(' ')[0]
-            var weekEnd = week.split(' ')[2]
+            var weekStart = week.start
+            var weekEnd = week.end
             return today >= weekStart && today <= weekEnd
          })
+         this.currentWeekId = currentWeek.id
          return currentWeek
       },
    },
@@ -88,7 +207,8 @@ export default {
          return this.getCurrentWeek()
       },
    },
-   mounted() {
+   created() {
+      this.setWeekList()
       this.setSelectedWeek()
    },
 }

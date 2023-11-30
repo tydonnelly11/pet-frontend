@@ -89,4 +89,3 @@
    margin-bottom: 0.5rem; /* Adds some space between dropdown items except the last one */
 }
  </style>
- 
