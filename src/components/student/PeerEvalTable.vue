@@ -44,6 +44,9 @@
       </table>
       <button type="submit">Submit</button>
    </form>
+   <div v-if="this.submissionStatus == 200" class="submit-message">
+      <p>Submitted!</p>
+   </div>
 </template>
 
 <script>
@@ -61,6 +64,7 @@ export default {
          rubric: null,
          peerEval: this.peerEvalProp,
          userID: '1',
+         submissionStatus: 0,
       }
    },
    watch: {
@@ -74,25 +78,35 @@ export default {
    methods: {
       submitEvaluation() {
          const targetPayload = []
-
+         var count = 0
          for (const item of this.peerEval) {
+            count = count + 1
             targetPayload.push({
                evaluatorId: this.userID,
-               evaluateeId: item.evaluateeId,
+               evaluateeId: count.toString(),
                week: item.week,
                ratings: item.ratings,
                comment: item.comment,
                oldScore: item.oldScore,
             })
+            console.log(targetPayload)
          }
-         const testPayload = this.peerEval[1]
-         testPayload.evaluatorId = '1'
-         console.log(targetPayload)
+         // const testPayload = {
+         //    evaluatorId: this.userID,
+         //       evaluateeId: this.peerEval[0].evaluateeId,
+         //       week: item..peerEval[0].week,
+         //       ratings: item.ratings,
+         //       comment: item.comment,
+         //       oldScore: item.oldScore,
+         // }
+         // testPayload.evaluatorId = '1'
+         // console.log(targetPayload)
 
          axios
-            .post('http://localhost:8080/api/v1/submitEval', testPayload, {})
+            .post('http://localhost:80/api/v1/submitEval', targetPayload, {})
             .then((response) => {
                console.log(response)
+               this.submissionStatus = response.data.code
             })
             .catch((error) => {
                console.log(error)

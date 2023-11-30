@@ -13,8 +13,12 @@
          :isPastWeek="isPastWeek"
          :peerEvalProp="this.peerEvalEntriesForSelectedWeek"
       />
-      <div v-else>
-         It is not the week yet for this peer eval, check back during this week.
+      <div
+         class="week-not-started"
+         v-else-if="!this.errorFlag & !this.hasEntry"
+      >
+         It is not the week yet for this peer eval, check back during
+         {{ this.selectedWeek }}.
       </div>
 
       <!-- <div v-else>
@@ -131,7 +135,7 @@ export default {
       getPeerEvalEntriesForWeek() {
          axios
             .get(
-               `http://localhost:8080/api/v1/peerEvaluation/1/${this.selectedWeekId}`,
+               `http://localhost:80/api/v1/peerEvaluation/1/${this.selectedWeekId}`,
                {
                   crossdomain: true,
                   // params: {
@@ -141,27 +145,40 @@ export default {
                }
             )
             .then((response) => {
-               console.log(response + 'response')
+               console.log(response)
                if (response.data.code == 200) {
                   this.errorFlag = false
                   this.hasEntry = true
                   const peerEvalEntriesForWeek = response.data.data
+                  for (const item of peerEvalEntriesForWeek) {
+                     item.oldScore = item.ratings.reduce(
+                        (a, b) => a + b.score,
+                        0
+                     )
+                  }
                   this.peerEvalEntriesForSelectedWeek = peerEvalEntriesForWeek
                   this.setPeerEvalVisibility(
                      this.currentWeekId,
                      this.selectedWeekId
                   )
-               } else if (response.data.code == 404) {
+               } else if (response.data.code == 409) {
                   //Will be changed to new code
+                  //409 is no entry for week
+
                   this.errorFlag = false
                   this.hasEntry = false
 
                   this.createNewPeerEvalEntry() // Make this function create an empty peer eval entry for the week then pass to table for completion
+               } else {
+                  this.hasEntry = false
+                  this.errorFlag = true
+                  this.responseFlag = response.data.code
+                  this.errorMessage = response.data.message
                }
             })
             .catch((error) => {
                console.log(error.response.status)
-               if (error.response.status == 404) {
+               if (error.response.status == 409) {
                   this.errorFlag = false //No error
                   this.hasEntry = false //No existing eval
                   console.log('about to create entry')
@@ -328,5 +345,10 @@ export default {
    flex-direction: column;
    justify-content: center;
    margin-top: 5%;
+}
+.week-not-started {
+   margin-top: 5%;
+   text-align: center;
+   font-size: 1.5em;
 }
 </style>
