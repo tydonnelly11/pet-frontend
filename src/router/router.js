@@ -6,7 +6,8 @@ import StudentHomePageView from '../views/StudentHomePageView.vue'
 import StudentPeerEvalView from '../views/StudentPeerEvalView.vue'
 import StudentTeamView from '..//views/StudentTeamView.vue'
 import InstructorHomePage from '../views/instructor/InstructorHomePageView.vue'
-import InstructorPeerEvalView from '../views/instructor/InstructorPeerEvalView.vue';
+import InstructorPeerEvalView from '../views/instructor/InstructorPeerEvalView.vue'
+import InstructorTeamView from '../views/instructor/InstructorTeamView.vue';
 
 const routes = [
    {
@@ -45,6 +46,12 @@ const routes = [
             path: 'instructorpeereval', // No leading slash for child routes
             name: 'InstructorPeerEval',
             component: InstructorPeerEvalView,
+         },
+         {
+            path: 'team/:teamId', // Dynamic segment for team ID
+            name: 'InstructorTeam',
+            component: InstructorTeamView,
+            props: true // This allows you to pass the teamId as a prop to the component
          },
          // The Instructor WAR is going to be added later
       ],
