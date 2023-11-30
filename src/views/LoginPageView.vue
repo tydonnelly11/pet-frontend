@@ -1,5 +1,8 @@
 <template>
    <div class="login-container">
+      <div class="logo-container">
+         <img src="img/logo.png" alt="Logo">
+      </div>
       <h1>Login</h1>
       <form @submit.prevent="login">
          <div class="form-container">
@@ -51,6 +54,9 @@ export default {
    display: flex;
    width: 50%;
    flex-direction: column;
+   flex-direction: column;
+   width: 50%;
+   margin-top: -10px;
 }
 .form-container {
    display: flex;
@@ -68,5 +74,9 @@ button {
    display: flex;
    flex-direction: row;
    justify-content: space-between;
+}
+.login-container{
+   margin-bottom: -175px;
+   margin-top: -300px;
 }
 </style>
