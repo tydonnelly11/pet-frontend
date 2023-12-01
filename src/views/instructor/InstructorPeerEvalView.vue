@@ -35,7 +35,7 @@
        reports: [], // This will hold the fetched evaluation reports
        isLoading: false,
        error: null,
-       sectionId: 1, // Replace with dynamic section ID
+      studentId: 3, // Replace with dynamic section ID
        selectedWeek: 'week1', // Replace with dynamic week selection
      };
    },
@@ -44,8 +44,8 @@
        this.isLoading = true;
        axios.get(`api/v1/evaluationReport`, {
          params: {
-           sectionId: this.sectionId,
-           week: this.selectedWeek,
+          studentId: this.studentId,
+           week: this.week,
          }
        }) 
        .then(response => {
