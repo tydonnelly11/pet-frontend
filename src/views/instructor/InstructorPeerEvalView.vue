@@ -1,75 +1,80 @@
 <template>
-   <div>
-     <h1>Instructor Peer Evaluation</h1>
-     <table>
-       <thead>
-         <tr>
-           <th>Student Name</th>
-           <th>Grade</th>
-           <th>Actions</th>
-         </tr>
-       </thead>
-       <tbody>
-         <tr v-for="(report, index) in reports" :key="index">
-           <td>{{ report.firstName }} {{ report.lastName }}</td>
-           <td>
-             <input type="number" v-model="report.averageScore" placeholder="Grade">
-           </td>
-           <td>
-             <!-- Remove button for each row -->
-             <button @click="removeReport(index)">Remove</button>
-           </td>
-         </tr>
-       </tbody>
-     </table>
-   </div>
- </template>
- 
- <script>
- import axios from 'axios';
- 
- export default {
-   name: 'InstructorPeerEvalView',
-   data() {
-     return {
-       reports: [], // This will hold the fetched evaluation reports
-       isLoading: false,
-       error: null,
-      studentId: 3, // Replace with dynamic section ID
-       selectedWeek: 'week1', // Replace with dynamic week selection
-     };
-   },
-   methods: {
-     fetchEvaluationReports() {
-       this.isLoading = true;
-       axios.get(`api/v1/evaluationReport`, {
-         params: {
+  <div>
+    <h1>Instructor Peer Evaluation</h1>
+    <!-- Display loading state or errors -->
+    <div v-if="isLoading">Loading...</div>
+    <div v-if="error" class="error-message">{{ error }}</div>
+    
+    <table v-if="!isLoading && !error">
+      <thead>
+        <tr>
+          <th>Student Name</th>
+          <th>Grade</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(report, index) in reports" :key="index">
+          <td>{{ report.firstName }} {{ report.lastName }}</td>
+          <td>
+            <input type="number" v-model="report.averageScore" placeholder="Grade">
+          </td>
+          <td>
+            <!-- Remove button for each row -->
+            <button @click="removeReport(index)">Remove</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</template>
+
+<script>
+import axios from 'axios';
+
+export default {
+  name: 'InstructorPeerEvalView',
+  data() {
+    return {
+      reports: [], // This will hold the fetched evaluation reports
+      isLoading: false,
+      error: null,
+      studentId: 3, // Replace with dynamic student ID
+      week: '15', // Replace with dynamic week selection
+    };
+  },
+  methods: {
+    fetchEvaluationReports() {
+      this.isLoading = true;
+      axios.get(`http://localhost:80/api/v1/evaluationReport`, {
+        params: {
           studentId: this.studentId,
-           week: this.week,
-         }
-       }) 
-       .then(response => {
-         this.isLoading = false;
-         if (response.data.flag && response.data.code === 200) {
-           this.reports = response.data.data;
-         } else {
-           this.error = response.data.message || 'Failed to fetch evaluation reports';
-         }
-       })
-       .catch(error => {
-         this.isLoading = false;
-         this.error = error.message || 'An error occurred while fetching data';
-       });
-     },
-     removeReport(index) {
-       this.reports.splice(index, 1);
-     },
-   },
-   mounted() {
-     this.fetchEvaluationReports();
-   },
- };
- </script>
+          week: this.week,
+        }
+      }) 
+      .then(response => {
+        this.isLoading = false;
+        if (response.data.flag && response.data.code === 200) {
+          this.reports = response.data.data;
+        } else {
+          this.error = response.data.message || 'Failed to fetch evaluation reports';
+        }
+      })
+      .catch(error => {
+        this.isLoading = false;
+        this.error = error.message || 'An error occurred while fetching data';
+      });
+    },
+    removeReport(index) {
+      this.reports.splice(index, 1);
+    },
+  },
+  mounted() {
+    this.fetchEvaluationReports();
+  },
+};
+</script>
+
  
  <style scoped>
  table {
