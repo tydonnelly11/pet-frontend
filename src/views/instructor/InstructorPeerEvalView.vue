@@ -10,19 +10,12 @@
         <tr>
           <th>Student Name</th>
           <th>Grade</th>
-          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(report, index) in reports" :key="index">
-          <td>{{ report.firstName }} {{ report.lastName }}</td>
-          <td>
-            <input type="number" v-model="report.averageScore" placeholder="Grade">
-          </td>
-          <td>
-            <!-- Remove button for each row -->
-            <button @click="removeReport(index)">Remove</button>
-          </td>
+          <td>{{ report.name }}</td>
+          <td>{{ report.score }}</td>
         </tr>
       </tbody>
     </table>
@@ -39,34 +32,47 @@ export default {
       reports: [], // This will hold the fetched evaluation reports
       isLoading: false,
       error: null,
-      studentId: 3, // Replace with dynamic student ID
-      week: '15', // Replace with dynamic week selection
+      studentId: [1, 2, 3, 4, 5], 
+      week: '15', 
     };
   },
   methods: {
-    fetchEvaluationReports() {
+    async fetchEvaluationReports() {
       this.isLoading = true;
-      axios.get(`http://localhost:80/api/v1/evaluationReport`, {
-        params: {
-          studentId: this.studentId,
-          week: this.week,
+      this.error = null;
+      // Temporary container for the reports
+      let tempReports = [];
+
+      // Fetch reports for each student
+      for (const studentId of this.studentId) {
+        try {
+          const response = await axios.get(`http://localhost:80/api/v1/evaluationReport`, {
+            params: {
+              studentId: studentId,
+              week: this.week,
+            }
+          });
+
+          if (response.data.flag && response.data.code === 200 && response.data.data.length > 0) {
+            const studentReport = response.data.data[0];
+            tempReports.push({
+              name: `${studentReport.firstName} ${studentReport.lastName}`,
+              score: `${studentReport.averageScore}/60`, 
+            });
+          } else {
+            this.error = response.data.message || `Failed to fetch evaluation report for student ID ${studentId}`;
+            // Consider how you want to handle partial failures
+          }
+        } catch (error) {
+          this.error = error.message || 'An error occurred while fetching data';
+          // Break the loop if one call fails or decide how to handle this case
+          break;
         }
-      }) 
-      .then(response => {
-        this.isLoading = false;
-        if (response.data.flag && response.data.code === 200) {
-          this.reports = response.data.data;
-        } else {
-          this.error = response.data.message || 'Failed to fetch evaluation reports';
-        }
-      })
-      .catch(error => {
-        this.isLoading = false;
-        this.error = error.message || 'An error occurred while fetching data';
-      });
-    },
-    removeReport(index) {
-      this.reports.splice(index, 1);
+      }
+
+      // All requests are complete, update the reports data property
+      this.reports = tempReports;
+      this.isLoading = false;
     },
   },
   mounted() {
@@ -75,24 +81,16 @@ export default {
 };
 </script>
 
- 
- <style scoped>
- table {
-   width: 100%;
-   border-collapse: collapse;
- }
- th, td {
-   border: 1px solid #ddd;
-   padding: 8px;
- }
- input[type="text"] {
-   width: 100%;
-   padding: 8px;
-   border: 1px solid #ddd;
- }
- button {
-   margin-top: 20px;
-   padding: 10px 20px;
-   cursor: pointer;
- }
- </style>
+<style scoped>
+.error-message {
+  color: red;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+</style>
