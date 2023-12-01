@@ -10,46 +10,63 @@
          </tr>
        </thead>
        <tbody>
-         <tr v-for="(evaluation, index) in evaluations" :key="index">
+         <tr v-for="(report, index) in reports" :key="index">
+           <td>{{ report.firstName }} {{ report.lastName }}</td>
            <td>
-             <input type="text" v-model="evaluation.name" placeholder="Enter student name">
-           </td>
-           <td>
-             <input type="text" v-model="evaluation.grade" placeholder="Enter grade">
+             <input type="number" v-model="report.averageScore" placeholder="Grade">
            </td>
            <td>
              <!-- Remove button for each row -->
-             <button @click="removeStudent(index)">Remove</button>
+             <button @click="removeReport(index)">Remove</button>
            </td>
          </tr>
        </tbody>
      </table>
-     <button @click="addStudent">Add Student</button>
-     <button @click="submitEvaluations">Submit Evaluations</button>
    </div>
  </template>
  
  <script>
+ import axios from 'axios';
+ 
  export default {
    name: 'InstructorPeerEvalView',
    data() {
      return {
-       evaluations: [
-         // Pre-populated or empty array as needed
-       ],
+       reports: [], // This will hold the fetched evaluation reports
+       isLoading: false,
+       error: null,
+       sectionId: 1, // Replace with dynamic section ID
+       selectedWeek: 'week1', // Replace with dynamic week selection
      };
    },
    methods: {
-     addStudent() {
-       this.evaluations.push({ name: '', grade: '' });
+     fetchEvaluationReports() {
+       this.isLoading = true;
+       axios.get(`api/v1/evaluationReport`, {
+         params: {
+           sectionId: this.sectionId,
+           week: this.selectedWeek,
+         }
+       }) 
+       .then(response => {
+         this.isLoading = false;
+         if (response.data.flag && response.data.code === 200) {
+           this.reports = response.data.data;
+         } else {
+           this.error = response.data.message || 'Failed to fetch evaluation reports';
+         }
+       })
+       .catch(error => {
+         this.isLoading = false;
+         this.error = error.message || 'An error occurred while fetching data';
+       });
      },
-     removeStudent(index) {
-       // Remove the evaluation at the given index
-       this.evaluations.splice(index, 1);
+     removeReport(index) {
+       this.reports.splice(index, 1);
      },
-     submitEvaluations() {
-       console.log(this.evaluations);
-     },
+   },
+   mounted() {
+     this.fetchEvaluationReports();
    },
  };
  </script>
