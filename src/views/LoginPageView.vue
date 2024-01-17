@@ -4,7 +4,7 @@
          <img src="img/logo.png" alt="Logo">
       </div>
       <h1>Login</h1>
-      <form @submit.prevent="login">
+      <div @submit.prevent="">
          <div class="form-container">
             <div class="input-field">
                <label for="email">Email:</label>
@@ -19,17 +19,20 @@
                   required
                />
             </div>
-            <button type="submit">Login</button>
+            <button type="submit" @click="loginStudent()">Login Student</button>
+            <button type="submit2" @click=loginInstructor()>Login Instructor</button>
+
 
             
          </div>
-      </form>
-      <button type="submit2" @click=pushInstructor()>Instructor</button>
+      </div>
+      <!-- <button type="submit2" @click=pushInstructor()>Instructor</button> -->
    </div>
 </template>
 
 <script>
 import { storeUser } from '../stores/store.js'
+import axios from 'axios'
 export default {
    // Will need to be changed - Ty Donnelly
    name: 'LoginPageView',
@@ -42,17 +45,35 @@ export default {
       }
    },
    methods: {
-      login() 
+      loginInstructor() 
       {
-         // axios.post('http://localhost:8080/api/v2/auth/login/student', {
-         //    headers: {
-              
-         //    }
-         // })
-         storeUser.updateLoginStatus("1", true)
-         console.log(storeUser.isLoggedIn)
-         console.log(storeUser.studentId)
-         this.$router.push('/studenthome')
+         axios.post('http://localhost:80/api/v1/auth/login/instructor', {
+            firstName: "",
+            middleName: "",
+            lastName: "",
+            id: "",
+            email: this.email,
+            password: this.password,
+            roles: "",
+            sections: [],
+         })
+         .then((response) => {
+            console.log(response)
+
+            storeUser.updateLoginStatus(response.data.data.id, true)
+            console.log(storeUser.isLoggedIn)
+            console.log(storeUser.studentId)
+            this.$router.push('/instructorhome')
+         }, (error) => {
+            console.log(error)
+         })
+         
+// UNCOMMENT THIS CODE 
+
+         // storeUser.updateLoginStatus("1", true)
+         // console.log(storeUser.isLoggedIn)
+         // console.log(storeUser.studentId)
+         // this.$router.push('/instructorhome')
 
          //         if (isAuthenticated) {
          //             this.$router.push('/dashboard')
@@ -61,58 +82,15 @@ export default {
          //             this.$router.push('/login')
          //   }
       },
+      loginStudent()
+      {
+
+      },
       pushInstructor()
       {
          this.$router.push('/instructorhome')
       },
-      async loginAsInstructor() {
-            try {
-                console.log(this.username);
-                console.log(this.password);
-                const basicAuth = 'Basic ' + btoa(this.username + ':' + this.password);
-                console.log(basicAuth);
-                const response = await axios.post('http://localhost:8080/api/users/login', {}, {
-                    headers: {
-                        Authorization: basicAuth
-                    }
-                });
-                console.log(response.data);
-                const token = response.data.data.token;
-                localStorage.setItem('token',token);
-                console.log(token);
-                // redirect to a new page after successful login
-                this.$router.push('/admin');
-            } catch (error) {
-                console.error(error);
-                this.errorMessage = error.response.data.message;
-            }
-        },
-
-        async loginAsStudent() {
-            try {
-                console.log(this.username);
-                console.log(this.password);
-                const basicAuth = 'Basic ' + btoa(this.username + ':' + this.password);
-                console.log(basicAuth);
-                const response = await axios.post('http://localhost:8080/api/users/login', {}, {
-                    headers: {
-                        Authorization: basicAuth
-                    }
-                });
-                console.log(response.data);
-                const token = response.data.data.token;
-                const superfrogEmail = response.data.data.userInfo.username;
-                localStorage.setItem('token',token);
-                console.log(token);
-                localStorage.setItem('superfrogEmail', superfrogEmail);
-                console.log(superfrogEmail);
-                // redirect to a new page after successful login
-                this.$router.push('/superfrog');
-            } catch (error) {
-                console.error(error);
-                this.errorMessage = error.response.data.message;
-            }
-        },
+      
    },
 }
 </script>
