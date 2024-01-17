@@ -18,6 +18,12 @@
              </li>
           </ul>
        </li>
+         <li class="nav-item flex-end">
+            <router-link class="nav-link" to="/instructorhome/section">Section</router-link>
+         </li>
+         <li class="nav-item flex-end">
+            <router-link class="nav-link" to="/instructorhome/invite">Invite Students</router-link>
+         </li>
     </ul>
  </template>
  

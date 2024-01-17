@@ -1,11 +1,11 @@
 <template>
    <div class="container">
-      <WeekDropdown
-         :current-week="currentWeekVar"
-         :select-week="this.selectedWeek"
-         :displayed-weeks="weeks"
+      <!-- <WeekDropdown
+         :currentWeekProp="currentWeekVar"
+         :selectWeek="this.selectedWeek"
+         :displayedWeeks="weeks"
          @select-week="setSelectedWeek"
-      />
+      /> -->
 
       <WarList
          :isTeamWar="false"
@@ -18,7 +18,11 @@
          @editTaskComplete="editTaskComplete"
          :editTaskProp="this.editTask"
       />
-      <AddWarTask v-else-if="!isPastWeek & !isFutureWeek" @add-task="addTask" />
+      
+      <AddWarTask v-else-if="(!isPastWeek & !isFutureWeek)"  @add-task="addTask" />
+      <button v-if="(!isEditTaskTrue)" @click="submitWarEntry">Submit Task</button>
+   <p v-if="hasSubmited" class="submit-msg">War Submitted for {{ this.selectedWeek }}</p>
+      
    </div>
 </template>
 
@@ -54,9 +58,14 @@ export default {
          editTaskIndex: 0,
          isFutureWeek: false,
          isPastWeek: false,
+         hasSubmited : false,
       }
    },
    methods: {
+      submitWarEntry() {
+         // Send the student's war to the database
+         this.hasSubmited = true
+      },
       addTask(task) {
          this.tasks.push(task)
       },
@@ -168,9 +177,10 @@ export default {
 .container {
    display: flex;
    flex-direction: column;
-   justify-content: space-around;
+   justify-content: space-evenly;
    width: 100%;
    height: 100%;
+   padding-top: 10%;
 }
 
 .profile {

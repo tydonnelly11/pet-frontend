@@ -1,24 +1,21 @@
 <template>
    <div class="student-pe-container">
-      <WeekDropdown
-         :currentWeek="currentWeekVar"
-         :selectWeek="this.selectedWeek"
-         :displayedWeeks="weeks"
-         @select-week="setSelectedWeek"
-      />
+      
       <!--@select-week is the emit from child component with week as first arg of the func-->
-
+      <div v-if="this.isPastWeek" class="display-grade">
+         <h1>Grade for {{ storeWeek.selectedWeek }}: {{ this.gradeForWeek }} </h1>
+      </div>
       <PeerEvalTable
-         v-if="!this.isFutureWeek & this.hasEntry"
+         v-if="(!this.isFutureWeek) & this.hasEntry"
          :isPastWeek="isPastWeek"
          :peerEvalProp="this.peerEvalEntriesForSelectedWeek"
       />
       <div
          class="week-not-started"
-         v-else-if="!this.errorFlag & !this.hasEntry"
+         v-else-if="(!this.errorFlag & !this.hasEntry) & this.isFutureWeek"
       >
          It is not the week yet for this peer eval, check back during
-         {{ this.selectedWeek }}.
+         {{ storeWeek.selectedWeek }}.
       </div>
 
       <!-- <div v-else>
@@ -34,6 +31,8 @@
 
 <script>
 import axios from 'axios'
+import { storeUser } from '../stores/store.js'
+import { storeWeek } from '../stores/storeWeek.js'
 import ErrorPopUp from '../components/utilities/ErrorPopUp.vue'
 import PeerEvalTable from '../components/student/PeerEvalTable.vue'
 import WeekDropdown from '../components/WeekDropdown.vue'
@@ -43,6 +42,10 @@ export default {
    props: {},
    data() {
       return {
+         storeUser,
+         storeWeek,
+
+
          evaluationData: [
             {
                evaluateeFirstName: 'Jonathan',
@@ -91,21 +94,19 @@ export default {
          team: [
             {
                studentid: '1',
-               studentName: 'John Doe1',
+               studentName: 'John Doe',
             },
             {
                studentid: '2',
-               studentName: 'John Doe2',
+               studentName: 'Jane Doe',
             },
             {
                studentid: '3',
-               studentName: 'John Doe3',
+               studentName: 'Johnahan Doe',
             },
-            {
-               studentid: '4',
-               studentName: 'John Doe4',
-            },
+            
          ],
+         gradeForWeek: 0,
 
          selectedWeekId: null,
          currentWeekId: 2,
@@ -132,10 +133,12 @@ export default {
       ErrorPopUp,
    },
    methods: {
-      getPeerEvalEntriesForWeek() {
+      async getPeerEvalEntriesForWeek() {
+         console.log("Store + " + storeUser.isLoggedIn)
+         console.log("Store" + storeUser.studentId)
          axios
             .get(
-               `http://localhost:80/api/v1/peerEvaluation/1/${this.selectedWeekId}`,
+               `http://localhost:80/api/v1/getPeerEvaluation/${storeUser.studentId}/${storeWeek.selectedWeekId}`,
                {
                   crossdomain: true,
                   // params: {
@@ -145,7 +148,7 @@ export default {
                }
             )
             .then((response) => {
-               console.log(response)
+               console.log(response + "NOT IN CATCH")
                if (response.data.code == 200) {
                   this.errorFlag = false
                   this.hasEntry = true
@@ -155,11 +158,12 @@ export default {
                         (a, b) => a + b.score,
                         0
                      )
+                     console.log(item.oldScore)
                   }
                   this.peerEvalEntriesForSelectedWeek = peerEvalEntriesForWeek
                   this.setPeerEvalVisibility(
-                     this.currentWeekId,
-                     this.selectedWeekId
+                     storeWeek.currentWeekId,
+                     storeWeek.selectedWeekId
                   )
                } else if (response.data.code == 409) {
                   //Will be changed to new code
@@ -177,19 +181,24 @@ export default {
                }
             })
             .catch((error) => {
-               console.log(error.response.status)
-               if (error.response.status == 409) {
-                  this.errorFlag = false //No error
-                  this.hasEntry = false //No existing eval
-                  console.log('about to create entry')
-                  this.createNewPeerEvalEntry()
-               } else {
+               if(error.response.status == 401){
+
                   this.hasEntry = false // No existing eval
-                  this.responseFlag = error.response.data.status //For error comp
+                  // this.responseFlag = error.response.data.code //For error comp
                   this.errorFlag = true //Shows error
-                  this.errorMessage = error.response.data.message //FOr error comp
+                  this.responseFlag = 401
+                  this.errorMessage = "Unauthorized Access, Please log in again"//FOr error comp
+               
                }
-            })
+               else{
+
+                  this.hasEntry = false // No existing eval
+                  // this.responseFlag = error.response.data.code //For error comp
+                  this.errorFlag = true //Shows error
+                  // this.errorMessage = error.response.data.message//FOr error comp
+               }
+            }
+            )
       },
       createNewPeerEvalEntry() {
          //API call to get teams
@@ -199,7 +208,7 @@ export default {
                evaluateeFirstName: item.studentName.split(' ')[0],
                evaluateeLastName: item.studentName.split(' ')[1],
                evaluateeId: item.studentid,
-               week: this.selectedWeekId,
+               week: storeWeek.currentWeekId,
                comment: '',
                ratings: [
                   {
@@ -240,7 +249,7 @@ export default {
                ],
             })
          }
-         this.setPeerEvalVisibility(this.currentWeekId, this.selectedWeekId)
+         this.setPeerEvalVisibility(storeWeek.currentWeekId, storeWeek.selectedWeekId)
          console.log(this.peerEvalEntriesForSelectedWeek)
       },
       setPeerEvalVisibility(currentWeekId, selectedWeekId) {
@@ -260,81 +269,25 @@ export default {
             this.hasEntry = true
             this.isPastWeek = true
             this.isFutureWeek = false
+            // this.getGradeForWeek(this.selectedWeekId, )
          }
       },
-
-      setWeekList() {
-         //Sets the week list for the dropdown menu
-         //Will be removed probably
-         const startDate = new Date('August 21, 2023') // Start date
-         const endDate = new Date('May 6, 2024') // End date
-         const weeks = []
-
-         let currentDate = new Date(startDate)
-
-         let weekId = 1
-         while (currentDate <= endDate) {
-            const startOfWeek = new Date(currentDate)
-            const endOfWeek = new Date(currentDate)
-            endOfWeek.setDate(endOfWeek.getDate() + 6)
-
-            weeks.push({
-               id: weekId,
-               start: this.formatDate(startOfWeek),
-               end: this.formatDate(endOfWeek),
-            })
-
-            currentDate.setDate(currentDate.getDate() + 7) // Move to the next week
-            weekId++
-         }
-         this.weeks = weeks
-      },
-      formatDate(date) {
-         //Formats date for display on week dropdown
-         const day = String(date.getDate()).padStart(2, '0')
-         const month = String(date.getMonth() + 1).padStart(2, '0')
-         const year = date.getFullYear()
-
-         return `${month}-${day}-${year}`
-      },
-
-      setSelectedWeek(week) {
-         //Sets the selected week based on what user selects
-         if (this.selectedWeek == null) {
-            const currentWeek = this.getCurrentWeek()
-            this.selectedWeek = currentWeek.start + ' to ' + currentWeek.end
-            this.selectedWeekId = currentWeek.id
-         } else {
-            this.selectedWeek = week.start + ' to ' + week.end
-            this.selectedWeekId = week.id
-         }
-         this.getPeerEvalEntriesForWeek()
-      },
-      getCurrentWeek() {
-         //Function gets current week based on provided week list
-         //Sets currentWeekID too
-         var today = new Date()
-         var dd = String(today.getDate()).padStart(2, '0')
-         var mm = String(today.getMonth() + 1).padStart(2, '0') //January is 0!
-         var yyyy = today.getFullYear()
-         today = mm + '-' + dd + '-' + yyyy
-         var currentWeek = this.weeks.find((week) => {
-            var weekStart = week.start
-            var weekEnd = week.end
-            return today >= weekStart && today <= weekEnd
-         })
-         this.currentWeekId = currentWeek.id
-         return currentWeek
-      },
+      
    },
+   watch: {
+      'storeWeek.selectedWeekId': function(newVal, oldVal) {
+         console.log(`currentWeekId changed from ${oldVal} to ${newVal}`);
+         // Call your function here
+         this.getPeerEvalEntriesForWeek();
+    }
+     
+   },
+
    computed: {
-      currentWeekVar() {
-         return this.getCurrentWeek()
-      },
+      
    },
    created() {
-      this.setWeekList()
-      this.setSelectedWeek()
+     this.getPeerEvalEntriesForWeek()
    },
 }
 </script>
@@ -345,6 +298,7 @@ export default {
    flex-direction: column;
    justify-content: center;
    margin-top: 5%;
+   height: 70%;
 }
 .week-not-started {
    margin-top: 5%;

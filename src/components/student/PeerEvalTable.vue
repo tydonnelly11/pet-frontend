@@ -76,7 +76,7 @@ export default {
       },
    },
    methods: {
-      submitEvaluation() {
+      async submitEvaluation() {
          const targetPayload = []
          var count = 0
          for (const item of this.peerEval) {
@@ -87,7 +87,7 @@ export default {
                week: item.week,
                ratings: item.ratings,
                comment: item.comment,
-               oldScore: item.oldScore,
+               oldScore: 0,
             })
             console.log(targetPayload)
          }

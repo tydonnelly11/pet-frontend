@@ -9,17 +9,17 @@
          :style="'width: 40%;'"
       >
          {{
-            selectWeek
-               ? this.selectWeek
-               : this.currentWeek.start + '-' + this.currentWeek.end
+            storeWeek.selectedWeek
+               ? convertWeekFormat(storeWeek.selectedWeek)
+               : convertWeekFormat(storeWeek.currentWeek)
          }}
       </a>
 
       <ul class="dropdown-menu" :style="'columns : 3;'">
          <li
-            v-for="week in displayedWeeks"
+            v-for="week in storeWeek.weeksForSemester"
             :value="week.id"
-            @click="$emit('selectWeek', week), userSelectsWeek()"
+            @click="storeWeek.updateSelectedWeek(week)"
          >
             <!--@Click Sends week to parent-->
 
@@ -30,17 +30,19 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, toRaw } from 'vue'
+import { storeWeek } from '../stores/storeWeek.js'
 export default {
    name: 'WeekDropdown',
    props: {
-      displayedWeeks: Array,
-      selectWeek: String,
-      currentWeek: Object,
+      
    },
    data() {
       return {
+         storeWeek,
          hasSelectedWeek: ref(false),
+         defaultCurrentWeek: toRaw(this.currentWeekProp),
+         currentWeekCalculated: false,
       }
    },
    methods: {
@@ -48,26 +50,19 @@ export default {
          console.log(this.displayedWeeks)
          this.hasSelectedWeek = true
       },
-      getCurrentWeek() {
-         var today = new Date()
-         var dd = String(today.getDate()).padStart(2, '0')
-         var mm = String(today.getMonth() + 1).padStart(2, '0') //January is 0!
-         var yyyy = today.getFullYear()
-         today = yyyy + '-' + mm + '-' + dd
-         var currentWeek = this.weeks.find((week) => {
-            var weekStart = week.split(' ')[0]
-            var weekEnd = week.split(' ')[2]
-            return today >= weekStart && today <= weekEnd
-         })
-         return currentWeek
-      },
+      
       convertWeekFormat(week) {
          var weekStart = week.start
          var weekEnd = week.end
          return weekStart + ' to ' + weekEnd
       },
    },
-   computed: {},
+   computed: {
+      
+   },
+   mounted() {
+     
+   },
 
    //Note for future self while doing visual only, so i think I
    //should try to emit event to warList which I think will handle what week is
@@ -76,4 +71,5 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>

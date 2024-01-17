@@ -88,7 +88,10 @@ export default {
          ],
       }
    },
-   methods: {},
+   methods: {
+      //Method for getting teams info using current weekvar
+      //Might put currentweek in localStore
+   },
    computed: {},
 }
 </script>

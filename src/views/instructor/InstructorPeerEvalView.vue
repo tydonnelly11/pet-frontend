@@ -32,7 +32,7 @@ export default {
       reports: [], // This will hold the fetched evaluation reports
       isLoading: false,
       error: null,
-      studentId: [1, 2, 3, 4, 5], 
+      studentId: [1, 2, 3], 
       week: '15', 
     };
   },

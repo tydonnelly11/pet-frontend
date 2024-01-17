@@ -1,6 +1,6 @@
 <template>
    <div class="sidebar-container">
-      <img src="img/logo.png" alt="Logo" class="logo">
+      <img src="/img/logo.png" alt="Logo" class="logo">
       <ul class="nav nav-pills flex-column justify-content">
          <li class="nav-item">
             <router-link to="/studenthome/team">Team</router-link>
@@ -35,13 +35,22 @@ export default {
 }
 
 .logo {
-   margin-top: -350px;
-   width: 150%; /* Adjust the width of the logo as needed */
-   margin-bottom: -820px; /* Add margin between logo and navigation links */
+   width: 100%; /* Adjust the width of the logo as needed */
 }
 
 .nav {
    width: 100%;
+    flex: 0 0 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    position: relative;
+    bottom: 20%;
+}
+a{
+   text-decoration: none;
+   font-weight: 550;
+   font-size: 1.5em;
 }
 
 .nav-item {
