@@ -1,11 +1,11 @@
 <template>
    <div class="student-team-view">
-      <WeekDropdown
-         :current-week="currentWeekVar"
-         :select-week="this.selectedWeek"
+      <!-- <WeekDropdown
+         :currentWeekProp="currentWeekVar"
+         :selectWeek="this.selectedWeek"
          :displayedWeeks="weeks"
          @select-week="setSelectedWeek"
-      ></WeekDropdown>
+      ></WeekDropdown> -->
       <WarTeamTable :team="team"></WarTeamTable>
    </div>
 </template>

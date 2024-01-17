@@ -2,11 +2,11 @@
    <div class="WarList-container">
       <!--Moved task addition to its own component AddWarTask-->
       <!-- Task List Table -->
-      <table class="table vh-45">
+      <h2>War Table for </h2> <!--Replace with teammates name-->
+      <table class="table">
          <!-- Table headers -->
          <thead>
             <tr>
-               <th scope="col">User</th>
                <th scope="col">Task</th>
                <th scope="col">Planned Task</th>
                <th scope="col">Description</th>
@@ -18,13 +18,12 @@
          <!-- Table body with dynamic rows -->
          <tbody>
             <tr v-for="(task, index) in tasks" :key="index">
-               <td>{{ task.user }}</td>
-               <td>{{ task.task }}</td>
-               <td>{{ task.plannedTask }}</td>
-               <td>{{ task.description }}</td>
-               <td>{{ task.plannedHours }}</td>
-               <td>{{ task.actualHours }}</td>
-               <td>{{ task.status }}</td>
+               <td :style="'width: 15%'">{{ task.task }}</td>
+               <td :style="'width: 25%'">{{ task.plannedTask }}</td>
+               <td :style="'width: 25%'">{{ task.description }}</td>
+               <td :style="'width: 10%'">{{ task.plannedHours }}</td>
+               <td :style="'width: 10%'">{{ task.actualHours }}</td>
+               <td :style="'width: 15%'">{{ task.status }}</td>
                <div v-if="!isTeamWar" class="button-group">
                   <button @click="$emit('deleteTask', task, index)">
                      Remove
@@ -98,8 +97,8 @@ export default {
    padding: 20px;
    background-color: #f5f5f5;
    border-radius: 10px;
-   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-   margin-bottom: 10%;
+   /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+   margin-bottom: 50px;
 }
 
 table {
