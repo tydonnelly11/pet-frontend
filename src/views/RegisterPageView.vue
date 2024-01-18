@@ -5,7 +5,7 @@
         </div>
         <div class="student-info">
            <p> {{ studentInfo.email }} </p> 
-           <p> {{ studentInfo.name }} </p> 
+           <p> {{ studentInfo.firstName + studentInfo.lastName }} </p> 
         </div>
 
         <input type="text" v-model="password2" placeholder="Enter your Password"/>
@@ -30,23 +30,29 @@ export default {
         studentInfo:{
             email: "",
             password: "",
-            name: "",
+            firstName: "",
+            middleName: "",
+            lastName: "",
+            sectionId: "",
+
         }
         
 
     }
    },
    methods: {
-        async getRegistrationInfo(){
+        getRegistrationInfo(){
+            console.log("here")
             
-            axios.get(`http://localhost:8080//api/v1/auth/register/student/getStudentRegistrationTokenInfo/${this.token}`, {
-                headers: {
-                 
-                },
+            axios.get(`http://localhost:80/api/v1/auth/register/student/getStudentRegistrationTokenInfo/${this.token}`, {
                 
             }).then(response => {
-                this.studentInfo.email = response.data.data.email
-                this.studentInfo.name = response.data.data.name
+                console.log(response)
+                this.studentInfo.email = response.data.data.studentEmail
+                this.studentInfo.firstName = response.data.data.studentFirstName 
+                this.studentInfo.lastName = response.data.data.studentLastName
+                this.studentInfo.middleName = response.data.data.studentMiddleName
+                this.studentInfo.sectionId = response.data.data.studentSectionId
                 
             }).catch(error => {
                 console.log(error)
@@ -55,10 +61,23 @@ export default {
             
         },
         registerStrudent(){
-            axios.post(`http://localhost:8080//api/v1/auth/register/student/${this.token}`, {
-                headers: {
-                 
-                },
+            axios.post(`http://localhost:80/api/v1/auth/register/student`, {
+                firstName: this.studentInfo.firstName,
+                middleName: this.studentInfo.middleName,
+                lastName: this.studentInfo.lastName,
+                email: this.studentInfo.email,
+                sectionId : this.studentInfo.sectionId,
+                password: this.password1,
+                roles : "user"
+                
+            },
+            {
+                withCredentials: true,
+            }
+            ).then(response => {
+                console.log(response)
+            }).catch(error => {
+                console.log(error)
                 
             })
         }

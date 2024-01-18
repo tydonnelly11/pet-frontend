@@ -46,66 +46,7 @@ export default {
          storeWeek,
 
 
-         evaluationData: [
-            {
-               evaluateeFirstName: 'Jonathan',
-               evaluateeLastName: 'Doe',
-               week: 1,
-               comment: 'Great teamwork and communication.',
-               ratings: [
-                  {
-                     score: 5,
-                     criterion: {
-                        criterionDesc: 'Quality of Work',
-                        maxScore: 10,
-                     },
-                  },
-                  {
-                     score: 5,
-                     criterion: {
-                        criterionDesc: 'Productiveness',
-                        maxScore: 10,
-                     },
-                  },
-                  {
-                     score: 5,
-                     criterion: {
-                        criterionDesc: 'Proactiveness',
-                        maxScore: 10,
-                     },
-                  },
-                  {
-                     score: 5,
-                     criterion: {
-                        criterionDesc: 'Respectfulness',
-                        maxScore: 10,
-                     },
-                  },
-                  {
-                     score: 5,
-                     criterion: {
-                        criterionDesc: 'Meeting Performance',
-                        maxScore: 10,
-                     },
-                  },
-               ],
-            },
-         ],
-         team: [
-            {
-               studentid: '1',
-               studentName: 'John Doe',
-            },
-            {
-               studentid: '2',
-               studentName: 'Jane Doe',
-            },
-            {
-               studentid: '3',
-               studentName: 'Johnahan Doe',
-            },
-            
-         ],
+         
          gradeForWeek: 0,
 
          selectedWeekId: null,
@@ -134,17 +75,12 @@ export default {
    },
    methods: {
       async getPeerEvalEntriesForWeek() {
-         console.log("Store + " + storeUser.isLoggedIn)
-         console.log("Store" + storeUser.studentId)
-         axios
-            .get(
-               `http://localhost:80/api/v1/getPeerEvaluation/${storeUser.studentId}/${storeWeek.selectedWeekId}`,
+         
+         axios.get(`http://localhost:80/api/v1/peerEvaluation/getPeerEvaluation/${storeUser.userID}/${storeWeek.selectedWeekId}`,
                {
                   crossdomain: true,
-                  // params: {
-                  //    week: 1,
-                  //    id : 1
-                  // },
+                  withCredentials: true,
+                 
                }
             )
             .then((response) => {
@@ -181,15 +117,26 @@ export default {
                }
             })
             .catch((error) => {
-               if(error.response.status == 401){
+               console.log(error.response)
+               if(error.response.data != null)
+               {
+                  if(error.response.data.code == 401){
 
-                  this.hasEntry = false // No existing eval
-                  // this.responseFlag = error.response.data.code //For error comp
-                  this.errorFlag = true //Shows error
-                  this.responseFlag = 401
-                  this.errorMessage = "Unauthorized Access, Please log in again"//FOr error comp
-               
+                     this.hasEntry = false // No existing eval
+                     // this.responseFlag = error.response.data.code //For error comp
+                     this.errorFlag = true //Shows error
+                     this.responseFlag = 401
+                     this.errorMessage = "Unauthorized Access, Please log in again"//FOr error comp
+
+                     }
+                     else if(error.response.code == 409){
+                     this.errorFlag = false
+                     this.hasEntry = false
+
+                     this.createNewPeerEvalEntry() // Make this function create an empty peer eval entry for the week then pass to table for completion
+                     }
                }
+               
                else{
 
                   this.hasEntry = false // No existing eval

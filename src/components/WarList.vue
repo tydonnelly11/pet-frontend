@@ -2,7 +2,7 @@
    <div class="WarList-container">
       <!--Moved task addition to its own component AddWarTask-->
       <!-- Task List Table -->
-      <h2>War Table for </h2> <!--Replace with teammates name-->
+       <!--Replace with teammates name-->
       <table class="table">
          <!-- Table headers -->
          <thead>
@@ -18,7 +18,7 @@
          <!-- Table body with dynamic rows -->
          <tbody>
             <tr v-for="(task, index) in tasks" :key="index">
-               <td :style="'width: 15%'">{{ task.task }}</td>
+               <td :style="'width: 15%'">{{ task.taskCategories }}</td>
                <td :style="'width: 25%'">{{ task.plannedTask }}</td>
                <td :style="'width: 25%'">{{ task.description }}</td>
                <td :style="'width: 10%'">{{ task.plannedHours }}</td>
@@ -73,15 +73,7 @@ export default {
             '2023-12-04 to 2023-12-10',
             '2023-12-11 to 2023-12-15',
          ],
-         newTask: {
-            user: 'John Doe', // Replace with the actual user information
-            task: '',
-            plannedTask: '',
-            description: '',
-            plannedHours: 0,
-            actualHours: 0,
-            status: '',
-         },
+         
          // Array to store tasks
          isFormVisible: false, // Flag to control form visibility
       }

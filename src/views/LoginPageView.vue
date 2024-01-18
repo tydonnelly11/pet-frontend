@@ -26,7 +26,7 @@
             
          </div>
       </div>
-      <!-- <button type="submit2" @click=pushInstructor()>Instructor</button> -->
+      <button type="submit2" @click=pushInstructor()>Login bypass to make first Instructor</button>
    </div>
 </template>
 
@@ -62,7 +62,11 @@ export default {
 
             storeUser.updateLoginStatus(response.data.data.id, true)
             console.log(storeUser.isLoggedIn)
-            console.log(storeUser.studentId)
+            console.log(storeUser.userID)
+            storeUser.setSectionId(response.data.data.sections[0].id)
+            console.log(storeUser.sectionId)
+            storeUser.setName(response.data.data.firstName,response.data.data.lastName)
+
             this.$router.push('/instructorhome')
          }, (error) => {
             console.log(error)
@@ -75,19 +79,38 @@ export default {
          // console.log(storeUser.studentId)
          // this.$router.push('/instructorhome')
 
-         //         if (isAuthenticated) {
-         //             this.$router.push('/dashboard')
-         //         } else
-         //         {
-         //             this.$router.push('/login')
-         //   }
+                
       },
       loginStudent()
       {
+         axios.post('http://localhost:80/api/v1/auth/login/student', {
+            firstName: "",
+            middleName: "",
+            lastName: "",
+            id: "",
+            email: this.email,
+            password: this.password,
+            roles: "",
+         })
+         .then((response) => {
+            console.log(response)
 
+            storeUser.updateLoginStatus(response.data.data.id, true)
+            console.log(storeUser.isLoggedIn)
+            console.log(storeUser.userID)
+            storeUser.setTeamId(response.data.data.teamId)
+            storeUser.setName(response.data.data.firstName,response.data.data.lastName)
+            // storeUser.setSectionId(response.data.data.sections[0].id)
+            this.$router.push('/studenthome')
+         }, (error) => {
+            console.log(error)
+         })
       },
       pushInstructor()
       {
+         storeUser.updateLoginStatus("1", true)
+         console.log(storeUser.isLoggedIn)
+         console.log(storeUser.userID)
          this.$router.push('/instructorhome')
       },
       

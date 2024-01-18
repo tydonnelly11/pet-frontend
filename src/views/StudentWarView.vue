@@ -1,12 +1,8 @@
 <template>
    <div class="container">
-      <!-- <WeekDropdown
-         :currentWeekProp="currentWeekVar"
-         :selectWeek="this.selectedWeek"
-         :displayedWeeks="weeks"
-         @select-week="setSelectedWeek"
-      /> -->
-
+      <div>
+         War For {{ storeUser.userFullName }} for Week {{ storeWeek.selectedWeek.start }} to {{ storeWeek.selectedWeek.end }}
+      </div>
       <WarList
          :isTeamWar="false"
          :tasks="tasks"
@@ -39,7 +35,10 @@ import WeekDropdown from '../components/WeekDropdown.vue'
 import AddWarTask from '../components/student/AddWarTask.vue'
 import ErrorPopUp from '../components/utilities/ErrorPopUp.vue'
 import EditWarTask from '../components/student/EditWarTask.vue'
+import axios from 'axios'
 import { ref } from 'vue'
+import { storeWeek } from '../stores/storeWeek.js'
+import { storeUser } from '../stores/store.js'
 
 export default {
    name: 'StudentWarView',
@@ -59,10 +58,31 @@ export default {
          isFutureWeek: false,
          isPastWeek: false,
          hasSubmited : false,
+         storeUser,storeWeek
       }
    },
    methods: {
       submitWarEntry() {
+         axios.post('http://localhost:80/api/v1/submit/activity', {
+            weekId: storeWeek.currentWeekId,
+            studentId : storeUser.userID,
+            taskCategories : this.tasks[0].task,
+            plannedTasks: this.tasks[0].plannedTasks,
+            description: this.tasks[0].description,
+            plannedHours: this.tasks[0].plannedHours,
+            actualHours: this.tasks[0].actualHours,
+            status: this.tasks[0].status,
+            comments : "",
+
+     
+         },
+         {
+            withCredentials: true,
+         }).then(response => {
+            console.log(response)
+         }).catch(error => {
+            console.log(error)
+         })
          // Send the student's war to the database
          this.hasSubmited = true
       },
@@ -83,39 +103,17 @@ export default {
       },
 
       getStudentWar() {
-         // Get the student's war from the database
+         axios.get(`http://localhost:80/api/v1/get/war/${storeUser.teamId}/${storeWeek.selectedWeekId}`,
+         {
+            withCredentials: true,
+         }).then(response => {
+            console.log(response)
+            
+         }).catch(error => {
+            console.log(error)
+         })
       },
-      setWeekList() {
-         const startDate = new Date('August 21, 2023') // Start date
-         const endDate = new Date('May 6, 2024') // End date
-         const weeks = []
-
-         let currentDate = new Date(startDate)
-
-         let weekId = 1
-         while (currentDate <= endDate) {
-            const startOfWeek = new Date(currentDate)
-            const endOfWeek = new Date(currentDate)
-            endOfWeek.setDate(endOfWeek.getDate() + 6)
-
-            weeks.push({
-               id: weekId,
-               start: this.formatDate(startOfWeek),
-               end: this.formatDate(endOfWeek),
-            })
-
-            currentDate.setDate(currentDate.getDate() + 7) // Move to the next week
-            weekId++
-         }
-         this.weeks = weeks
-      },
-      formatDate(date) {
-         const day = String(date.getDate()).padStart(2, '0')
-         const month = String(date.getMonth() + 1).padStart(2, '0')
-         const year = date.getFullYear()
-
-         return `${month}-${day}-${year}`
-      },
+      
       setWARVisibility(currentWeekId, selectedWeekId) {
          //Sets the visibility of the peer eval table and is used in
          //getPeerEvalEntriesForWeek() and createNewPeerEvalEntry() to
@@ -136,39 +134,15 @@ export default {
          }
       },
 
-      setSelectedWeek(week) {
-         if (this.selectedWeek == null) {
-            const currentWeek = this.getCurrentWeek()
-            this.selectedWeek = currentWeek.start + ' to ' + currentWeek.end
-            this.selectedWeekId = currentWeek.id
-         } else {
-            this.selectedWeek = week.start + ' to ' + week.end
-            this.selectedWeekId = week.id
-         }
-      },
-      getCurrentWeek() {
-         var today = new Date()
-         var dd = String(today.getDate()).padStart(2, '0')
-         var mm = String(today.getMonth() + 1).padStart(2, '0') //January is 0!
-         var yyyy = today.getFullYear()
-         today = mm + '-' + dd + '-' + yyyy
-         var currentWeek = this.weeks.find((week) => {
-            var weekStart = week.start
-            var weekEnd = week.end
-            return today >= weekStart && today <= weekEnd
-         })
-         this.currentWeekId = currentWeek.id
-         return currentWeek
-      },
+      
+      
    },
    computed: {
-      currentWeekVar() {
-         return this.getCurrentWeek()
-      },
+      
    },
    created() {
-      this.setWeekList()
-      this.setSelectedWeek()
+      this.getStudentWar()
+      
    },
 }
 </script>

@@ -11,6 +11,7 @@ import InstructorTeamView from '../views/instructor/InstructorTeamView.vue';
 import RegisterPageView from '../views/RegisterPageView.vue'
 import InstructorSectionView from '../views/instructor/InstructorSectionView.vue'
 import InstructorInviteStudentsView from '../views/instructor/InstructorInviteStudentsView.vue'
+import InstructorTeamEditView from '../views/instructor/InstructorTeamEditView.vue'
 import { storeUser } from '../stores/store.js'
 
 
@@ -78,6 +79,11 @@ const routes = [
             path: 'invite',
             name: 'InstructorInvite',
             component: InstructorInviteStudentsView,
+         },
+         {
+            path: 'editteams',
+            name: 'InstructorEditTeams',
+            component: InstructorTeamEditView,
          }
          // The Instructor WAR is going to be added later
       ],

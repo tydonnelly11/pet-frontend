@@ -24,6 +24,9 @@
          <li class="nav-item flex-end">
             <router-link class="nav-link" to="/instructorhome/invite">Invite Students</router-link>
          </li>
+         <li class="nav-item flex-end">
+            <router-link class="nav-link" to="/instructorhome/editteams">Add/edit teams</router-link>
+         </li>
     </ul>
  </template>
  

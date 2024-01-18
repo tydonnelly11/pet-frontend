@@ -3,7 +3,7 @@
       <h1>InstructorSectionView</h1>
    </div>
 
-   <div>
+   <div class="register-instructor">
       <div class="input-field">
          <label>First Name</label>
          <input type="text"  v-model="firstName" required />
@@ -28,17 +28,21 @@
    </div>
 
 
-   <div>
+   <div class="create-section">
+      <h2>Enter Details below to create a new section</h2>
       <div class="input-field">
          <label>Section Name</label>
          <input type="text" id="sectionName" v-model="sectionName" required /> 
 
       </div>
-      <h1>Enter Rubric Critera for Year</h1>
-      <div class="container">
+      <h4>Enter Rubric Critera for Year</h4>
          <div class="input-field">
             <label>Criteria Name</label>
             <input type="text" id="criteriaName" v-model="criteriaName" required />
+         </div>
+         <div class="input-field">
+            <label>Criteria Description</label>
+            <input type="text" id="criteriaDesc" v-model="criteriaDesc" required />
          </div>
       <div class="input-field">
             <label>Criteria Max Score</label>
@@ -46,10 +50,10 @@
          </div>
          <button type="submit" @click="addRubric">Add Criteria</button>
 
-      </div>
       <div class="list-of-rubrics">
             <h2>List of Criteria</h2>
             <div class="rubric" v-for="rubric in criteria">
+               <p>Name: {{ rubric.criterionName }}</p>
                 <p>Description: {{ rubric.criterionDesc }}</p>
                 <p>Max Score: {{ rubric.maxScore }}</p>
                 
@@ -64,17 +68,16 @@
          <label>Team Name</label>
          <input type="text" id="sectionName" v-model="teamName" required />
       </div>
-      <button type="submit" @click="addTeam">Add Team</button>
 
-      <div>
+      <!-- <div>
          Created Teams for Section: {{sectionId}}
          <div class="team" v-for="team in listOfTeams">
 
             <p>Team Name: {{ team.teamName }}</p>
          </div>
-      </div>
+      </div> -->
 
-   <button type="submit" @click="createTeams()">Create Teams</button>
+   <button type="submit" @click="createTeams()">Create Team</button>
 
 
    </div>
@@ -94,8 +97,9 @@ export default {
          criteria: [],
          teamName: "",
          rubricName: "",
-         maxScore: "",
+         maxScore: 0,
          criteriaName: "",
+         criteriaDesc: "",
          sectionId: "",
          hasCreatedSection: false,
          storeUser,
@@ -105,6 +109,7 @@ export default {
          lastName: "",
          email: "",
          password: "",
+
 
 
          
@@ -120,11 +125,12 @@ export default {
       },
       addRubric() {
          this.criteria.push({
-            criterionDesc: this.criteriaName,
+            criterionName: this.criteriaName,
+            criterionDesc: this.criteriaDesc,
             maxScore: this.maxScore,
          })
          console.log(this.criteria)
-         this.maxScore = ""
+         this.maxScore = 0
          this.criteriaName = ""
       },
       registerInstructor() {
@@ -141,7 +147,7 @@ export default {
             .then(res => {
                console.log(res.data)
                storeUser.updateLoginStatus(res.data.data, true)
-               console.log(storeUser.studentId)
+               console.log(storeUser.userID)
             })
             .catch(err => {
                console.log(err)
@@ -155,16 +161,21 @@ export default {
          const dto ={
             id : null,
             name: this.sectionName,
-            instructorId: storeUser.studentId,
+            instructorId: storeUser.userID,
             rubric: this.criteria ,
          }
          axios.post(`http://localhost:80/api/v1/section/save`, {
             id : null,
             name: this.sectionName,
-            instructorId: storeUser.studentId,
-            rubric: this.criteria,
-         })
+            instructorId: storeUser.userID,
+            rubric: rubric,
+         },
+         { 
+            withCredentials: true
+         }
+         )
             .then(res => {
+               console.log(res)
                console.log(res.data.data)
                this.sectionId = res.data.data
                this.hasCreatedSection = true
@@ -172,7 +183,28 @@ export default {
             .catch(err => {
                console.log(err)
             })
-      }
+      },
+      createTeams() {
+         axios.post(`http://localhost:80/api/v1/team/save`, {
+            id : null,
+            name: this.teamName,
+            sectionId: this.sectionId,
+            students: null,
+         },
+         { 
+            withCredentials: true
+         }
+         )
+            .then(res => {
+               console.log(res)
+               console.log(res.data.data)
+               
+               
+            })
+            .catch(err => {
+               console.log(err)
+            })
+      },
    },
    computed: {},
 }
@@ -180,5 +212,52 @@ export default {
 </script>
 
 <style scoped>
+.register-instructor {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: space-evenly;
+   margin-top: 50px;
+   height: 80%;
+}
 
+.create-section{
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: space-evenly;
+   margin-top: 50px;
+   height: 80%;
+
+}
+.input-field {
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+   justify-content: space-evenly;
+   width: 90%;
+
+}
+label{
+   display: flex;
+   flex: 0 0 50%;
+}
+
+input{
+   flex: 0 0 50%;
+}
+.list-of-rubrics{
+   width: 100%
+}
+
+.rubric{
+   display: flex;
+   flex-direction: row;
+   justify-content: space-evenly;
+   width: 100%;
+}
+
+.rubric > p{
+   flex: 0 0 33%;
+}
 </style>
