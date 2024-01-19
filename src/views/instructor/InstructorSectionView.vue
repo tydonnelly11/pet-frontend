@@ -2,6 +2,9 @@
    <div class="InstructorSectionView">
       <h1>InstructorSectionView</h1>
    </div>
+   <!-- <div class="error-popup">
+      <ErrorPopUp v-if="hasError" :errorMessage="errorMessage" />
+   </div> -->
 
    <div class="register-instructor">
       <div class="input-field">
@@ -25,6 +28,9 @@
          <input type="text"  v-model="password" required />
       </div>
       <button type="submit" @click="registerInstructor">Register Instructor</button>
+      <div v-if="hasSubmittedInstructor" class="success">
+         <p>Instructor Succesfully Added!</p>
+      </div>
    </div>
 
 
@@ -60,8 +66,11 @@
             </div>
         </div>
       <button type="submit" @click="submitSection">Create Section</button>
+      <div class="success" v-if="hasCreatedSection">
+         <p>Section Succesfully Created!</p>
 
       </div>
+   </div>
    <div v-if="hasCreatedSection">
       Add Teams for Section: {{sectionName}}
       <div class="input-field">
@@ -82,15 +91,17 @@
 
    </div>
 
-
 </template>
 
 <script>
 import { storeUser } from '@/stores/store.js'
 import axios from 'axios'
+import ErrorPopUp from '@/components/utilities/ErrorPopUp.vue'
 export default {
    name: 'InstructorSectionView',
-   components: {},
+   components: {
+      ErrorPopUp
+   },
    data() {
       return {
          listOfTeams: [],
@@ -102,6 +113,8 @@ export default {
          criteriaDesc: "",
          sectionId: "",
          hasCreatedSection: false,
+         hasSubmittedInstructor: false,
+         hasCreatedTeams: false,
          storeUser,
          sectionName: "",
          firstName: "",
@@ -109,6 +122,7 @@ export default {
          lastName: "",
          email: "",
          password: "",
+         hasError: false,
 
 
 
@@ -132,6 +146,7 @@ export default {
          console.log(this.criteria)
          this.maxScore = 0
          this.criteriaName = ""
+         this.hasError = true
       },
       registerInstructor() {
          axios.post(`http://localhost:80/api/v1/auth/register/instructor`, {
@@ -148,6 +163,7 @@ export default {
                console.log(res.data)
                storeUser.updateLoginStatus(res.data.data, true)
                console.log(storeUser.userID)
+               this.hasSubmittedInstructor = true
             })
             .catch(err => {
                console.log(err)
@@ -198,6 +214,7 @@ export default {
             .then(res => {
                console.log(res)
                console.log(res.data.data)
+               this.hasCreatedTeams = true
                
                
             })
@@ -255,6 +272,17 @@ input{
    flex-direction: row;
    justify-content: space-evenly;
    width: 100%;
+}
+.error-popup {
+   position: fixed;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   z-index: 1000;
+   background-color: white;
+
+   ;
+   /* Add more styles for background, padding, etc. */
 }
 
 .rubric > p{

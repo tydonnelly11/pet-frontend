@@ -15,9 +15,9 @@
 </template>
 
 <script>
-import NavbarSide from '../components/student/NavbarSide.vue'
-import WeekDropdown from '../components/WeekDropdown.vue';
-import {storeWeek} from '../stores/storeWeek.js';
+import NavbarSide from '@/components/student/NavbarSide.vue'
+import WeekDropdown from '@/components/WeekDropdown.vue';
+import {storeWeek} from '@/stores/storeWeek.js';
 export default {
    name: 'StudentHomePageView',
    components: {

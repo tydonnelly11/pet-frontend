@@ -3,7 +3,8 @@
       
       <!--@select-week is the emit from child component with week as first arg of the func-->
       <div v-if="this.isPastWeek" class="display-grade">
-         <h1>Grade for {{ storeWeek.selectedWeek }}: {{ this.gradeForWeek }} </h1>
+         <h1>Grade for {{ storeWeek.selectedWeek.start }} to {{ storeWeek.selectedWeek.end }} :</h1>
+         <!-- {{ this.gradeForWeek }} -->
       </div>
       <PeerEvalTable
          v-if="(!this.isFutureWeek) & this.hasEntry"
@@ -15,7 +16,7 @@
          v-else-if="(!this.errorFlag & !this.hasEntry) & this.isFutureWeek"
       >
          It is not the week yet for this peer eval, check back during
-         {{ storeWeek.selectedWeek }}.
+         {{ storeWeek.selectedWeek.start }} to {{ storeWeek.selectedWeek.end }}.
       </div>
 
       <!-- <div v-else>
@@ -31,11 +32,11 @@
 
 <script>
 import axios from 'axios'
-import { storeUser } from '../stores/store.js'
-import { storeWeek } from '../stores/storeWeek.js'
-import ErrorPopUp from '../components/utilities/ErrorPopUp.vue'
-import PeerEvalTable from '../components/student/PeerEvalTable.vue'
-import WeekDropdown from '../components/WeekDropdown.vue'
+import { storeUser } from '@/stores/store.js'
+import { storeWeek } from '@/stores/storeWeek.js'
+import ErrorPopUp from '@/components/utilities/ErrorPopUp.vue'
+import PeerEvalTable from '@/components/student/PeerEvalTable.vue'
+import WeekDropdown from '@/components/WeekDropdown.vue'
 import { ref } from 'vue'
 export default {
    name: 'StudentPeerEvalView',
@@ -44,14 +45,14 @@ export default {
       return {
          storeUser,
          storeWeek,
+         team: [
+            {
+               studentId : 1,
+               studentName: 'John Doe',
+            }
 
-
-         
+         ],
          gradeForWeek: 0,
-
-         selectedWeekId: null,
-         currentWeekId: 2,
-         selectedWeek: ref(null),
          peerEvalEntriesForSelectedWeek: [],
          hasEntry: false,
          errorFlag: false,
@@ -84,7 +85,6 @@ export default {
                }
             )
             .then((response) => {
-               console.log(response + "NOT IN CATCH")
                if (response.data.code == 200) {
                   this.errorFlag = false
                   this.hasEntry = true
@@ -107,7 +107,6 @@ export default {
 
                   this.errorFlag = false
                   this.hasEntry = false
-
                   this.createNewPeerEvalEntry() // Make this function create an empty peer eval entry for the week then pass to table for completion
                } else {
                   this.hasEntry = false
@@ -120,8 +119,11 @@ export default {
                console.log(error.response)
                if(error.response.data != null)
                {
+                  console.log(error.response.data.code)
+                  console.log("BEFORE SECOND IFS")
+                  console.log(error.response.data.code == 409)
                   if(error.response.data.code == 401){
-
+                     console.log("HERE")
                      this.hasEntry = false // No existing eval
                      // this.responseFlag = error.response.data.code //For error comp
                      this.errorFlag = true //Shows error
@@ -129,16 +131,16 @@ export default {
                      this.errorMessage = "Unauthorized Access, Please log in again"//FOr error comp
 
                      }
-                     else if(error.response.code == 409){
+                  else if(error.response.data.code == 409){
                      this.errorFlag = false
                      this.hasEntry = false
 
                      this.createNewPeerEvalEntry() // Make this function create an empty peer eval entry for the week then pass to table for completion
-                     }
+                  }
+                  
                }
                
                else{
-
                   this.hasEntry = false // No existing eval
                   // this.responseFlag = error.response.data.code //For error comp
                   this.errorFlag = true //Shows error

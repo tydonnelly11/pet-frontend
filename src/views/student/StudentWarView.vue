@@ -30,15 +30,15 @@ It will also add a task to the students war and
 send it to the backend
 
 */
-import WarList from '../components/WarList.vue'
-import WeekDropdown from '../components/WeekDropdown.vue'
-import AddWarTask from '../components/student/AddWarTask.vue'
-import ErrorPopUp from '../components/utilities/ErrorPopUp.vue'
-import EditWarTask from '../components/student/EditWarTask.vue'
+import WarList from '@/components/WarList.vue'
+import WeekDropdown from '@/components/WeekDropdown.vue'
+import AddWarTask from '@/components/student/AddWarTask.vue'
+import ErrorPopUp from '@/components/utilities/ErrorPopUp.vue'
+import EditWarTask from '@/components/student/EditWarTask.vue'
 import axios from 'axios'
 import { ref } from 'vue'
-import { storeWeek } from '../stores/storeWeek.js'
-import { storeUser } from '../stores/store.js'
+import { storeWeek } from '@/stores/storeWeek.js'
+import { storeUser } from '@/stores/store.js'
 
 export default {
    name: 'StudentWarView',
@@ -66,8 +66,8 @@ export default {
          axios.post('http://localhost:80/api/v1/submit/activity', {
             weekId: storeWeek.currentWeekId,
             studentId : storeUser.userID,
-            taskCategories : this.tasks[0].task,
-            plannedTasks: this.tasks[0].plannedTasks,
+            taskCategories : this.tasks[0].taskCategories,
+            plannedTask: this.tasks[0].plannedTask,
             description: this.tasks[0].description,
             plannedHours: this.tasks[0].plannedHours,
             actualHours: this.tasks[0].actualHours,

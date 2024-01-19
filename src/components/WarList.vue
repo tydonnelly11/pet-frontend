@@ -7,7 +7,8 @@
          <!-- Table headers -->
          <thead>
             <tr>
-               <th scope="col">Task</th>
+               <th scope="col">Student</th>
+               <th scope="col">Task Category</th>
                <th scope="col">Planned Task</th>
                <th scope="col">Description</th>
                <th scope="col">Planned Hours</th>
@@ -18,8 +19,9 @@
          <!-- Table body with dynamic rows -->
          <tbody>
             <tr v-for="(task, index) in tasks" :key="index">
+               <td :style="'width: 15%'">{{ task.studentName }}</td>
                <td :style="'width: 15%'">{{ task.taskCategories }}</td>
-               <td :style="'width: 25%'">{{ task.plannedTask }}</td>
+               <td :style="'width: 20%'">{{ task.plannedTask }}</td>
                <td :style="'width: 25%'">{{ task.description }}</td>
                <td :style="'width: 10%'">{{ task.plannedHours }}</td>
                <td :style="'width: 10%'">{{ task.actualHours }}</td>
@@ -55,24 +57,7 @@ export default {
    },
    data() {
       return {
-         warDates2023: [
-            '2023-09-01 to 2023-09-03',
-            '2023-09-04 to 2023-09-10',
-            '2023-09-11 to 2023-09-17',
-            '2023-09-18 to 2023-09-24',
-            '2023-09-25 to 2023-10-01',
-            '2023-10-02 to 2023-10-08',
-            '2023-10-09 to 2023-10-15',
-            '2023-10-16 to 2023-10-22',
-            '2023-10-23 to 2023-10-29',
-            '2023-10-30 to 2023-11-05',
-            '2023-11-06 to 2023-11-12',
-            '2023-11-13 to 2023-11-19',
-            '2023-11-20 to 2023-11-26',
-            '2023-11-27 to 2023-12-03',
-            '2023-12-04 to 2023-12-10',
-            '2023-12-11 to 2023-12-15',
-         ],
+         
          
          // Array to store tasks
          isFormVisible: false, // Flag to control form visibility
