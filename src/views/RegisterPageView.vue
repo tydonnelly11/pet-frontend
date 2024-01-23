@@ -55,7 +55,7 @@ export default {
         getRegistrationInfo(){
             console.log("here")
             
-            axios.get(`http://localhost:80/api/v1/auth/register/student/getStudentRegistrationTokenInfo/${this.token}`, {
+            axios.get(`/api/v1/auth/register/student/getStudentRegistrationTokenInfo/${this.token}`, {
                 
             }).then(response => {
                 console.log(response)
@@ -76,7 +76,7 @@ export default {
                 alert("Passwords do not match")
                 return
             }
-            axios.post(`http://localhost:80/api/v1/auth/register/student`, {
+            axios.post(`/api/v1/auth/register/student`, {
                 firstName: this.studentInfo.firstName,
                 middleName: this.studentInfo.middleName,
                 lastName: this.studentInfo.lastName,

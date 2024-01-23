@@ -8,7 +8,7 @@ export default defineConfig({
    resolve: {
       alias: {
          '@': '/src',
-         '@api': '/api',
+         '': '/api',
       },
       test: {
          globals: true,

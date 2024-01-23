@@ -36,7 +36,7 @@ export default {
    },
    methods: {
       getTeamMembers() {
-         axios.get(`@api/api/v1/team/getStudents/${storeUser.teamId}`,
+         axios.get(`/api/v1/team/getStudents/${storeUser.teamId}`,
          {
              withCredentials: true,
          }
