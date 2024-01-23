@@ -4,10 +4,7 @@
    </div>
 
    <div class="main-item">
-      <WeekDropdown :displayedWeeks="storeWeek.weeksForSemester" 
-      :selectWeek="storeWeek.currentWeekId" 
-      :currentWeekProp="storeWeek.currentWeek">
-      </WeekDropdown>
+      
       <router-view> </router-view>
    </div>
 </template>
