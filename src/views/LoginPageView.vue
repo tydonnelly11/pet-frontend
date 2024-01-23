@@ -49,7 +49,7 @@ export default {
    methods: {
       loginInstructor() 
       {
-         axios.post('/api/v1/auth/login/instructor', {
+         axios.post('baseurl/api/v1/auth/login/instructor', {
             firstName: "",
             middleName: "",
             lastName: "",
@@ -85,7 +85,7 @@ export default {
       },
       loginStudent()
       {
-         axios.post('/api/v1/auth/login/student', {
+         axios.post('baseurl/api/v1/auth/login/student', {
             firstName: "",
             middleName: "",
             lastName: "",

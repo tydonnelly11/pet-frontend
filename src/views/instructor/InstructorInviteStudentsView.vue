@@ -72,7 +72,7 @@ export default {
         },
         submitStudents() {
             this.isLoading = true
-            axios.post(`/api/v1/auth/register/student/inviteStudents`, 
+            axios.post(`baseurl/api/v1/auth/register/student/inviteStudents`, 
                 
                     this.listOfStudents
             ,{
