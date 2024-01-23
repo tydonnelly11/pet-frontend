@@ -1,14 +1,18 @@
 <template>
    <div class="container">
-      <div>
-         War For {{ storeUser.userFullName }} for Week {{ storeWeek.selectedWeek.start }} to {{ storeWeek.selectedWeek.end }}
+      <div v-if="!isFutureWeek">
+         War For <b>{{ storeUser.userFullName }} </b>for Week {{ storeWeek.selectedWeek.start }} to {{ storeWeek.selectedWeek.end }}
       </div>
       <WarList
+         v-if="(!isFutureWeek)"
          :isTeamWar="false"
-         :tasks="tasks"
+         :studentTasks="studentTasks"
          @editTask="editTaskStart"
          @deleteTask="deleteTask"
       />
+      <div v-if="isFutureWeek">
+         Come back during {{ storeWeek.selectedWeek.start }} to {{ storeWeek.selectedWeek.end }} to submit your war
+      </div>
       <EditWarTask
          v-if="isEditTaskTrue"
          @editTaskComplete="editTaskComplete"
@@ -51,7 +55,10 @@ export default {
    data() {
       return {
          selectedWeek: ref(null),
-         tasks: [],
+         studentTasks : {
+            name : storeUser.userFullName,
+            tasks : []
+         },
          editTask: null,
          isEditTaskTrue: false,
          editTaskIndex: 0,
@@ -63,16 +70,16 @@ export default {
    },
    methods: {
       submitWarEntry() {
-         axios.post('http://localhost:80/api/v1/submit/activity', {
+         axios.post('http://localhost:80/api/v1/activity/submit', {
             weekId: storeWeek.currentWeekId,
             studentId : storeUser.userID,
-            taskCategories : this.tasks[0].taskCategories,
-            plannedTask: this.tasks[0].plannedTask,
-            description: this.tasks[0].description,
-            plannedHours: this.tasks[0].plannedHours,
-            actualHours: this.tasks[0].actualHours,
-            status: this.tasks[0].status,
-            comments : "",
+            taskCategories : this.studentTasks.tasks[0].taskCategories,
+            plannedTask: this.studentTasks.tasks[0].plannedTask,
+            description: this.studentTasks.tasks[0].description,
+            plannedHours: this.studentTasks.tasks[0].plannedHours,
+            actualHours: this.studentTasks.tasks[0].actualHours,
+            status: this.studentTasks.tasks[0].status,
+            comments : this.studentTasks.tasks[0].comments,
 
      
          },
@@ -87,7 +94,7 @@ export default {
          this.hasSubmited = true
       },
       addTask(task) {
-         this.tasks.push(task)
+         this.studentTasks.tasks.push(task)
       },
       editTaskStart(task, index) {
          this.editTask = task
@@ -95,24 +102,35 @@ export default {
          this.editTaskIndex = index
       },
       editTaskComplete(task) {
-         this.tasks[this.editTaskIndex] = task
+         this.studentTasks.tasks[this.editTaskIndex] = task
          this.isEditTaskTrue = false
       },
       deleteTask(task, index) {
-         this.tasks.splice(index, 1)
+         this.studentTasks.tasks.splice(index, 1)
       },
 
       getStudentWar() {
-         axios.get(`http://localhost:80/api/v1/get/war/${storeUser.teamId}/${storeWeek.selectedWeekId}`,
+         axios.get(`http://localhost:80/api/v1/war/get`,
          {
+            params: {
+               teamId: storeUser.teamId,
+               weekId: storeWeek.selectedWeekId,
+            },
             withCredentials: true,
          }).then(response => {
             console.log(response)
+            for(const activity of response.data.data.activities){
+               if(activity.studentId == storeUser.userID){
+                  this.studentTasks.tasks.push(activity)
+               }
+            }
+            
             
          }).catch(error => {
             console.log(error)
          })
       },
+      
       
       setWARVisibility(currentWeekId, selectedWeekId) {
          //Sets the visibility of the peer eval table and is used in
@@ -140,6 +158,17 @@ export default {
    computed: {
       
    },
+   watch: {
+      'storeWeek.selectedWeekId': function(newVal, oldVal) {
+         console.log(`SelectedWeekId changed from ${oldVal} to ${newVal}`);
+         this.tasks = []
+         this.getStudentWar();
+         this.setWARVisibility(storeWeek.currentWeekId, storeWeek.selectedWeekId)
+
+    }
+     
+   },
+
    created() {
       this.getStudentWar()
       

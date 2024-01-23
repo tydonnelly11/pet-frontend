@@ -12,6 +12,13 @@
         <input type="text" v-model="password1" placeholder="Enter your Password"/>
 
         <button @click="registerStrudent">Register</button>
+        <div class="loading">
+            <p v-if="isLoading">Request being processed...DO NOT REFRESH</p>
+        </div>
+        <div class="success">
+            <p v-if="hasSubmittedStudents">Succesfully Registered</p>
+            <button @click="goToLogin">Go to Login</button>
+        </div>
     </div>
 
 
@@ -34,6 +41,8 @@ export default {
             middleName: "",
             lastName: "",
             sectionId: "",
+            isLoading: false,
+            hasSubmittedStudents: false,
 
         }
         
@@ -76,8 +85,11 @@ export default {
             }
             ).then(response => {
                 console.log(response)
+                this.isLoading = false
+                this.hasSubmittedStudents = true
             }).catch(error => {
                 console.log(error)
+                this.isLoading = false
                 
             })
         }

@@ -32,8 +32,10 @@
 
 <script>
 import axios from 'axios'
+import _ from 'lodash'
 import { storeUser } from '@/stores/store.js'
 import { storeWeek } from '@/stores/storeWeek.js'
+import { storeTeam } from '@/stores/storeTeam.js'
 import ErrorPopUp from '@/components/utilities/ErrorPopUp.vue'
 import PeerEvalTable from '@/components/student/PeerEvalTable.vue'
 import WeekDropdown from '@/components/WeekDropdown.vue'
@@ -47,8 +49,8 @@ export default {
          storeWeek,
          team: [
             {
-               studentId : 1,
-               studentName: 'John Doe',
+               studentId : '3deea794-06ba-4dc2-9255-d18a7d5eb61c'	,
+               studentName: 'Student One',
             }
 
          ],
@@ -59,6 +61,7 @@ export default {
          responseFlag: null,
          isPastWeek: false,
          isFutureWeek: false,
+         rubric: null,
       }
    },
    /*
@@ -149,53 +152,33 @@ export default {
             }
             )
       },
+      
+      
       createNewPeerEvalEntry() {
-         //API call to get teams
+         
          this.peerEvalEntriesForSelectedWeek = []
-         for (const item of this.team) {
+         var ratingList = []
+         for (const criteria of this.rubric) {
+            const rating = {
+               score : 0,
+               criteria
+            }
+            ratingList.push(rating)
+
+
+            
+         }
+         for (const student of storeTeam.teamMembers) {
             this.peerEvalEntriesForSelectedWeek.push({
-               evaluateeFirstName: item.studentName.split(' ')[0],
-               evaluateeLastName: item.studentName.split(' ')[1],
-               evaluateeId: item.studentid,
+               evaluateeFirstName: student.firstName,
+               evaluateeLastName: student.lastName,
+               evaluateeId: student.id,
+               evaluatorId: storeUser.userID,
                week: storeWeek.currentWeekId,
                comment: '',
-               ratings: [
-                  {
-                     score: 0,
-                     criterion: {
-                        criterionDesc: 'Quality of Work',
-                        maxScore: 10,
-                     },
-                  },
-                  {
-                     score: 0,
-                     criterion: {
-                        criterionDesc: 'Productiveness',
-                        maxScore: 10,
-                     },
-                  },
-                  {
-                     score: 0,
-                     criterion: {
-                        criterionDesc: 'Proactiveness',
-                        maxScore: 10,
-                     },
-                  },
-                  {
-                     score: 0,
-                     criterion: {
-                        criterionDesc: 'Respectfulness',
-                        maxScore: 10,
-                     },
-                  },
-                  {
-                     score: 0,
-                     criterion: {
-                        criterionDesc: 'Meeting Performance',
-                        maxScore: 10,
-                     },
-                  },
-               ],
+               ratings : _.cloneDeep(ratingList),
+               
+               
             })
          }
          this.setPeerEvalVisibility(storeWeek.currentWeekId, storeWeek.selectedWeekId)
@@ -221,6 +204,16 @@ export default {
             // this.getGradeForWeek(this.selectedWeekId, )
          }
       },
+      getRubric() {
+         axios.get(`http://localhost:80/api/v1/section/getRubric/${storeUser.sectionId}`, {
+            withCredentials: true,
+         })
+         .then((response) => {
+            console.log('RUBRIC' + response.data.data.criteria)
+            this.rubric = response.data.data.criteria
+         })
+      },
+      
       
    },
    watch: {
@@ -236,6 +229,7 @@ export default {
       
    },
    created() {
+     this.rubric = this.getRubric()
      this.getPeerEvalEntriesForWeek()
    },
 }

@@ -1,7 +1,10 @@
 <template>
    <div class="student-team-view">
       
-      <WarTeamTable :team="team"></WarTeamTable>
+      <div>
+
+      </div>
+      <WarTeamTable :teamProp="team"></WarTeamTable>
    </div>
 </template>
 
@@ -10,6 +13,10 @@ import NavbarSide from '@/components/student/NavbarSide.vue'
 import WeekDropdown from '@/components/WeekDropdown.vue'
 import WarTeamTable from '@/components/WarTeamTable.vue'
 import { ref } from 'vue'
+import axios from 'axios'
+import { storeUser } from '@/stores/store.js'
+import { storeWeek } from '@/stores/storeWeek.js'
+import { storeTeam } from '../../stores/storeTeam'
 export default {
    name: 'StudentTeamView',
    props: {
@@ -24,64 +31,7 @@ export default {
    data() {
       return {
          team: [
-            {
-               student: 'John Doe',
-               tasks: [
-                  {
-                     task: 'Task 1',
-                     plannedTask: 'Planned Task 1',
-                     description: 'Description 1',
-                     plannedHours: 1,
-                     actualHours: 1,
-                     status: 'Status 1',
-                  },
-                  {
-                     task: 'Task 2',
-                     plannedTask: 'Planned Task 2',
-                     description: 'Description 2',
-                     plannedHours: 2,
-                     actualHours: 2,
-                     status: 'Status 2',
-                  },
-                  {
-                     task: 'Task 3',
-                     plannedTask: 'Planned Task 3',
-                     description: 'Description 3',
-                     plannedHours: 3,
-                     actualHours: 3,
-                     status: 'Status 3',
-                  },
-               ],
-            },
-            {
-               student: 'Jane Doe',
-               tasks: [
-                  {
-                     task: 'Task 1',
-                     plannedTask: 'Planned Task 1',
-                     description: 'Description 1',
-                     plannedHours: 1,
-                     actualHours: 1,
-                     status: 'Status 1',
-                  },
-                  {
-                     task: 'Task 2',
-                     plannedTask: 'Planned Task 2',
-                     description: 'Description 2',
-                     plannedHours: 2,
-                     actualHours: 2,
-                     status: 'Status 2',
-                  },
-                  {
-                     task: 'Task 3',
-                     plannedTask: 'Planned Task 3',
-                     description: 'Description 3',
-                     plannedHours: 3,
-                     actualHours: 3,
-                     status: 'Status 3',
-                  },
-               ],
-            },
+            
          ],
          selectedWeekId: null,
          currentWeekId: null,
@@ -89,7 +39,47 @@ export default {
       }
    },
    methods: {
-      
+      getTeamMatesWar(){
+         axios.get(`http://localhost:80/api/v1/war/get`,
+         {
+            params: {
+               teamId: storeUser.teamId,
+               weekId: storeWeek.selectedWeekId,
+            },
+            withCredentials: true,
+         }).then(response => {
+            this.formatActivities(response.data.data.activities)
+         }).catch(error => {
+            console.log(error)
+         })
+      },
+      formatActivities(activities){
+         const team = [];
+         
+         console.log("START")
+         for(const item of storeTeam.teamMembers){
+            let student = {
+               name: item.name,
+               tasks: [],
+               id: item.id,
+            }
+           
+            for(const activity of activities){
+               if(activity.studentId == student.id){
+                  
+                  student.tasks.push(activity)
+               }
+               else{
+                  console.log(student.tasks)
+                  continue;
+               }
+            }
+            console.log(student)
+            team.push(student)
+         }
+         this.team = team
+      }
+
       
    },
    computed: {
@@ -104,7 +94,7 @@ export default {
      
    },
    created() {
-      
+      this.getTeamMatesWar();
    },
 }
 </script>

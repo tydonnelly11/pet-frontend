@@ -29,6 +29,12 @@
             </div>
         </div>
         <button type="submit" @click="submitStudents">Invite Students</button>
+        <div class="loading">
+            <p v-if="isLoading">Request being processed...</p>
+        </div>
+        <div class="success">
+            <p v-if="hasSubmittedStudents">Students Succesfully Invited!</p>
+        </div>
     </div>
 
 </template>
@@ -46,7 +52,9 @@ export default {
             lastName: "",
             email: "",
             listOfStudents: [],
-            storeUser
+            storeUser,
+            isLoading: false,
+            hasSubmittedStudents: false,
       }
    },
    methods: {
@@ -63,6 +71,7 @@ export default {
              console.log(this.listOfStudents)
         },
         submitStudents() {
+            this.isLoading = true
             axios.post(`http://localhost:80/api/v1/auth/register/student/inviteStudents`, 
                 
                     this.listOfStudents
@@ -71,8 +80,12 @@ export default {
             }
             ).then(response => {
                 console.log(response)
+                this.isLoading = false
+                this.hasSubmittedStudents = true
             }).catch(error => {
                 console.log(error)
+                this.isLoading = false
+                this.hasError = true
             })
             
         },

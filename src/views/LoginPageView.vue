@@ -27,6 +27,8 @@
          </div>
       </div>
       <button type="submit2" @click=pushInstructor()>Login bypass to make first Instructor</button>
+      <button type="submit2" @click=pushInstructor2()>Login bypass to get to students</button>
+
    </div>
 </template>
 
@@ -96,17 +98,31 @@ export default {
             console.log(response)
 
             storeUser.updateLoginStatus(response.data.data.id, true)
-            console.log(storeUser.isLoggedIn)
-            console.log(storeUser.userID)
+            
             storeUser.setTeamId(response.data.data.teamId)
             storeUser.setName(response.data.data.firstName,response.data.data.lastName)
-            // storeUser.setSectionId(response.data.data.sections[0].id)
-            this.$router.push('/studenthome')
+            storeUser.setSectionId(response.data.data.sectionId)
+            
+            if(storeUser.teamId == null)
+            {
+               this.$router.push('/waitingroom')
+            }
+            else
+            {
+               this.$router.push('/studenthome')
+            }
          }, (error) => {
             console.log(error)
          })
       },
       pushInstructor()
+      {
+         storeUser.updateLoginStatus("1", true)
+         console.log(storeUser.isLoggedIn)
+         console.log(storeUser.userID)
+         this.$router.push('/instructorhome')
+      },
+      pushInstructor2()
       {
          storeUser.updateLoginStatus("1", true)
          console.log(storeUser.isLoggedIn)

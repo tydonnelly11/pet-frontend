@@ -5,7 +5,7 @@
          <label for="task">Task:</label>
          <input
             class="input-field"
-            v-model="newTask.task"
+            v-model="newTask.taskCategories"
             type="text"
             required
          />
@@ -74,11 +74,13 @@ Moved logic and look of adding task to this component
 from WarList.vue
 
 */
+import { storeUser } from '../../stores/store'
 export default {
    name: 'AddWarTask',
    data() {
       return {
          newTask: {
+            studentName: storeUser.userFullName,
             task: '',
             plannedTask: '',
             description: '',

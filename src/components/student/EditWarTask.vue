@@ -5,7 +5,7 @@
          <label for="task">Task:</label>
          <input
             class="input-field"
-            v-model="editTask.task"
+            v-model="editTask.taskCategories"
             type="text"
             required
          />

@@ -1,4 +1,25 @@
 <template>
+    <h2> Add teams to section</h2>
+    <div>
+      <!-- Add Teams for Section: {{sectionName}} -->
+      <div class="input-field">
+         <label>Team Name</label>
+         <input type="text" id="sectionName" v-model="teamName" required />
+      </div>
+
+      <!-- <div>
+         Created Teams for Section: {{sectionId}}
+         <div class="team" v-for="team in listOfTeams">
+
+            <p>Team Name: {{ team.teamName }}</p>
+         </div>
+      </div> -->
+
+   <button type="submit" @click="createTeams()">Create Team</button>
+
+
+   </div>
+
     <h3>To add students to a team, please select a team, 
             then select all the students you wish to add to that team 
             and click the save button.
@@ -11,6 +32,11 @@
             <div class="team" v-for="team in teams" :key="team.id">
                 {{ team.name }}
                 <input type="radio" :value="team.id" v-model="updatedTeam.id" @change="selectTeam(team)">
+                <div class="team-students">
+                    <div class="student" v-for="student in team.students" :key="student.id">
+                        {{ student.firstName }} {{ student.lastName }}
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -47,6 +73,7 @@ export default {
             name: "",
             sectionId: storeUser.sectionId,
             students: [],
+
         }
          
       }
@@ -58,7 +85,13 @@ export default {
             withCredentials: true,
         })
         .then(response => {
-            this.students = response.data.data
+            console.log(response.data.data)
+            for(const student of response.data.data){
+                if(student.teamId == null){
+                    this.students.push(student)
+                }
+            }
+            // this.students = response.data.data
         })
         .catch(error => {
             console.log(error)
@@ -85,7 +118,9 @@ export default {
 
       // Method to add/remove a student from the updatedTeam.students array
       toggleStudent(student) {
-          const index = this.updatedTeam.students.indexOf(student.id);
+          const index = this.updatedTeam.students.indexOf(student);
+
+          console.log(index)
           if (index > -1) {
               // Student is already in the array, remove them
               this.updatedTeam.students.splice(index, 1);
@@ -111,7 +146,29 @@ export default {
     }).catch(error => {
         console.log(error)
     })
-   }
+   },
+   createTeams() {
+         axios.post(`http://localhost:80/api/v1/team/save`, {
+            id : null,
+            name: this.teamName,
+            sectionId: storeUser.sectionId,
+            students: null,
+         },
+         { 
+            withCredentials: true
+         }
+         )
+            .then(res => {
+               console.log(res)
+               console.log(res.data.data)
+               this.hasCreatedTeams = true
+               
+               
+            })
+            .catch(err => {
+               console.log(err)
+            })
+      },
 },
    computed: {},
    created() {
@@ -138,6 +195,7 @@ export default {
     flex : 0 0 10%;
     height: 150px;
     text-align: center;
+    border: 1px solid black;
 }
 
 .students{

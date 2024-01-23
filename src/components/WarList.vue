@@ -3,7 +3,7 @@
       <!--Moved task addition to its own component AddWarTask-->
       <!-- Task List Table -->
        <!--Replace with teammates name-->
-      <table class="table">
+      <table v-if="hasTaskForWeek" class="table">
          <!-- Table headers -->
          <thead>
             <tr>
@@ -18,8 +18,8 @@
          </thead>
          <!-- Table body with dynamic rows -->
          <tbody>
-            <tr v-for="(task, index) in tasks" :key="index">
-               <td :style="'width: 15%'">{{ task.studentName }}</td>
+            <tr v-for="(task, index) in studentTasks.tasks" :key="index">
+               <td :style="'width: 15%'">{{ studentTasks.name }}</td>
                <td :style="'width: 15%'">{{ task.taskCategories }}</td>
                <td :style="'width: 20%'">{{ task.plannedTask }}</td>
                <td :style="'width: 25%'">{{ task.description }}</td>
@@ -33,8 +33,12 @@
                   <button @click="$emit('editTask', task, index)">Edit</button>
                </div>
             </tr>
+            
          </tbody>
       </table>
+      <div v-else>
+               <p>No Tasks for {{ studentTasks.name }} for {{ storeWeek.selectedWeek.start}} to {{ storeWeek.selectedWeek.end }}</p>
+            </div>
    </div>
 </template>
 
@@ -46,25 +50,53 @@ in the WarTable.vue component to display multiple wars for
 the team view
 */
 import WeekDropdown from './WeekDropdown.vue'
+import { storeWeek } from '../stores/storeWeek.js'
 export default {
    name: 'WarList',
    props: {
-      tasks: Array,
+      studentTasks: Object,
       isTeamWar: Boolean,
+      
    },
    components: {
       WeekDropdown,
    },
    data() {
       return {
+         // hasTasksForWeek: true,
+         storeWeek
          
          
-         // Array to store tasks
-         isFormVisible: false, // Flag to control form visibility
+        
       }
    },
    emits: ['deleteTask', 'editTask'],
-   methods: {},
+   methods: {
+      toggleFormVisibility() {
+         const tasks = this.studentTasks.tasks
+         console.log(tasks)
+         if(tasks.length == 0){
+            this.hasTasksForWeek = false
+         }
+         else{
+            this.hasTasksForWeek = true
+         }
+         
+      },
+   },
+   computed: {
+      hasTaskForWeek() {
+         // Make sure studentTasks and studentTasks.tasks are not null or undefined
+         return this.studentTasks && this.studentTasks.tasks && this.studentTasks.tasks.length > 0;
+      }
+   },
+   created() {
+
+      console.log(this.studentTasks)
+      console.log("STUDENT")
+      // this.toggleFormVisibility()
+      // console.log(this.studentTasks.tasks)
+   },
 }
 </script>
 <style scoped>
