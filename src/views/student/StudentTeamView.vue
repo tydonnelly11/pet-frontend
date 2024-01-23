@@ -40,7 +40,7 @@ export default {
    },
    methods: {
       getTeamMatesWar(){
-         axios.get(`@api/api/v1/war/get`,
+         axios.get(`/api/v1/war/get`,
          {
             params: {
                teamId: storeUser.teamId,

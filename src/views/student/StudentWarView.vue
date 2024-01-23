@@ -70,7 +70,7 @@ export default {
    },
    methods: {
       submitWarEntry() {
-         axios.post('@api/api/v1/activity/submit', {
+         axios.post('/api/v1/activity/submit', {
             weekId: storeWeek.currentWeekId,
             studentId : storeUser.userID,
             taskCategories : this.studentTasks.tasks[0].taskCategories,
