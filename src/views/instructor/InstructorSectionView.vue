@@ -164,6 +164,7 @@ export default {
                storeUser.updateLoginStatus(res.data.data, true)
                console.log(storeUser.userID)
                this.hasSubmittedInstructor = true
+               
             })
             .catch(err => {
                console.log(err)
