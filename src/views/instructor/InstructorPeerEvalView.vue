@@ -49,7 +49,7 @@ export default {
   },
   methods: {
     getRubric() {
-         axios.get(`/api/v1/section/getRubric/${storeUser.sectionId}`, {
+         axios.get(`baseurl/api/v1/section/getRubric/${storeUser.sectionId}`, {
             withCredentials: true,
          })
          .then((response) => {
@@ -65,7 +65,7 @@ export default {
       console.log(storeUser.sectionId)
       // Fetch reports for each student
         try {
-          const response = await axios.get(`/api/v1/peerEvaluation/getEvaluationReport`, {
+          const response = await axios.get(`baseurl/api/v1/peerEvaluation/getEvaluationReport`, {
             params: {
               
               week: storeWeek.currentWeekId,

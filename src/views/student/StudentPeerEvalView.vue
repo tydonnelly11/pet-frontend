@@ -80,7 +80,7 @@ export default {
    methods: {
       async getPeerEvalEntriesForWeek() {
          
-         axios.get(`/api/v1/peerEvaluation/getPeerEvaluation/${storeUser.userID}/${storeWeek.selectedWeekId}`,
+         axios.get(`baseurl/api/v1/peerEvaluation/getPeerEvaluation/${storeUser.userID}/${storeWeek.selectedWeekId}`,
                {
                   crossdomain: true,
                   withCredentials: true,
@@ -205,7 +205,7 @@ export default {
          }
       },
       getRubric() {
-         axios.get(`/api/v1/section/getRubric/${storeUser.sectionId}`, {
+         axios.get(`baseurl/api/v1/section/getRubric/${storeUser.sectionId}`, {
             withCredentials: true,
          })
          .then((response) => {

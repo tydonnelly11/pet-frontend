@@ -109,7 +109,7 @@ export default {
          // console.log(targetPayload)
 
          axios
-            .post('/api/v1/peerEvaluation/submitPeerEvaluation', targetPayload, {
+            .post('baseurlbaseurl/api/v1/peerEvaluation/submitPeerEvaluation', targetPayload, {
                withCredentials: true,
             })
             .then((response) => {
@@ -121,7 +121,7 @@ export default {
             })
       },
       getRubric() {
-         axios.get(`/api/v1/section/getRubric/${storeUser.sectionId}`, {
+         axios.get(`baseurlbaseurlbaseurlbaseurl/api/v1/section/getRubric/${storeUser.sectionId}`, {
             withCredentials: true,
          })
          .then((response) => {
