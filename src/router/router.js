@@ -13,6 +13,7 @@ import InstructorSectionView from '../views/instructor/InstructorSectionView.vue
 import InstructorInviteStudentsView from '../views/instructor/InstructorInviteStudentsView.vue'
 import InstructorTeamEditView from '../views/instructor/InstructorTeamEditView.vue'
 import { storeUser } from '../stores/store.js'
+import WaitingForTeam from '@/components/student/WaitingForTeam.vue'
 
 
 const routes = [
@@ -29,6 +30,10 @@ const routes = [
       component: RegisterPageView,
       //http://localhost:5173/auth/register/student?token=1
    
+   },
+   {
+      path: '/waitingroom',
+      component: WaitingForTeam,
    },
    
    {

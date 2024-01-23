@@ -1,4 +1,8 @@
 <template>
+  <WeekDropdown :displayedWeeks="storeWeek.weeksForSemester" 
+      :selectWeek="storeWeek.currentWeekId" 
+      :currentWeekProp="storeWeek.currentWeek">
+      </WeekDropdown>
   <div>
     <h1>Instructor Peer Evaluation</h1>
     <!-- Display loading state or errors -->
@@ -26,9 +30,12 @@
 import axios from 'axios';
 import { storeWeek } from '../../stores/storeWeek.js';
 import { storeUser } from '../../stores/store.js';
-
+import WeekDropdown from '@/components/WeekDropdown.vue';
 export default {
   name: 'InstructorPeerEvalView',
+  components: {
+    WeekDropdown,
+  },
   data() {
     return {
       reports: [], // This will hold the fetched evaluation reports
@@ -103,7 +110,15 @@ export default {
       return total
     },
   },
-  mounted() {
+  watch: {
+      'storeWeek.selectedWeekId': function(newVal, oldVal) {
+         console.log(`currentWeekId changed from ${oldVal} to ${newVal}`);
+         // Call your function here
+         this.fetchEvaluationReports();
+    }
+     
+   },
+  created() {
     this.getRubric()
     this.fetchEvaluationReports();
   },
