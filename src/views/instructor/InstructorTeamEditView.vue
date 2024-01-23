@@ -82,7 +82,7 @@ export default {
    methods: {
     getStudents(){
         this.isLoading = true
-        axios.get(`baseurl/api/v1/section/getAllStudents/${storeUser.sectionId}`,
+        axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getAllStudents/${storeUser.sectionId}`,
         {
             withCredentials: true,
         })
@@ -103,7 +103,7 @@ export default {
         })
     },
     getTeams(){
-        axios.get(`baseurl/api/v1/section/getAllTeams/${storeUser.sectionId}`,
+        axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getAllTeams/${storeUser.sectionId}`,
         {
             withCredentials: true,
         })
@@ -136,7 +136,7 @@ export default {
       },
    
    saveTeam(){
-    axios.post(`baseurl/api/v1/team/edit`,
+    axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/team/edit`,
     {
         id: this.updatedTeam.id,
         name: this.updatedTeam.name,
@@ -153,7 +153,7 @@ export default {
     })
    },
    createTeams() {
-         axios.post(`baseurl/api/v1/team/save`, {
+         axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/team/save`, {
             id : null,
             name: this.teamName,
             sectionId: storeUser.sectionId,
