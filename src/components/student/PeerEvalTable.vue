@@ -109,7 +109,7 @@ export default {
          // console.log(targetPayload)
 
          axios
-            .post('baseurlbaseurl/api/v1/peerEvaluation/submitPeerEvaluation', targetPayload, {
+            .post('https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/peerEvaluation/submitPeerEvaluation', targetPayload, {
                withCredentials: true,
             })
             .then((response) => {
@@ -121,7 +121,7 @@ export default {
             })
       },
       getRubric() {
-         axios.get(`baseurlbaseurlbaseurlbaseurl/api/v1/section/getRubric/${storeUser.sectionId}`, {
+         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getRubric/${storeUser.sectionId}`, {
             withCredentials: true,
          })
          .then((response) => {

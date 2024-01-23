@@ -70,7 +70,7 @@ export default {
    },
    methods: {
       submitWarEntry() {
-         axios.post('baseurl/api/v1/activity/submit', {
+         axios.post('https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/activity/submit', {
             weekId: storeWeek.currentWeekId,
             studentId : storeUser.userID,
             taskCategories : this.studentTasks.tasks[0].taskCategories,
@@ -110,7 +110,7 @@ export default {
       },
 
       getStudentWar() {
-         axios.get(`http://localhost:80baseurl/api/v1/war/get`,
+         axios.get(`http://localhost:80https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/war/get`,
          {
             params: {
                teamId: storeUser.teamId,
