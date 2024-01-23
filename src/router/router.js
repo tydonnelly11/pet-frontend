@@ -1,16 +1,17 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LoginPageView from '../views/LoginPageView.vue'
 import App from '../App.vue'
-import StudentWarView from '../views/StudentWarView.vue'
-import StudentHomePageView from '../views/StudentHomePageView.vue'
-import StudentPeerEvalView from '../views/StudentPeerEvalView.vue'
-import StudentTeamView from '..//views/StudentTeamView.vue'
+import StudentWarView from '../views/student/StudentWarView.vue'
+import StudentHomePageView from '../views/student/StudentHomePageView.vue'
+import StudentPeerEvalView from '../views/student/StudentPeerEvalView.vue'
+import StudentTeamView from '../views/student/StudentTeamView.vue'
 import InstructorHomePage from '../views/instructor/InstructorHomePageView.vue'
 import InstructorPeerEvalView from '../views/instructor/InstructorPeerEvalView.vue'
 import InstructorTeamView from '../views/instructor/InstructorTeamView.vue';
 import RegisterPageView from '../views/RegisterPageView.vue'
 import InstructorSectionView from '../views/instructor/InstructorSectionView.vue'
 import InstructorInviteStudentsView from '../views/instructor/InstructorInviteStudentsView.vue'
+import InstructorTeamEditView from '../views/instructor/InstructorTeamEditView.vue'
 import { storeUser } from '../stores/store.js'
 
 
@@ -78,6 +79,11 @@ const routes = [
             path: 'invite',
             name: 'InstructorInvite',
             component: InstructorInviteStudentsView,
+         },
+         {
+            path: 'editteams',
+            name: 'InstructorEditTeams',
+            component: InstructorTeamEditView,
          }
          // The Instructor WAR is going to be added later
       ],

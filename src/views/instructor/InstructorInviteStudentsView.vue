@@ -28,13 +28,20 @@
                 <p>Email: {{ student.email }}</p>
             </div>
         </div>
-        <button type="submit" >Invite Students</button>
+        <button type="submit" @click="submitStudents">Invite Students</button>
+        <div class="loading">
+            <p v-if="isLoading">Request being processed...</p>
+        </div>
+        <div class="success">
+            <p v-if="hasSubmittedStudents">Students Succesfully Invited!</p>
+        </div>
     </div>
 
 </template>
 
 <script>
 import axios from 'axios'
+import { storeUser } from '@/stores/store.js'
 
 export default {
    name: 'InstructorInviteStudentsView',
@@ -45,29 +52,40 @@ export default {
             lastName: "",
             email: "",
             listOfStudents: [],
+            storeUser,
+            isLoading: false,
+            hasSubmittedStudents: false,
       }
    },
    methods: {
         inviteStudent() {
              this.listOfStudents.push({
                 firstName: this.firstName,
+                middleName: "",
                 lastName: this.lastName,
                 email: this.email,
+                sectionId : storeUser.sectionId,
+                password: null,
+                roles : "user"
              })
              console.log(this.listOfStudents)
         },
         submitStudents() {
-            axios.post(`http://localhost:8080/api/v1/auth/register/student/inviteStudents`, {
-                headers: {
-                 
-                },
-                data: {
-                    listOfStudents: this.listOfStudents
-                }
-            }).then(response => {
+            this.isLoading = true
+            axios.post(`http://localhost:80/api/v1/auth/register/student/inviteStudents`, 
+                
+                    this.listOfStudents
+            ,{
+                withCredentials: true,
+            }
+            ).then(response => {
                 console.log(response)
+                this.isLoading = false
+                this.hasSubmittedStudents = true
             }).catch(error => {
                 console.log(error)
+                this.isLoading = false
+                this.hasError = true
             })
             
         },

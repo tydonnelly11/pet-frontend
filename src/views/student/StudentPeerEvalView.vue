@@ -3,7 +3,8 @@
       
       <!--@select-week is the emit from child component with week as first arg of the func-->
       <div v-if="this.isPastWeek" class="display-grade">
-         <h1>Grade for {{ storeWeek.selectedWeek }}: {{ this.gradeForWeek }} </h1>
+         <h1>Grade for {{ storeWeek.selectedWeek.start }} to {{ storeWeek.selectedWeek.end }} :</h1>
+         <!-- {{ this.gradeForWeek }} -->
       </div>
       <PeerEvalTable
          v-if="(!this.isFutureWeek) & this.hasEntry"
@@ -15,7 +16,7 @@
          v-else-if="(!this.errorFlag & !this.hasEntry) & this.isFutureWeek"
       >
          It is not the week yet for this peer eval, check back during
-         {{ storeWeek.selectedWeek }}.
+         {{ storeWeek.selectedWeek.start }} to {{ storeWeek.selectedWeek.end }}.
       </div>
 
       <!-- <div v-else>
@@ -31,11 +32,13 @@
 
 <script>
 import axios from 'axios'
-import { storeUser } from '../stores/store.js'
-import { storeWeek } from '../stores/storeWeek.js'
-import ErrorPopUp from '../components/utilities/ErrorPopUp.vue'
-import PeerEvalTable from '../components/student/PeerEvalTable.vue'
-import WeekDropdown from '../components/WeekDropdown.vue'
+import _ from 'lodash'
+import { storeUser } from '@/stores/store.js'
+import { storeWeek } from '@/stores/storeWeek.js'
+import { storeTeam } from '@/stores/storeTeam.js'
+import ErrorPopUp from '@/components/utilities/ErrorPopUp.vue'
+import PeerEvalTable from '@/components/student/PeerEvalTable.vue'
+import WeekDropdown from '@/components/WeekDropdown.vue'
 import { ref } from 'vue'
 export default {
    name: 'StudentPeerEvalView',
@@ -44,79 +47,21 @@ export default {
       return {
          storeUser,
          storeWeek,
-
-
-         evaluationData: [
-            {
-               evaluateeFirstName: 'Jonathan',
-               evaluateeLastName: 'Doe',
-               week: 1,
-               comment: 'Great teamwork and communication.',
-               ratings: [
-                  {
-                     score: 5,
-                     criterion: {
-                        criterionDesc: 'Quality of Work',
-                        maxScore: 10,
-                     },
-                  },
-                  {
-                     score: 5,
-                     criterion: {
-                        criterionDesc: 'Productiveness',
-                        maxScore: 10,
-                     },
-                  },
-                  {
-                     score: 5,
-                     criterion: {
-                        criterionDesc: 'Proactiveness',
-                        maxScore: 10,
-                     },
-                  },
-                  {
-                     score: 5,
-                     criterion: {
-                        criterionDesc: 'Respectfulness',
-                        maxScore: 10,
-                     },
-                  },
-                  {
-                     score: 5,
-                     criterion: {
-                        criterionDesc: 'Meeting Performance',
-                        maxScore: 10,
-                     },
-                  },
-               ],
-            },
-         ],
          team: [
             {
-               studentid: '1',
-               studentName: 'John Doe',
-            },
-            {
-               studentid: '2',
-               studentName: 'Jane Doe',
-            },
-            {
-               studentid: '3',
-               studentName: 'Johnahan Doe',
-            },
-            
+               studentId : '3deea794-06ba-4dc2-9255-d18a7d5eb61c'	,
+               studentName: 'Student One',
+            }
+
          ],
          gradeForWeek: 0,
-
-         selectedWeekId: null,
-         currentWeekId: 2,
-         selectedWeek: ref(null),
          peerEvalEntriesForSelectedWeek: [],
          hasEntry: false,
          errorFlag: false,
          responseFlag: null,
          isPastWeek: false,
          isFutureWeek: false,
+         rubric: null,
       }
    },
    /*
@@ -134,21 +79,15 @@ export default {
    },
    methods: {
       async getPeerEvalEntriesForWeek() {
-         console.log("Store + " + storeUser.isLoggedIn)
-         console.log("Store" + storeUser.studentId)
-         axios
-            .get(
-               `http://localhost:80/api/v1/getPeerEvaluation/${storeUser.studentId}/${storeWeek.selectedWeekId}`,
+         
+         axios.get(`http://localhost:80/api/v1/peerEvaluation/getPeerEvaluation/${storeUser.userID}/${storeWeek.selectedWeekId}`,
                {
                   crossdomain: true,
-                  // params: {
-                  //    week: 1,
-                  //    id : 1
-                  // },
+                  withCredentials: true,
+                 
                }
             )
             .then((response) => {
-               console.log(response + "NOT IN CATCH")
                if (response.data.code == 200) {
                   this.errorFlag = false
                   this.hasEntry = true
@@ -171,7 +110,6 @@ export default {
 
                   this.errorFlag = false
                   this.hasEntry = false
-
                   this.createNewPeerEvalEntry() // Make this function create an empty peer eval entry for the week then pass to table for completion
                } else {
                   this.hasEntry = false
@@ -181,17 +119,31 @@ export default {
                }
             })
             .catch((error) => {
-               if(error.response.status == 401){
+               console.log(error.response)
+               if(error.response.data != null)
+               {
+                  console.log(error.response.data.code)
+                  console.log("BEFORE SECOND IFS")
+                  console.log(error.response.data.code == 409)
+                  if(error.response.data.code == 401){
+                     console.log("HERE")
+                     this.hasEntry = false // No existing eval
+                     // this.responseFlag = error.response.data.code //For error comp
+                     this.errorFlag = true //Shows error
+                     this.responseFlag = 401
+                     this.errorMessage = "Unauthorized Access, Please log in again"//FOr error comp
 
-                  this.hasEntry = false // No existing eval
-                  // this.responseFlag = error.response.data.code //For error comp
-                  this.errorFlag = true //Shows error
-                  this.responseFlag = 401
-                  this.errorMessage = "Unauthorized Access, Please log in again"//FOr error comp
-               
+                     }
+                  else if(error.response.data.code == 409){
+                     this.errorFlag = false
+                     this.hasEntry = false
+
+                     this.createNewPeerEvalEntry() // Make this function create an empty peer eval entry for the week then pass to table for completion
+                  }
+                  
                }
+               
                else{
-
                   this.hasEntry = false // No existing eval
                   // this.responseFlag = error.response.data.code //For error comp
                   this.errorFlag = true //Shows error
@@ -200,53 +152,33 @@ export default {
             }
             )
       },
+      
+      
       createNewPeerEvalEntry() {
-         //API call to get teams
+         
          this.peerEvalEntriesForSelectedWeek = []
-         for (const item of this.team) {
+         var ratingList = []
+         for (const criteria of this.rubric) {
+            const rating = {
+               score : 0,
+               criteria
+            }
+            ratingList.push(rating)
+
+
+            
+         }
+         for (const student of storeTeam.teamMembers) {
             this.peerEvalEntriesForSelectedWeek.push({
-               evaluateeFirstName: item.studentName.split(' ')[0],
-               evaluateeLastName: item.studentName.split(' ')[1],
-               evaluateeId: item.studentid,
+               evaluateeFirstName: student.firstName,
+               evaluateeLastName: student.lastName,
+               evaluateeId: student.id,
+               evaluatorId: storeUser.userID,
                week: storeWeek.currentWeekId,
                comment: '',
-               ratings: [
-                  {
-                     score: 0,
-                     criterion: {
-                        criterionDesc: 'Quality of Work',
-                        maxScore: 10,
-                     },
-                  },
-                  {
-                     score: 0,
-                     criterion: {
-                        criterionDesc: 'Productiveness',
-                        maxScore: 10,
-                     },
-                  },
-                  {
-                     score: 0,
-                     criterion: {
-                        criterionDesc: 'Proactiveness',
-                        maxScore: 10,
-                     },
-                  },
-                  {
-                     score: 0,
-                     criterion: {
-                        criterionDesc: 'Respectfulness',
-                        maxScore: 10,
-                     },
-                  },
-                  {
-                     score: 0,
-                     criterion: {
-                        criterionDesc: 'Meeting Performance',
-                        maxScore: 10,
-                     },
-                  },
-               ],
+               ratings : _.cloneDeep(ratingList),
+               
+               
             })
          }
          this.setPeerEvalVisibility(storeWeek.currentWeekId, storeWeek.selectedWeekId)
@@ -272,6 +204,16 @@ export default {
             // this.getGradeForWeek(this.selectedWeekId, )
          }
       },
+      getRubric() {
+         axios.get(`http://localhost:80/api/v1/section/getRubric/${storeUser.sectionId}`, {
+            withCredentials: true,
+         })
+         .then((response) => {
+            console.log('RUBRIC' + response.data.data.criteria)
+            this.rubric = response.data.data.criteria
+         })
+      },
+      
       
    },
    watch: {
@@ -287,6 +229,7 @@ export default {
       
    },
    created() {
+     this.rubric = this.getRubric()
      this.getPeerEvalEntriesForWeek()
    },
 }

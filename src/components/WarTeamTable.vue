@@ -2,8 +2,8 @@
    <div class="war-table-container">
       <WarList
          :isTeamWar="true"
-         v-for="student in team"
-         :tasks="student.tasks"
+         v-for="student in this.teamProp"
+         :studentTasks="student"
       />
    </div>
 </template>
@@ -22,70 +22,12 @@ export default {
       WarList,
    },
    props: {
-      team: Array,
+      teamProp: Array,
    },
    data() {
       return {
-         team: [
-            {
-               student: 'John Doe',
-               tasks: [
-                  {
-                     task: 'Task 1',
-                     plannedTask: 'Planned Task 1',
-                     description: 'Description 1',
-                     plannedHours: 1,
-                     actualHours: 1,
-                     status: 'Status 1',
-                  },
-                  {
-                     task: 'Task 2',
-                     plannedTask: 'Planned Task 2',
-                     description: 'Description 2',
-                     plannedHours: 2,
-                     actualHours: 2,
-                     status: 'Status 2',
-                  },
-                  {
-                     task: 'Task 3',
-                     plannedTask: 'Planned Task 3',
-                     description: 'Description 3',
-                     plannedHours: 3,
-                     actualHours: 3,
-                     status: 'Status 3',
-                  },
-               ],
-            },
-            {
-               student: 'Jane Doe',
-               tasks: [
-                  {
-                     task: 'Task 1',
-                     plannedTask: 'Planned Task 1',
-                     description: 'Description 1',
-                     plannedHours: 1,
-                     actualHours: 1,
-                     status: 'Status 1',
-                  },
-                  {
-                     task: 'Task 2',
-                     plannedTask: 'Planned Task 2',
-                     description: 'Description 2',
-                     plannedHours: 2,
-                     actualHours: 2,
-                     status: 'Status 2',
-                  },
-                  {
-                     task: 'Task 3',
-                     plannedTask: 'Planned Task 3',
-                     description: 'Description 3',
-                     plannedHours: 3,
-                     actualHours: 3,
-                     status: 'Status 3',
-                  },
-               ],
-            },
-         ],
+        
+        
       }
    },
    methods: {
@@ -93,6 +35,9 @@ export default {
       //Might put currentweek in localStore
    },
    computed: {},
+   created() {
+      console.log(this.team)
+   },
 }
 </script>
 

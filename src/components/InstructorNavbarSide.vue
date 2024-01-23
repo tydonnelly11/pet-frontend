@@ -3,11 +3,9 @@
        <li class="nav-item">
         <router-link class="nav-link" to="/instructorhome/instructorpeereval">Instructor Peer Evaluation</router-link>
        </li>
-       <li class="nav-item">
-          <!-- Placeholder link for Instructor WAR page -->
+       <!-- <li class="nav-item">
           <router-link class="nav-link" to="/instructorwar">Instructor WAR</router-link>
        </li>
-       <!-- Add other instructor-specific links here if needed -->
        <li class="nav-item">
         <button class="nav-link dropdown-toggle" @click="toggleTeamsDropdown">
             Teams <span v-if="showTeamsDropdown">▲</span><span v-else>▼</span>
@@ -17,12 +15,15 @@
                 <router-link :to="`/instructorhome/team/${team.id}`">{{ team.name }}</router-link>
              </li>
           </ul>
-       </li>
+       </li> -->
          <li class="nav-item flex-end">
             <router-link class="nav-link" to="/instructorhome/section">Section</router-link>
          </li>
          <li class="nav-item flex-end">
             <router-link class="nav-link" to="/instructorhome/invite">Invite Students</router-link>
+         </li>
+         <li class="nav-item flex-end">
+            <router-link class="nav-link" to="/instructorhome/editteams">Add/edit teams</router-link>
          </li>
     </ul>
  </template>
@@ -62,8 +63,8 @@
     position: relative;
  }
  .nav-link {
-   background-color: #000; /* Black background */
-   color: #fff; /* White text color */
+   background-color: white; /* Black background */
+   color: blue; /* White text color */
    padding: 10px 15px; /* Padding inside the box */
    margin-bottom: 10px; /* Space between the items */
    display: block; /* Make sure the link takes the full width available */
@@ -71,9 +72,7 @@
    border-radius: 5px; /* Rounded corners */
 }
 
-.nav-link:hover {
-   background-color: #333; /* Darker background on hover */
-}
+
 
 .dropdown-toggle {
    cursor: pointer; /* Changes the mouse cursor to a pointer */

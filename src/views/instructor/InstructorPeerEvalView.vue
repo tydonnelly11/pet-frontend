@@ -24,6 +24,8 @@
 
 <script>
 import axios from 'axios';
+import { storeWeek } from '../../stores/storeWeek.js';
+import { storeUser } from '../../stores/store.js';
 
 export default {
   name: 'InstructorPeerEvalView',
@@ -32,33 +34,49 @@ export default {
       reports: [], // This will hold the fetched evaluation reports
       isLoading: false,
       error: null,
-      studentId: [1, 2, 3], 
-      week: '15', 
+      
+      // week: '15', 
+      storeWeek,storeUser,
+      rubric: null,
     };
   },
   methods: {
+    getRubric() {
+         axios.get(`http://localhost:80/api/v1/section/getRubric/${storeUser.sectionId}`, {
+            withCredentials: true,
+         })
+         .then((response) => {
+            this.rubric = response.data.data.criteria
+         })
+      },
     async fetchEvaluationReports() {
       this.isLoading = true;
       this.error = null;
       // Temporary container for the reports
       let tempReports = [];
-
+      console.log(storeWeek.currentWeekId)
+      console.log(storeUser.sectionId)
       // Fetch reports for each student
-      for (const studentId of this.studentId) {
         try {
-          const response = await axios.get(`http://localhost:80/api/v1/evaluationReport`, {
+          const response = await axios.get(`http://localhost:80/api/v1/peerEvaluation/getEvaluationReport`, {
             params: {
-              studentId: studentId,
-              week: this.week,
-            }
+              
+              week: storeWeek.currentWeekId,
+              sectionId: storeUser.sectionId,
+            },
+            withCredentials : true,
+            
           });
-
+          console.log(response)
           if (response.data.flag && response.data.code === 200 && response.data.data.length > 0) {
-            const studentReport = response.data.data[0];
-            tempReports.push({
-              name: `${studentReport.firstName} ${studentReport.lastName}`,
-              score: `${studentReport.averageScore}/60`, 
+            const studentReport = response.data.data;
+            for(const student of studentReport){
+              tempReports.push({
+              name: `${student.firstName} ${student.lastName}`,
+              score: `${student.averageScore}/${this.totalScore}`, 
             });
+            }
+            
           } else {
             this.error = response.data.message || `Failed to fetch evaluation report for student ID ${studentId}`;
             // Consider how you want to handle partial failures
@@ -66,16 +84,27 @@ export default {
         } catch (error) {
           this.error = error.message || 'An error occurred while fetching data';
           // Break the loop if one call fails or decide how to handle this case
-          break;
         }
-      }
+      
 
       // All requests are complete, update the reports data property
       this.reports = tempReports;
       this.isLoading = false;
     },
   },
+  computed: {
+    // This is a computed property that will return the total score
+    // of all the reports
+    totalScore() {
+      let total = 0
+      for(const criteria of this.rubric){
+        total = total + criteria.maxScore
+      }
+      return total
+    },
+  },
   mounted() {
+    this.getRubric()
     this.fetchEvaluationReports();
   },
 };

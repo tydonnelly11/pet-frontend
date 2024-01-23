@@ -5,7 +5,8 @@
             <tr>
                <th scope="col">Team member</th>
                <th scope="col" v-for="item in rubric">
-                  {{ item }}
+                  <p>Name:{{ item.criterionName }}</p>
+                  <p>Desc:{{ item.criterionDesc }}</p>
                </th>
                <th scope="col">Comments</th>
                <th>Total</th>
@@ -51,6 +52,9 @@
 
 <script>
 import axios from 'axios'
+import { storeUser } from '@/stores/store.js'
+import { storeWeek } from '@/stores/storeWeek.js'
+import { storeTeam } from '@/stores/storeTeam.js'
 export default {
    name: 'PeerEvalTable',
    props: {
@@ -63,8 +67,9 @@ export default {
       return {
          rubric: null,
          peerEval: this.peerEvalProp,
-         userID: '1',
          submissionStatus: 0,
+         storeUser,
+         
       }
    },
    watch: {
@@ -78,16 +83,17 @@ export default {
    methods: {
       async submitEvaluation() {
          const targetPayload = []
-         var count = 0
          for (const item of this.peerEval) {
-            count = count + 1
+            console.log(item)
+            console.log(storeUser.userId)
             targetPayload.push({
-               evaluatorId: this.userID,
-               evaluateeId: count.toString(),
+               evaluatorId: item.evaluatorId,
+               evaluateeId: item.evaluateeId,
+               
                week: item.week,
                ratings: item.ratings,
                comment: item.comment,
-               oldScore: 0,
+               
             })
             console.log(targetPayload)
          }
@@ -103,7 +109,9 @@ export default {
          // console.log(targetPayload)
 
          axios
-            .post('http://localhost:80/api/v1/submitEval', targetPayload, {})
+            .post('http://localhost:80/api/v1/peerEvaluation/submitPeerEvaluation', targetPayload, {
+               withCredentials: true,
+            })
             .then((response) => {
                console.log(response)
                this.submissionStatus = response.data.code
@@ -113,19 +121,20 @@ export default {
             })
       },
       getRubric() {
-         var rubric = []
-         const item = this.peerEvalProp[0]
-         console.log(item.ratings)
-         for (const rating of item.ratings) {
-            rubric.push(rating.criterion.criterionDesc)
-         }
-
-         return rubric
+         axios.get(`http://localhost:80/api/v1/section/getRubric/${storeUser.sectionId}`, {
+            withCredentials: true,
+         })
+         .then((response) => {
+            console.log('RUBRIC' + response.data.data.criteria)
+            this.rubric = response.data.data.criteria
+         })
       },
+      
    },
    computed: {},
    created() {
       this.rubric = this.getRubric()
+      
    },
 }
 </script>

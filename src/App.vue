@@ -1,6 +1,4 @@
 <script setup>
-import LoginPageView from './views/LoginPageView.vue'
-import StudentWarView from './views/StudentWarView.vue'
 </script>
 
 <template>

@@ -2,12 +2,13 @@
    <div class="WarList-container">
       <!--Moved task addition to its own component AddWarTask-->
       <!-- Task List Table -->
-      <h2>War Table for </h2> <!--Replace with teammates name-->
-      <table class="table">
+       <!--Replace with teammates name-->
+      <table v-if="hasTaskForWeek" class="table">
          <!-- Table headers -->
          <thead>
             <tr>
-               <th scope="col">Task</th>
+               <th scope="col">Student</th>
+               <th scope="col">Task Category</th>
                <th scope="col">Planned Task</th>
                <th scope="col">Description</th>
                <th scope="col">Planned Hours</th>
@@ -17,9 +18,10 @@
          </thead>
          <!-- Table body with dynamic rows -->
          <tbody>
-            <tr v-for="(task, index) in tasks" :key="index">
-               <td :style="'width: 15%'">{{ task.task }}</td>
-               <td :style="'width: 25%'">{{ task.plannedTask }}</td>
+            <tr v-for="(task, index) in studentTasks.tasks" :key="index">
+               <td :style="'width: 15%'">{{ studentTasks.name }}</td>
+               <td :style="'width: 15%'">{{ task.taskCategories }}</td>
+               <td :style="'width: 20%'">{{ task.plannedTask }}</td>
                <td :style="'width: 25%'">{{ task.description }}</td>
                <td :style="'width: 10%'">{{ task.plannedHours }}</td>
                <td :style="'width: 10%'">{{ task.actualHours }}</td>
@@ -31,8 +33,12 @@
                   <button @click="$emit('editTask', task, index)">Edit</button>
                </div>
             </tr>
+            
          </tbody>
       </table>
+      <div v-else>
+               <p>No Tasks for {{ studentTasks.name }} for {{ storeWeek.selectedWeek.start}} to {{ storeWeek.selectedWeek.end }}</p>
+            </div>
    </div>
 </template>
 
@@ -44,50 +50,53 @@ in the WarTable.vue component to display multiple wars for
 the team view
 */
 import WeekDropdown from './WeekDropdown.vue'
+import { storeWeek } from '../stores/storeWeek.js'
 export default {
    name: 'WarList',
    props: {
-      tasks: Array,
+      studentTasks: Object,
       isTeamWar: Boolean,
+      
    },
    components: {
       WeekDropdown,
    },
    data() {
       return {
-         warDates2023: [
-            '2023-09-01 to 2023-09-03',
-            '2023-09-04 to 2023-09-10',
-            '2023-09-11 to 2023-09-17',
-            '2023-09-18 to 2023-09-24',
-            '2023-09-25 to 2023-10-01',
-            '2023-10-02 to 2023-10-08',
-            '2023-10-09 to 2023-10-15',
-            '2023-10-16 to 2023-10-22',
-            '2023-10-23 to 2023-10-29',
-            '2023-10-30 to 2023-11-05',
-            '2023-11-06 to 2023-11-12',
-            '2023-11-13 to 2023-11-19',
-            '2023-11-20 to 2023-11-26',
-            '2023-11-27 to 2023-12-03',
-            '2023-12-04 to 2023-12-10',
-            '2023-12-11 to 2023-12-15',
-         ],
-         newTask: {
-            user: 'John Doe', // Replace with the actual user information
-            task: '',
-            plannedTask: '',
-            description: '',
-            plannedHours: 0,
-            actualHours: 0,
-            status: '',
-         },
-         // Array to store tasks
-         isFormVisible: false, // Flag to control form visibility
+         // hasTasksForWeek: true,
+         storeWeek
+         
+         
+        
       }
    },
    emits: ['deleteTask', 'editTask'],
-   methods: {},
+   methods: {
+      toggleFormVisibility() {
+         const tasks = this.studentTasks.tasks
+         console.log(tasks)
+         if(tasks.length == 0){
+            this.hasTasksForWeek = false
+         }
+         else{
+            this.hasTasksForWeek = true
+         }
+         
+      },
+   },
+   computed: {
+      hasTaskForWeek() {
+         // Make sure studentTasks and studentTasks.tasks are not null or undefined
+         return this.studentTasks && this.studentTasks.tasks && this.studentTasks.tasks.length > 0;
+      }
+   },
+   created() {
+
+      console.log(this.studentTasks)
+      console.log("STUDENT")
+      // this.toggleFormVisibility()
+      // console.log(this.studentTasks.tasks)
+   },
 }
 </script>
 <style scoped>

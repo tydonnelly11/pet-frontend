@@ -15,9 +15,12 @@
 </template>
 
 <script>
-import NavbarSide from '../components/student/NavbarSide.vue'
-import WeekDropdown from '../components/WeekDropdown.vue';
-import {storeWeek} from '../stores/storeWeek.js';
+import NavbarSide from '@/components/student/NavbarSide.vue'
+import WeekDropdown from '@/components/WeekDropdown.vue';
+import { storeWeek } from '@/stores/storeWeek.js';
+import { storeTeam } from '@/stores/storeTeam.js';
+import { storeUser } from '@/stores/store.js';
+import axios from 'axios';
 export default {
    name: 'StudentHomePageView',
    components: {
@@ -27,14 +30,33 @@ export default {
    data() {
       return {
          storeWeek,
+         storeTeam,
+         storeUser,
       }
    },
-   methods: {},
+   methods: {
+      getTeamMembers() {
+         axios.get(`http://localhost:80/api/v1/team/getStudents/${storeUser.teamId}`,
+         {
+             withCredentials: true,
+         }
+         )
+         .then((response) => {
+            console.log(response.data.data)
+            storeTeam.setTeamMembers(response.data.data);
+            console.log(storeTeam.teamMembers);
+         })
+         .catch((error) => {
+            console.log(error);
+         })
+      }
+   },
    computed: {
       
    },
    created() {
       storeWeek.calcCurrentWeek();
+      this.getTeamMembers();
       console.log(storeWeek.currentWeek)
       console.log(storeWeek.currentWeekId)
       console.log(storeWeek.weeksForSemester)
