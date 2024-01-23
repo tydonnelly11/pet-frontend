@@ -6,7 +6,9 @@
         <div class="student-info">
            <p> {{ studentInfo.email }} </p> 
            <p> {{ studentInfo.firstName + studentInfo.lastName }} </p> 
+           <p> Confirm the above name is you and then enter in a passowrd. DO NOT USE your TCU password</p>
         </div>
+        
 
         <input type="text" v-model="password2" placeholder="Enter your Password"/>
         <input type="text" v-model="password1" placeholder="Enter your Password"/>
@@ -70,6 +72,10 @@ export default {
             
         },
         registerStrudent(){
+            if(this.password1 != this.password2){
+                alert("Passwords do not match")
+                return
+            }
             axios.post(`http://localhost:80/api/v1/auth/register/student`, {
                 firstName: this.studentInfo.firstName,
                 middleName: this.studentInfo.middleName,

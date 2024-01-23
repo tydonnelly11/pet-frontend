@@ -7,16 +7,15 @@
          <input type="text" id="sectionName" v-model="teamName" required />
       </div>
 
-      <!-- <div>
-         Created Teams for Section: {{sectionId}}
-         <div class="team" v-for="team in listOfTeams">
-
-            <p>Team Name: {{ team.teamName }}</p>
-         </div>
-      </div> -->
+      
 
    <button type="submit" @click="createTeams()">Create Team</button>
-
+   <div class="success" v-if="isSuccess">
+      <p>Teams Succesfully Created!</p>
+    </div>
+    <div class="loading" v-if="isLoading">
+        Process being requested... DO NOT REFRESH
+    </div>
 
    </div>
 
@@ -74,17 +73,22 @@ export default {
             sectionId: storeUser.sectionId,
             students: [],
 
-        }
+        },
+        isLoading: false,
+        isSuccess: false,
          
       }
    },
    methods: {
     getStudents(){
+        this.isLoading = true
         axios.get(`http://localhost:80/api/v1/section/getAllStudents/${storeUser.sectionId}`,
         {
             withCredentials: true,
         })
         .then(response => {
+            this.isLoading = false
+            this.isSuccess = true
             console.log(response.data.data)
             for(const student of response.data.data){
                 if(student.teamId == null){
@@ -94,6 +98,7 @@ export default {
             // this.students = response.data.data
         })
         .catch(error => {
+            this.isLoading = false
             console.log(error)
         })
     },

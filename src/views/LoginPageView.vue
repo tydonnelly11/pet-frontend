@@ -1,7 +1,7 @@
 <template>
    <div class="login-container">
       <div class="logo-container">
-         <img src="img/logo.png" alt="Logo">
+         <img src="/img/logo.png" alt="Logo">
       </div>
       <h1>Login</h1>
       <div @submit.prevent="">
