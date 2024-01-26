@@ -17,10 +17,11 @@
          v-if="isEditTaskTrue"
          @editTaskComplete="editTaskComplete"
          :editTaskProp="this.editTask"
+         
       />
       
-      <AddWarTask v-else-if="(!isPastWeek & !isFutureWeek)"  @add-task="addTask" />
-      <button v-if="(!isEditTaskTrue)" @click="submitWarEntry">Submit Task</button>
+      <AddWarTask v-else-if="(!isPastWeek && !isFutureWeek)"  @add-task="addTask" />
+      <button v-if="(!isEditTaskTrue) && (!isPastWeek && !isFutureWeek)" @click="submitWarEntry">Submit Task</button>
    <p v-if="hasSubmited" class="submit-msg">War Submitted for {{ this.selectedWeek }}</p>
       
    </div>
@@ -70,7 +71,7 @@ export default {
    },
    methods: {
       submitWarEntry() {
-         axios.post('https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/activity/submit', {
+         axios.post('http://localhost:80/api/v1/activity/submit', {
             weekId: storeWeek.currentWeekId,
             studentId : storeUser.userID,
             taskCategories : this.studentTasks.tasks[0].taskCategories,
@@ -110,7 +111,7 @@ export default {
       },
 
       getStudentWar() {
-         axios.get(`http://localhost:80https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/war/get`,
+         axios.get(`http://localhost:80/api/v1/war/get`,
          {
             params: {
                teamId: storeUser.teamId,
@@ -128,6 +129,9 @@ export default {
             
          }).catch(error => {
             console.log(error)
+            if(error.response.data.status == 500){
+               this.setWARVisibility(storeWeek.currentWeekId, storeWeek.selectedWeekId)
+            }
          })
       },
       
@@ -168,9 +172,14 @@ export default {
     }
      
    },
+   // mounted() {
+   //    this.getStudentWar()
+   // },
 
    created() {
       this.getStudentWar()
+      this.setWARVisibility(storeWeek.currentWeekId, storeWeek.selectedWeekId)
+
       
    },
 }

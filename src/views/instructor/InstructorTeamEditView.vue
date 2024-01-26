@@ -4,16 +4,16 @@
       <!-- Add Teams for Section: {{sectionName}} -->
       <div class="input-field">
          <label>Team Name</label>
-         <input type="text" id="sectionName" v-model="teamName" required />
+         <input type="text" id="sectionName" v-model="this.teamName" required />
       </div>
 
       
 
    <button type="submit" @click="createTeams()">Create Team</button>
-   <div class="success" v-if="isSuccess">
+   <div class="success" v-if="hasCreatedTeams">
       <p>Teams Succesfully Created!</p>
     </div>
-    <div class="loading" v-if="isLoading">
+    <div class="loading" v-if="isProcessingTeamCreation">
         Process being requested... DO NOT REFRESH
     </div>
 
@@ -23,7 +23,7 @@
             then select all the students you wish to add to that team 
             and click the save button.
         </h3>
-    <div class="page">
+    <div v-if="hasLoaded" class="page">
         <!-- Teams Section -->
         
         <div class="teams">
@@ -50,6 +50,12 @@
 
     </div>
     <button type="submit" @click="saveTeam()">Save Team</button>
+    <div class="success" v-if="hasSavedTeam">
+      <p>Teams Succesfully Saved!</p>
+    </div>
+    <div class="loading" v-if="isProcessingTeamSave">
+        Process being requested... DO NOT REFRESH
+    </div>
     <button type="submit" @click="clearSelection()">Clear Selection</button>
 </template>
 
@@ -76,39 +82,50 @@ export default {
         },
         isLoading: false,
         isSuccess: false,
+        isProcessingTeamCreation: false,
+        isProcessingTeamSave: false,
+        hasCreatedTeams: false,
+        hasSavedTeam: false,
+        hasLoaded: false,
+        teamName: "",
          
       }
    },
    methods: {
     getStudents(){
         this.isLoading = true
-        axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getAllStudents/${storeUser.sectionId}`,
+        axios.get(`http://localhost:80/api/v1/section/getAllStudents/${storeUser.sectionId}`,
         {
             withCredentials: true,
         })
         .then(response => {
-            this.isLoading = false
+            this.students = []
             this.isSuccess = true
+            this.isLoading = false
+            this.hasLoaded = true
             console.log(response.data.data)
             for(const student of response.data.data){
                 if(student.teamId == null){
                     this.students.push(student)
                 }
+
             }
             // this.students = response.data.data
         })
         .catch(error => {
-            this.isLoading = false
             console.log(error)
         })
     },
     getTeams(){
-        axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getAllTeams/${storeUser.sectionId}`,
+        this.isLoading = true
+        axios.get(`http://localhost:80/api/v1/section/getAllTeams/${storeUser.sectionId}`,
         {
             withCredentials: true,
         })
         .then(response => {
             this.teams = response.data.data
+            this.hasLoaded = true
+
         })
         .catch(error => {
             console.log(error)
@@ -118,7 +135,7 @@ export default {
           this.updatedTeam.id = team.id;
           this.updatedTeam.name = team.name;
           // Clear the students array when a new team is selected
-          this.updatedTeam.students = [];
+          this.updatedTeam.students = team.students;
       },
 
       // Method to add/remove a student from the updatedTeam.students array
@@ -136,7 +153,9 @@ export default {
       },
    
    saveTeam(){
-    axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/team/edit`,
+    this.hasSavedTeam = false
+    this.isProcessingTeamSave = true
+    axios.post(`http://localhost:80/api/v1/team/edit`,
     {
         id: this.updatedTeam.id,
         name: this.updatedTeam.name,
@@ -146,14 +165,21 @@ export default {
     {
         withCredentials: true,
     }).then(response => {
+        this.hasSavedTeam = true
+        this.isProcessingTeamSave = false
         console.log(response)
+        this.getStudents()
+
         
     }).catch(error => {
+        this.isProcessingTeamSave = false
         console.log(error)
     })
    },
    createTeams() {
-         axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/team/save`, {
+    this.hasCreatedTeams = false
+    this.isProcessingTeamCreation = true
+         axios.post(`http://localhost:80/api/v1/team/save`, {
             id : null,
             name: this.teamName,
             sectionId: storeUser.sectionId,
@@ -166,6 +192,9 @@ export default {
             .then(res => {
                console.log(res)
                console.log(res.data.data)
+               this.getTeams()
+               this.isProcessingTeamCreation = false
+            
                this.hasCreatedTeams = true
                
                

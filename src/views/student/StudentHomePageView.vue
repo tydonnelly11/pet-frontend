@@ -36,7 +36,7 @@ export default {
    },
    methods: {
       getTeamMembers() {
-         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/team/getStudents/${storeUser.teamId}`,
+         axios.get(`http://localhost:80/api/v1/team/getStudents/${storeUser.teamId}`,
          {
              withCredentials: true,
          }

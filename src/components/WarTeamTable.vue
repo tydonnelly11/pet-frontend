@@ -31,13 +31,11 @@ export default {
       }
    },
    methods: {
-      //Method for getting teams info using current weekvar
-      //Might put currentweek in localStore
+      
    },
    computed: {},
    created() {
-      console.log(this.team)
-   },
+      console.log(this.teamProp)   },
 }
 </script>
 

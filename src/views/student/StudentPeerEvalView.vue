@@ -80,7 +80,7 @@ export default {
    methods: {
       async getPeerEvalEntriesForWeek() {
          
-         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/peerEvaluation/getPeerEvaluation/${storeUser.userID}/${storeWeek.selectedWeekId}`,
+         axios.get(`http://localhost:80/api/v1/peerEvaluation/getPeerEvaluation/${storeUser.userID}/${storeWeek.selectedWeekId}`,
                {
                   crossdomain: true,
                   withCredentials: true,
@@ -99,6 +99,7 @@ export default {
                      )
                      console.log(item.oldScore)
                   }
+                  console.log(peerEvalEntriesForWeek)
                   this.peerEvalEntriesForSelectedWeek = peerEvalEntriesForWeek
                   this.setPeerEvalVisibility(
                      storeWeek.currentWeekId,
@@ -205,12 +206,13 @@ export default {
          }
       },
       getRubric() {
-         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getRubric/${storeUser.sectionId}`, {
+         axios.get(`http://localhost:80/api/v1/section/getRubric/${storeUser.sectionId}`, {
             withCredentials: true,
          })
          .then((response) => {
             console.log('RUBRIC' + response.data.data.criteria)
             this.rubric = response.data.data.criteria
+            this.getPeerEvalEntriesForWeek()
          })
       },
       
@@ -229,8 +231,8 @@ export default {
       
    },
    created() {
-     this.rubric = this.getRubric()
-     this.getPeerEvalEntriesForWeek()
+     this.getRubric()
+     
    },
 }
 </script>

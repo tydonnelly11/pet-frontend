@@ -71,25 +71,9 @@
 
       </div>
    </div>
-   <div v-if="hasCreatedSection">
-      Add Teams for Section: {{sectionName}}
-      <div class="input-field">
-         <label>Team Name</label>
-         <input type="text" id="sectionName" v-model="teamName" required />
-      </div>
-
-      <!-- <div>
-         Created Teams for Section: {{sectionId}}
-         <div class="team" v-for="team in listOfTeams">
-
-            <p>Team Name: {{ team.teamName }}</p>
-         </div>
-      </div> -->
-
-   <button type="submit" @click="createTeams()">Create Team</button>
+   
 
 
-   </div>
 
 </template>
 
@@ -131,12 +115,7 @@ export default {
       }
    },
    methods: {
-      addTeam() {
-         this.listOfTeams.push({
-            teamName: this.teamName,
-         })
-         console.log(this.listOfTeams)
-      },
+      
       addRubric() {
          this.criteria.push({
             criterionName: this.criteriaName,
@@ -146,10 +125,11 @@ export default {
          console.log(this.criteria)
          this.maxScore = 0
          this.criteriaName = ""
+         this.criteriaDesc = ""
          this.hasError = true
       },
       registerInstructor() {
-         axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/register/instructor`, {
+         axios.post(`http://localhost:80/api/v1/auth/register/instructor`, {
                firstName: this.firstName,
                middleName: this.middleName,
                lastName: this.lastName,
@@ -181,7 +161,7 @@ export default {
             instructorId: storeUser.userID,
             rubric: this.criteria ,
          }
-         axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/save`, {
+         axios.post(`http://localhost:80/api/v1/section/save`, {
             id : null,
             name: this.sectionName,
             instructorId: storeUser.userID,
@@ -202,7 +182,7 @@ export default {
             })
       },
       createTeams() {
-         axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/team/save`, {
+         axios.post(`http://localhost:80/api/v1/team/save`, {
             id : null,
             name: this.teamName,
             sectionId: this.sectionId,
@@ -215,7 +195,9 @@ export default {
             .then(res => {
                console.log(res)
                console.log(res.data.data)
+
                this.hasCreatedTeams = true
+
                
                
             })
