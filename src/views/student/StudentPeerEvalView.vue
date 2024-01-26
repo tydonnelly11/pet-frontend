@@ -80,7 +80,7 @@ export default {
    methods: {
       async getPeerEvalEntriesForWeek() {
          
-         axios.get(`http://localhost:80/api/v1/peerEvaluation/getPeerEvaluation/${storeUser.userID}/${storeWeek.selectedWeekId}`,
+         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/peerEvaluation/getPeerEvaluation/${storeUser.userID}/${storeWeek.selectedWeekId}`,
                {
                   crossdomain: true,
                   withCredentials: true,
@@ -206,7 +206,7 @@ export default {
          }
       },
       getRubric() {
-         axios.get(`http://localhost:80/api/v1/section/getRubric/${storeUser.sectionId}`, {
+         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getRubric/${storeUser.sectionId}`, {
             withCredentials: true,
          })
          .then((response) => {

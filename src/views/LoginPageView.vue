@@ -49,7 +49,7 @@ export default {
    methods: {
       loginInstructor() 
       {
-         axios.post('http://localhost:80/api/v1/auth/login/instructor', {
+         axios.post('https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/login/instructor', {
             firstName: "",
             middleName: "",
             lastName: "",
@@ -85,7 +85,7 @@ export default {
       },
       loginStudent()
       {
-         axios.post('http://localhost:80/api/v1/auth/login/student', {
+         axios.post('https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/login/student', {
             firstName: "",
             middleName: "",
             lastName: "",
