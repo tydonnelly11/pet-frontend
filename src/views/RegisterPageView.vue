@@ -5,20 +5,22 @@
         </div>
         <div class="student-info">
            <p> {{ studentInfo.email }} </p> 
-           <p> {{ studentInfo.firstName + studentInfo.lastName }} </p> 
-           <p> Confirm the above name is you and then enter in a passowrd. DO NOT USE your TCU password</p>
+          
+           <p> Confirm the above email is yours and then enter in your name and a passowrd. DO NOT USE your TCU password</p>
         </div>
         
-
+        <input type="text" v-model="studentInfo.firstName" placeholder="Enter your First Name"/>
+        <input type="text" v-model="studentInfo.middleName" placeholder="Enter your Middle Intial"/>
+        <input type="text" v-model="studentInfo.lastName" placeholder="Enter your Last Name"/>
         <input type="text" v-model="password2" placeholder="Enter your Password"/>
         <input type="text" v-model="password1" placeholder="Enter your Password"/>
 
         <button @click="registerStrudent">Register</button>
-        <div class="loading">
-            <p v-if="isLoading">Request being processed...DO NOT REFRESH</p>
+        <div v-if="isLoading" class="loading">
+            <p >Request being processed...DO NOT REFRESH</p>
         </div>
-        <div class="success">
-            <p v-if="hasSubmittedStudents">Succesfully Registered</p>
+        <div v-if="hasSubmittedStudents" class="success">
+            <p >Succesfully Registered</p>
             <button @click="goToLogin">Go to Login</button>
         </div>
     </div>
@@ -53,16 +55,14 @@ export default {
    },
    methods: {
         getRegistrationInfo(){
-            console.log("here")
+
             
             axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/register/student/getStudentRegistrationTokenInfo/${this.token}`, {
                 
             }).then(response => {
                 console.log(response)
                 this.studentInfo.email = response.data.data.studentEmail
-                this.studentInfo.firstName = response.data.data.studentFirstName 
-                this.studentInfo.lastName = response.data.data.studentLastName
-                this.studentInfo.middleName = response.data.data.studentMiddleName
+                
                 this.studentInfo.sectionId = response.data.data.studentSectionId
                 
             }).catch(error => {
@@ -71,11 +71,14 @@ export default {
             
             
         },
+        
         registerStrudent(){
             if(this.password1 != this.password2){
                 alert("Passwords do not match")
                 return
             }
+            this.isLoading = true
+            this.hasSubmittedStudents = false
             axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/register/student`, {
                 firstName: this.studentInfo.firstName,
                 middleName: this.studentInfo.middleName,
@@ -89,19 +92,26 @@ export default {
             {
                 withCredentials: true,
             }
-            ).then(response => {
+            ).then((response) => {
                 console.log(response)
                 this.isLoading = false
                 this.hasSubmittedStudents = true
-            }).catch(error => {
+                console.log(this.hasSubmittedStudents)
+                console.log(this.isLoading)
+            }).catch((error) => {
                 console.log(error)
                 this.isLoading = false
                 
             })
+        },
+        goToLogin(){
+            this.$router.push('/login')
         }
    },
     created(){
         this.getRegistrationInfo()
+        this.isLoading = false
+        this.hasSubmittedStudents = false
     }
 }
 

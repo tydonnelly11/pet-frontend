@@ -68,7 +68,7 @@ export default {
           const response = await axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/peerEvaluation/getEvaluationReport`, {
             params: {
               
-              week: storeWeek.currentWeekId,
+              week: storeWeek.selectedWeekId,
               sectionId: storeUser.sectionId,
             },
             withCredentials : true,

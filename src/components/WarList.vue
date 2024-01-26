@@ -14,6 +14,7 @@
                <th scope="col">Planned Hours</th>
                <th scope="col">Actual Hours</th>
                <th scope="col">Status</th>
+               <th scope="col" v-if="!isTeamWar">Actions</th>
             </tr>
          </thead>
          <!-- Table body with dynamic rows -->
@@ -93,7 +94,6 @@ export default {
    created() {
 
       console.log(this.studentTasks)
-      console.log("STUDENT")
       // this.toggleFormVisibility()
       // console.log(this.studentTasks.tasks)
    },

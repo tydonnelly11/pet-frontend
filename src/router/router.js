@@ -64,7 +64,7 @@ const routes = [
       component: InstructorHomePage,
       children: [
          {
-            path: 'instructorpeereval', // No leading slash for child routes
+            path: '', // No leading slash for child routes
             name: 'InstructorPeerEval',
             component: InstructorPeerEvalView,
          },

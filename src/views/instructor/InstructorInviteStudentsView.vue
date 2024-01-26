@@ -6,16 +6,8 @@
         </div>
         <div class="form">
             <div class="input-field">
-                <label for="firstName">First Name:</label>
-                <input type="text" id="firstName" v-model="firstName" required />
-            </div>
-            <div class="input-field">
-                <label for="lastName">Last Name:</label>
-                <input type="text" id="lastName" v-model="lastName" required />
-            </div>
-            <div class="input-field">
                 <label for="email">Email:</label>
-                <input type="email" id="email" v-model="email" required />
+                <input type="email" id="email" v-model="this.emails" required />
             </div>
             <button type="submit" @click="inviteStudent">Add Student</button>
         </div>
@@ -23,8 +15,6 @@
         <div class="list-of-students">
             <h2>List of Students</h2>
             <div class="student" v-for="student in listOfStudents">
-                <p>First Name: {{ student.firstName }}</p>
-                <p>Last Name: {{ student.lastName }}</p>
                 <p>Email: {{ student.email }}</p>
             </div>
         </div>
@@ -48,6 +38,7 @@ export default {
    components: {},
    data() {
       return {
+            emails: "",
             firstName: "",
             lastName: "",
             email: "",
@@ -55,19 +46,26 @@ export default {
             storeUser,
             isLoading: false,
             hasSubmittedStudents: false,
+            listOfEmails: [],
+            
       }
    },
    methods: {
         inviteStudent() {
-             this.listOfStudents.push({
-                firstName: this.firstName,
+            this.listOfEmails = this.emails.split(';');
+            for(const item of this.listOfEmails){
+                
+                this.listOfStudents.push({
+                firstName: "",
                 middleName: "",
-                lastName: this.lastName,
-                email: this.email,
+                lastName: "",
+                email: item.trimStart(),
                 sectionId : storeUser.sectionId,
                 password: null,
                 roles : "user"
              })
+            }
+             
              console.log(this.listOfStudents)
         },
         submitStudents() {

@@ -99,6 +99,7 @@ export default {
                      )
                      console.log(item.oldScore)
                   }
+                  console.log(peerEvalEntriesForWeek)
                   this.peerEvalEntriesForSelectedWeek = peerEvalEntriesForWeek
                   this.setPeerEvalVisibility(
                      storeWeek.currentWeekId,
@@ -211,6 +212,7 @@ export default {
          .then((response) => {
             console.log('RUBRIC' + response.data.data.criteria)
             this.rubric = response.data.data.criteria
+            this.getPeerEvalEntriesForWeek()
          })
       },
       
@@ -229,8 +231,8 @@ export default {
       
    },
    created() {
-     this.rubric = this.getRubric()
-     this.getPeerEvalEntriesForWeek()
+     this.getRubric()
+     
    },
 }
 </script>
