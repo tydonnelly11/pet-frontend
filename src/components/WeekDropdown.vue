@@ -6,7 +6,7 @@
          role="button"
          data-bs-toggle="dropdown"
          aria-expanded="false"
-         :style="'width: 40%;'"
+         :style="'width: 50%;'"
       >
          {{
             storeWeek.selectedWeek

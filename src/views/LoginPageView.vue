@@ -21,6 +21,9 @@
             </div>
             <button type="submit" @click="loginStudent()">Login Student</button>
             <button type="submit2" @click=loginInstructor()>Login Instructor</button>
+            <div v-if="isLoading">
+               <p>Logging in...</p>
+            </div>
 
 
             
@@ -43,13 +46,15 @@ export default {
          storeUser,
          email: "",
          password: "",
+         isLoading: false,
          
       }
    },
    methods: {
       loginInstructor() 
       {
-         axios.post('https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/login/instructor', {
+         this.isLoading = true
+         axios.post('http://localhost:80/api/v1/auth/login/instructor', {
             firstName: "",
             middleName: "",
             lastName: "",
@@ -61,7 +66,7 @@ export default {
          })
          .then((response) => {
             console.log(response)
-
+            this.isLoading = false
             storeUser.updateLoginStatus(response.data.data.id, true)
             console.log(storeUser.isLoggedIn)
             console.log(storeUser.userID)
@@ -85,7 +90,8 @@ export default {
       },
       loginStudent()
       {
-         axios.post('https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/login/student', {
+         this.isLoading = true
+         axios.post('http://localhost:80/api/v1/auth/login/student', {
             firstName: "",
             middleName: "",
             lastName: "",
@@ -96,7 +102,7 @@ export default {
          })
          .then((response) => {
             console.log(response)
-
+            this.isLoading = false
             storeUser.updateLoginStatus(response.data.data.id, true)
             
             storeUser.setTeamId(response.data.data.teamId)
@@ -113,6 +119,7 @@ export default {
             }
          }, (error) => {
             console.log(error)
+            this.isLoading = false
          })
       },
       pushInstructor()

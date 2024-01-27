@@ -6,10 +6,17 @@
          <h1>Grade for {{ storeWeek.selectedWeek.start }} to {{ storeWeek.selectedWeek.end }} :</h1>
          <!-- {{ this.gradeForWeek }} -->
       </div>
+      <div class="loading">
+         <div v-if="isLoading">
+            <h1>Loading...</h1>
+         </div>
+      </div>
       <PeerEvalTable
          v-if="(!this.isFutureWeek) & this.hasEntry"
          :isPastWeek="isPastWeek"
          :peerEvalProp="this.peerEvalEntriesForSelectedWeek"
+         :rubricProp="this.rubric"
+
       />
       <div
          class="week-not-started"
@@ -47,13 +54,6 @@ export default {
       return {
          storeUser,
          storeWeek,
-         team: [
-            {
-               studentId : '3deea794-06ba-4dc2-9255-d18a7d5eb61c'	,
-               studentName: 'Student One',
-            }
-
-         ],
          gradeForWeek: 0,
          peerEvalEntriesForSelectedWeek: [],
          hasEntry: false,
@@ -61,6 +61,7 @@ export default {
          responseFlag: null,
          isPastWeek: false,
          isFutureWeek: false,
+         isLoading: false,
          rubric: null,
       }
    },
@@ -79,8 +80,8 @@ export default {
    },
    methods: {
       async getPeerEvalEntriesForWeek() {
-         
-         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/peerEvaluation/getPeerEvaluation/${storeUser.userID}/${storeWeek.selectedWeekId}`,
+         this.isLoading = true
+         axios.get(`http://localhost:80/api/v1/peerEvaluation/getPeerEvaluation/${storeUser.userID}/${storeWeek.selectedWeekId}`,
                {
                   crossdomain: true,
                   withCredentials: true,
@@ -88,31 +89,28 @@ export default {
                }
             )
             .then((response) => {
+              
                if (response.data.code == 200) {
                   this.errorFlag = false
                   this.hasEntry = true
                   const peerEvalEntriesForWeek = response.data.data
-                  for (const item of peerEvalEntriesForWeek) {
-                     item.oldScore = item.ratings.reduce(
-                        (a, b) => a + b.score,
-                        0
-                     )
-                     console.log(item.oldScore)
-                  }
+                  
                   console.log(peerEvalEntriesForWeek)
                   this.peerEvalEntriesForSelectedWeek = peerEvalEntriesForWeek
                   this.setPeerEvalVisibility(
                      storeWeek.currentWeekId,
                      storeWeek.selectedWeekId
                   )
+                  this.isLoading = false
                } else if (response.data.code == 409) {
                   //Will be changed to new code
                   //409 is no entry for week
-
+                  this.isLoading = false
                   this.errorFlag = false
                   this.hasEntry = false
                   this.createNewPeerEvalEntry() // Make this function create an empty peer eval entry for the week then pass to table for completion
                } else {
+                  this.isLoading = false
                   this.hasEntry = false
                   this.errorFlag = true
                   this.responseFlag = response.data.code
@@ -124,22 +122,23 @@ export default {
                if(error.response.data != null)
                {
                   console.log(error.response.data.code)
-                  console.log("BEFORE SECOND IFS")
                   console.log(error.response.data.code == 409)
                   if(error.response.data.code == 401){
-                     console.log("HERE")
                      this.hasEntry = false // No existing eval
                      // this.responseFlag = error.response.data.code //For error comp
                      this.errorFlag = true //Shows error
                      this.responseFlag = 401
                      this.errorMessage = "Unauthorized Access, Please log in again"//FOr error comp
+                     this.isLoading = false
+
 
                      }
                   else if(error.response.data.code == 409){
                      this.errorFlag = false
                      this.hasEntry = false
 
-                     this.createNewPeerEvalEntry() // Make this function create an empty peer eval entry for the week then pass to table for completion
+                     this.createNewPeerEvalEntry()
+                     this.isLoading = false // Make this function create an empty peer eval entry for the week then pass to table for completion
                   }
                   
                }
@@ -206,12 +205,14 @@ export default {
          }
       },
       getRubric() {
-         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getRubric/${storeUser.sectionId}`, {
+         axios.get(`http://localhost:80/api/v1/section/getRubric/${storeUser.sectionId}`, {
             withCredentials: true,
          })
          .then((response) => {
-            console.log('RUBRIC' + response.data.data.criteria)
+            console.log('RUBRIC')
+            
             this.rubric = response.data.data.criteria
+            console.log(this.rubric)
             this.getPeerEvalEntriesForWeek()
          })
       },

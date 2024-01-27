@@ -16,11 +16,11 @@
         <input type="text" v-model="password1" placeholder="Enter your Password"/>
 
         <button @click="registerStrudent">Register</button>
-        <div v-if="isLoading" class="loading">
-            <p >Request being processed...DO NOT REFRESH</p>
+        <div v-if="isLoading">
+            <p>Request being processed...DO NOT REFRESH</p>
         </div>
-        <div v-if="hasSubmittedStudents" class="success">
-            <p >Succesfully Registered</p>
+        <div v-if="hasRegistered">
+            <p>Succesfully Registered</p>
             <button @click="goToLogin">Go to Login</button>
         </div>
     </div>
@@ -46,7 +46,7 @@ export default {
             lastName: "",
             sectionId: "",
             isLoading: false,
-            hasSubmittedStudents: false,
+            hasRegistered: false,
 
         }
         
@@ -57,7 +57,7 @@ export default {
         getRegistrationInfo(){
 
             
-            axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/register/student/getStudentRegistrationTokenInfo/${this.token}`, {
+            axios.get(`http://localhost:80/api/v1/auth/register/student/getStudentRegistrationTokenInfo/${this.token}`, {
                 
             }).then(response => {
                 console.log(response)
@@ -79,7 +79,8 @@ export default {
             }
             this.isLoading = true
             this.hasSubmittedStudents = false
-            axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/register/student`, {
+            axios.post(`http://localhost:80/api/v1/auth/register/student`, {
+                
                 firstName: this.studentInfo.firstName,
                 middleName: this.studentInfo.middleName,
                 lastName: this.studentInfo.lastName,
@@ -90,12 +91,15 @@ export default {
                 
             },
             {
+                params: {
+                    token: this.token
+                },
                 withCredentials: true,
             }
             ).then((response) => {
                 console.log(response)
                 this.isLoading = false
-                this.hasSubmittedStudents = true
+                this.hasRegistered = true
                 console.log(this.hasSubmittedStudents)
                 console.log(this.isLoading)
             }).catch((error) => {

@@ -8,9 +8,12 @@
             :errorMessageProp="errorMessage"/>
 
       </div>
-      <WarTeamTable v-if='(!isFutureWeek)' :teamProp="team"></WarTeamTable>
+      <WarTeamTable v-if="hasEntry && !isFutureWeek" :teamProp="team"></WarTeamTable>
+      <div v-if="isLoading">
+         <h1>Loading...</h1>
+      </div>
       <div v-if="isFutureWeek">
-         <p>Come back during {{ storeWeek.selectedWeek.start}} to {{ storeWeek.selectedWeek.end }} to complete WAR</p>
+         <p>Come back during {{ storeWeek.selectedWeek.start}} to {{ storeWeek.selectedWeek.end }} to view your team mates activities</p>
       </div>
    </div>
 </template>
@@ -36,20 +39,18 @@ export default {
    },
    data() {
       return {
-         team: [
-            
-         ],
-        
-         selectedWeek: ref(null),
+         team: [],
          isFutureWeek: false,
          isPastWeek: false,
          hasEntry: false,
          storeWeek,
+         storeTeam,
       }
    },
    methods: {
       getTeamMatesWar(){
-         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/war/get`,
+         this.isLoading = true
+         axios.get(`http://localhost:80/api/v1/war/get`,
          {
             params: {
                teamId: storeUser.teamId,
@@ -57,13 +58,17 @@ export default {
             },
             withCredentials: true,
          }).then(response => {
+            this.isLoading = false
             this.formatActivities(response.data.data.activities)
          }).catch(error => {
+            this.isLoading = false
             console.log(error)
             if(error.response.data.status == 500){
-               
+               this.formatActivities([])
+               this.hasEntry = true
             }
          })
+         this.setWARVisibility(storeWeek.currentWeekId, storeWeek.selectedWeekId)
       },
       setWARVisibility(currentWeekId, selectedWeekId) {
          //Sets the visibility of the peer eval table and is used in
@@ -71,15 +76,13 @@ export default {
          //determine if the table should be displayed/editable
 
          if (currentWeekId == selectedWeekId) {
-            this.hasEntry = true
             this.isPastWeek = false
             this.isFutureWeek = false
+            this.hasEntry = true
          } else if (currentWeekId < selectedWeekId) {
-            this.hasEntry = false
             this.isFutureWeek = true
             this.isPastWeek = false
          } else {
-            this.hasEntry = true
             this.isPastWeek = true
             this.isFutureWeek = false
          }
@@ -87,7 +90,6 @@ export default {
       formatActivities(activities){
          const team = [];
          
-         console.log("START")
          for(const item of storeTeam.teamMembers){
             let student = {
                name: item.name,
@@ -101,11 +103,9 @@ export default {
                   student.tasks.push(activity)
                }
                else{
-                  console.log(student.tasks)
                   continue;
                }
             }
-            console.log(student)
             team.push(student)
          }
          this.team = team
@@ -119,8 +119,6 @@ export default {
    },
    watch: {
       'storeWeek.selectedWeekId': function(newVal, oldVal) {
-         console.log(`currentWeekId changed from ${oldVal} to ${newVal}`);
-         // Call your function here
          
          this.getTeamMatesWar();
          this.setWARVisibility(storeWeek.currentWeekId, storeWeek.selectedWeekId)

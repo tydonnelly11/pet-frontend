@@ -2,13 +2,21 @@
    <div class="sidebar">
       <NavbarSide />
    </div>
+   
 
+      
    <div class="main-item">
+      <div class="top-bar">
+         
       <WeekDropdown :displayedWeeks="storeWeek.weeksForSemester" 
       :selectWeek="storeWeek.currentWeekId" 
-      :currentWeekProp="storeWeek.currentWeek">
+      :currentWeekProp="storeWeek.currentWeek"
+      :style="'width: 100%;'">
       </WeekDropdown>
-      
+      <div class="profile">
+         <p>{{ storeUser.userFullName }}</p>
+      </div>
+      </div>
 
       <router-view></router-view>
    </div>
@@ -36,7 +44,7 @@ export default {
    },
    methods: {
       getTeamMembers() {
-         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/team/getStudents/${storeUser.teamId}`,
+         axios.get(`http://localhost:80/api/v1/team/getStudents/${storeUser.teamId}`,
          {
              withCredentials: true,
          }
@@ -74,5 +82,17 @@ export default {
    width: 100%;
    display: flex;
    flex-direction: column;
+   flex: 1 0 80%;
+}
+.top-bar{
+   display: flex;
+   flex-direction: row;
+   position: relative;
+   right: 2.5%;
+}
+.profile{
+   position: relative;
+   right: 2.5%;
+   width: 20%;
 }
 </style>

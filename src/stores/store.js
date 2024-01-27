@@ -20,5 +20,12 @@ export const storeUser = reactive({
   setName(first,last)
   {
       this.userFullName = first + " " + last;
+  },
+  logoutUser(){
+        this.userID = null;
+        this.isLoggedIn = false;
+        this.userFullName = null;
+        this.sectionId = null;
+        this.teamId = null;
   }
 });

@@ -49,7 +49,7 @@ export default {
   },
   methods: {
     getRubric() {
-         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getRubric/${storeUser.sectionId}`, {
+         axios.get(`http://localhost:80/api/v1/section/getRubric/${storeUser.sectionId}`, {
             withCredentials: true,
          })
          .then((response) => {
@@ -65,7 +65,7 @@ export default {
       console.log(storeUser.sectionId)
       // Fetch reports for each student
         try {
-          const response = await axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/peerEvaluation/getEvaluationReport`, {
+          const response = await axios.get(`http://localhost:80/api/v1/peerEvaluation/getEvaluationReport`, {
             params: {
               
               week: storeWeek.selectedWeekId,
