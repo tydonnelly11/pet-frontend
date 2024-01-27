@@ -129,7 +129,7 @@ export default {
          this.hasError = true
       },
       registerInstructor() {
-         axios.post(`http://localhost:80/api/v1/auth/register/instructor`, {
+         axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/register/instructor`, {
                firstName: this.firstName,
                middleName: this.middleName,
                lastName: this.lastName,
@@ -161,7 +161,7 @@ export default {
             instructorId: storeUser.userID,
             rubric: this.criteria ,
          }
-         axios.post(`http://localhost:80/api/v1/section/save`, {
+         axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/save`, {
             id : null,
             name: this.sectionName,
             instructorId: storeUser.userID,
@@ -182,7 +182,7 @@ export default {
             })
       },
       createTeams() {
-         axios.post(`http://localhost:80/api/v1/team/save`, {
+         axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/team/save`, {
             id : null,
             name: this.teamName,
             sectionId: this.sectionId,
