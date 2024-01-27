@@ -18,7 +18,7 @@
                   {{ student.evaluateeFirstName + student.evaluateeLastName }}
                </td>
                <td scope="col" v-for="item in student.ratings">
-                  <p type="number" min="1" max="10">{{ item.score }}</p>
+                  <p type="number" min="0" >{{ item.score }}</p>
                </td>
                <td scope="col">
                   <p type="text">{{ student.comment }}</p>
@@ -61,11 +61,12 @@ export default {
       peerEvalProp: Object,
       user: Object,
       isPastWeek: Boolean,
+      rubricProp: Array,
    },
 
    data() {
       return {
-         rubric: null,
+         rubric: this.rubricProp,
          peerEval: this.peerEvalProp,
          submissionStatus: 0,
          storeUser,
@@ -109,7 +110,7 @@ export default {
          // console.log(targetPayload)
 
          axios
-            .post('https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/peerEvaluation/submitPeerEvaluation', targetPayload, {
+            .post('http://localhost:80/api/v1/peerEvaluation/submitPeerEvaluation', targetPayload, {
                withCredentials: true,
             })
             .then((response) => {
@@ -120,20 +121,20 @@ export default {
                console.log(error)
             })
       },
-      getRubric() {
-         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getRubric/${storeUser.sectionId}`, {
-            withCredentials: true,
-         })
-         .then((response) => {
-            console.log('RUBRIC' + response.data.data.criteria)
-            this.rubric = response.data.data.criteria
-         })
-      },
+      // getRubric() {
+      //    axios.get(`http://localhost:80/api/v1/section/getRubric/${storeUser.sectionId}`, {
+      //       withCredentials: true,
+      //    })
+      //    .then((response) => {
+      //       console.log('RUBRIC' + response.data.data.criteria)
+      //       this.rubric = response.data.data.criteria
+      //    })
+      // },
       
    },
    computed: {},
    created() {
-      this.rubric = this.getRubric()
+      // this.rubric = this.getRubric()
       
    },
 }

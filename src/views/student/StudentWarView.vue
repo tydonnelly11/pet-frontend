@@ -4,12 +4,16 @@
          War For <b>{{ storeUser.userFullName }} </b>for Week {{ storeWeek.selectedWeek.start }} to {{ storeWeek.selectedWeek.end }}
       </div>
       <WarList
-         v-if="(!isFutureWeek)"
+         v-if="(!isFutureWeek) && (!isLoading)"
          :isTeamWar="false"
          :studentTasks="studentTasks"
          @editTask="editTaskStart"
          @deleteTask="deleteTask"
       />
+      <div v-if="isLoading" class="loading">
+         <h1>Loading...</h1>
+      </div>
+
       <div v-if="isFutureWeek">
          Come back during {{ storeWeek.selectedWeek.start }} to {{ storeWeek.selectedWeek.end }} to submit your war
       </div>
@@ -63,6 +67,7 @@ export default {
          editTask: null,
          isEditTaskTrue: false,
          editTaskIndex: 0,
+         isLoading: false,
          isFutureWeek: false,
          isPastWeek: false,
          hasSubmited : false,
@@ -71,7 +76,7 @@ export default {
    },
    methods: {
       submitWarEntry() {
-         axios.post('https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/activity/submit', {
+         axios.post('http://localhost:80/api/v1/activity/submit', {
             weekId: storeWeek.currentWeekId,
             studentId : storeUser.userID,
             taskCategories : this.studentTasks.tasks[0].taskCategories,
@@ -111,7 +116,8 @@ export default {
       },
 
       getStudentWar() {
-         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/war/get`,
+         this.isLoading = true
+         axios.get(`http://localhost:80/api/v1/war/get`,
          {
             params: {
                teamId: storeUser.teamId,
@@ -119,6 +125,7 @@ export default {
             },
             withCredentials: true,
          }).then(response => {
+            this.isLoading = false
             console.log(response)
             for(const activity of response.data.data.activities){
                if(activity.studentId == storeUser.userID){
@@ -128,6 +135,7 @@ export default {
             
             
          }).catch(error => {
+            this.isLoading = false
             console.log(error)
             if(error.response.data.status == 500){
                this.setWARVisibility(storeWeek.currentWeekId, storeWeek.selectedWeekId)

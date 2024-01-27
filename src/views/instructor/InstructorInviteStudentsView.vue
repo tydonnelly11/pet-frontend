@@ -70,7 +70,7 @@ export default {
         },
         submitStudents() {
             this.isLoading = true
-            axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/register/student/inviteStudents`, 
+            axios.post(`http://localhost:80/api/v1/auth/register/student/inviteStudents`, 
                 
                     this.listOfStudents
             ,{

@@ -2,19 +2,14 @@
    <div class="war-table-container">
       <WarList
          :isTeamWar="true"
-         v-for="student in this.teamProp"
+         v-for="student in teamProp"
          :studentTasks="student"
       />
    </div>
 </template>
 
 <script>
-/*
-This component is responsible for holding multiple wars for
-the team view this
-may be changed and some of the logic may be moved to the view
-if it is easier
- */
+
 import WarList from './WarList.vue'
 export default {
    name: 'WarTeamTable',
@@ -35,7 +30,9 @@ export default {
    },
    computed: {},
    created() {
-      console.log(this.teamProp)   },
+      console.log("teamProp")
+      console.log(this.teamProp)   
+   },
 }
 </script>
 

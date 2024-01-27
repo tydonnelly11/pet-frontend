@@ -12,15 +12,22 @@
             <router-link to="/studenthome/studentwar">War</router-link>
          </li>
          <li class="nav-item flex-end">
-            <router-link to="/">Logout</router-link>
+            <router-link to="/" @click="logoutUser()">Logout</router-link>
          </li>
       </ul>
    </div>
 </template>
 
 <script>
+import { storeUser } from '@/stores/store.js'
+
 export default {
    name: 'NavbarSide',
+   methods: {
+      logoutUser() {
+         storeUser.logoutUser()
+      },
+   },
 }
 </script>
 
