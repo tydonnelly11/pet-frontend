@@ -28,9 +28,9 @@
                <td :style="'width: 10%'">{{ task.actualHours }}</td>
                <td :style="'width: 15%'">{{ task.status }}</td>
                <div v-if="!isTeamWar" class="button-group">
-                  <button @click="$emit('deleteTask', task, index)">
+                  <!-- <button @click="$emit('deleteTask', task, index)">
                      Remove
-                  </button>
+                  </button> -->
                   <button @click="$emit('editTask', task, index)">Edit</button>
                </div>
             </tr>

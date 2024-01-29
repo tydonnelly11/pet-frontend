@@ -157,15 +157,15 @@ export default {
             instructorId: storeUser.userID,
             rubric: this.criteria ,
          }
+         const auth = localStorage.getItem('auth')
+         
          axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/save`, {
             id : null,
             name: this.sectionName,
             instructorId: storeUser.userID,
             rubric: rubric,
          },
-         { 
-            withCredentials: true
-         }
+         {  headers: { 'Authorization': `Basic ${auth}` }}
          )
             .then(res => {
                console.log(res)
@@ -178,15 +178,17 @@ export default {
             })
       },
       createTeams() {
+         const auth = localStorage.getItem('auth')
+         const config = {
+            headers: { 'Authorization': `Basic ${auth}` }
+         };
          axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/team/save`, {
             id : null,
             name: this.teamName,
             sectionId: this.sectionId,
             students: null,
          },
-         { 
-            withCredentials: true
-         }
+         {  headers: { 'Authorization': `Basic ${auth}` }}
          )
             .then(res => {
                console.log(res)

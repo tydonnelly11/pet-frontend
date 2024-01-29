@@ -10,7 +10,7 @@
      </div>
      <ul class="nav-links">
        <li class="nav-item">
-         <router-link class="nav-link" to="/instructorhome/instructorpeereval">
+         <router-link class="nav-link" to="/instructorhome/">
            <span class="link-text">Instructor Peer Evaluation</span>
          </router-link>
        </li>
@@ -31,7 +31,7 @@
        </li>
        <li class="nav-item">
          <router-link class="nav-link" to="/">
-           <span class="link-text">Logout</span>
+           <span @click="logout" class="link-text">Logout</span>
          </router-link>
        </li>
      </ul>
@@ -50,6 +50,10 @@
    methods: {
      toggleSidebar() {
        this.isSidebarOpen = !this.isSidebarOpen;
+     },
+     logout() {
+       localStorage.removeItem('auth');
+        this.$router.push('/');
      },
    },
  };

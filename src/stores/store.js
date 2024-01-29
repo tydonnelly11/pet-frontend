@@ -6,6 +6,8 @@ export const storeUser = reactive({
   userFullName: null,
   sectionId: null,
   teamId: null,
+  firstName: null,
+lastName: null,
   // Method to update the store
   updateLoginStatus(id, status) {
       this.userID = id;
@@ -19,6 +21,8 @@ export const storeUser = reactive({
   },
   setName(first,last)
   {
+    this.firstName = first;
+    this.lastName = last;
       this.userFullName = first + " " + last;
   },
   logoutUser(){

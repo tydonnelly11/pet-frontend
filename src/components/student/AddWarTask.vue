@@ -81,7 +81,7 @@ export default {
       return {
          newTask: {
             studentName: storeUser.userFullName,
-            task: '',
+            taskCategories: '',
             plannedTask: '',
             description: '',
             plannedHours: '',

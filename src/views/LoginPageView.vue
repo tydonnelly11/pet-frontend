@@ -22,7 +22,20 @@
                <button type="submit" class="submit">Login</button>
              <!-- <button type="button" class="submit" @click="loginInstructor">Login Instructor</button> -->
              </form>
+             <form @submit.prevent="loginInstructor">
+               <div class="input-field">
+                 <input type="email" id="email" class="input" v-model="email" required>
+                 <label for="email">Email</label>
+               </div>
+               <div class="input-field">
+                 <input type="password" id="password" class="input" v-model="password" required>
+                 <label for="password">Password</label>
+               </div>
+               <button type="submit" class="submit">LoginINS</button>
+             <!-- <button type="button" class="submit" @click="loginInstructor">Login Instructor</button> -->
+             </form>
              <div class="signin">
+               
                <div>
                 <a href="#" @click="pushInstructor">Login bypass to make first Instructor</a>
                </div>
@@ -55,8 +68,12 @@ export default {
       }
    },
    methods: {
+      encodeCredentials(email, password) {
+         return btoa(`${email}:${password}`);
+      },
       loginInstructor() 
       {
+         localStorage.setItem('auth', this.encodeCredentials(this.email, this.password));
          this.isLoading = true
          axios.post('https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/login/instructor', {
             firstName: "",
@@ -76,6 +93,7 @@ export default {
             console.log(storeUser.userID)
             storeUser.setSectionId(response.data.data.sections[0].id)
             console.log(storeUser.sectionId)
+            
             storeUser.setName(response.data.data.firstName,response.data.data.lastName)
 
             this.$router.push('/instructorhome')
@@ -94,6 +112,7 @@ export default {
       },
       loginStudent()
       {
+         localStorage.setItem('auth', this.encodeCredentials(this.email, this.password));
          this.isLoading = true
          axios.post('https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/login/student', {
             firstName: "",
@@ -131,6 +150,7 @@ export default {
          storeUser.updateLoginStatus("1", true)
          console.log(storeUser.isLoggedIn)
          console.log(storeUser.userID)
+         localStorage.setItem('auth', this.encodeCredentials(this.email, this.password));
          this.$router.push('/instructorhome/section')
       },
       pushInstructor2()

@@ -94,10 +94,13 @@ export default {
    methods: {
     getStudents(){
         this.isLoading = true
+        const auth = localStorage.getItem('auth')
+         const config = {
+            headers: { 'Authorization': `Basic ${auth}` }
+         };
         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getAllStudents/${storeUser.sectionId}`,
-        {
-            withCredentials: true,
-        })
+        {  headers: { 'Authorization': `Basic ${auth}` }}
+        )
         .then(response => {
             this.students = []
             this.isSuccess = true
@@ -118,10 +121,13 @@ export default {
     },
     getTeams(){
         this.isLoading = true
+        const auth = localStorage.getItem('auth')
+         const config = {
+            headers: { 'Authorization': `Basic ${auth}` }
+         };
         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getAllTeams/${storeUser.sectionId}`,
-        {
-            withCredentials: true,
-        })
+        {  headers: { 'Authorization': `Basic ${auth}` }}
+        )
         .then(response => {
             this.teams = response.data.data
             this.hasLoaded = true
@@ -155,6 +161,10 @@ export default {
    saveTeam(){
     this.hasSavedTeam = false
     this.isProcessingTeamSave = true
+    const auth = localStorage.getItem('auth')
+         const config = {
+            headers: { 'Authorization': `Basic ${auth}` }
+         };
     axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/team/edit`,
     {
         id: this.updatedTeam.id,
@@ -162,9 +172,8 @@ export default {
         sectionId: this.updatedTeam.sectionId,
         students: this.updatedTeam.students,
     },
-    {
-        withCredentials: true,
-    }).then(response => {
+    {  headers: { 'Authorization': `Basic ${auth}` }}
+    ).then(response => {
         this.hasSavedTeam = true
         this.isProcessingTeamSave = false
         console.log(response)
@@ -179,15 +188,18 @@ export default {
    createTeams() {
     this.hasCreatedTeams = false
     this.isProcessingTeamCreation = true
+    const auth = localStorage.getItem('auth')
+    const config = {
+            headers: { 'Authorization': `Basic ${auth}` }
+    };
+
          axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/team/save`, {
             id : null,
             name: this.teamName,
             sectionId: storeUser.sectionId,
             students: null,
          },
-         { 
-            withCredentials: true
-         }
+         {  headers: { 'Authorization': `Basic ${auth}` }}
          )
             .then(res => {
                console.log(res)

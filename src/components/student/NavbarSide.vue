@@ -14,7 +14,7 @@
          <router-link to="/studenthome/studentwar">War</router-link>
        </li>
        <li class="nav-item">
-         <router-link to="/">Logout</router-link>
+         <router-link @click=logout to="/">Logout</router-link>
        </li>
      </ul>
    </div>
@@ -31,6 +31,10 @@
    methods: {
      toggleSidebar() {
        this.isSidebarOpen = !this.isSidebarOpen;
+     },
+     logout() {
+       localStorage.removeItem('auth');
+        this.$router.push('/');
      },
    },
  };

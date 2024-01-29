@@ -24,15 +24,16 @@
             <label for="password2" class="label">Re-Enter your Password</label>
             <input type="password" id="password2" v-model="password2" placeholder="Re-Enter your Password"/>
           </div> -->
-          <button @click="registerStudent">Register</button>
-          <div class="loading" v-if="isLoading">
+          <button @click="registerStrudent">Register</button>
+          <div class="loading" v-if="this.isLoading">
             <p>Request being processed...DO NOT REFRESH</p>
           </div>
-          <div class="success" v-if="hasSubmittedStudents">
+          <div class="success" v-if="this.hasRegistered">
             <p>Succesfully Registered</p>
             <button @click="goToLogin">Go to Login</button>
             </div>
       </div>
+    </div>
     </div>
   </template>
 
@@ -53,10 +54,11 @@ export default {
             middleName: "",
             lastName: "",
             sectionId: "",
-            isLoading: false,
-            hasRegistered: false,
+            
 
-        }
+        },
+        isLoading: false,
+        hasRegistered: false,
         
 
     }
@@ -86,7 +88,7 @@ export default {
                 return
             }
             this.isLoading = true
-            this.hasSubmittedStudents = false
+            this.hasRegistered = false
             axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/register/student`, {
                 
                 firstName: this.studentInfo.firstName,
@@ -102,7 +104,6 @@ export default {
                 params: {
                     token: this.token
                 },
-                withCredentials: true,
             }
             ).then((response) => {
                 console.log(response)
