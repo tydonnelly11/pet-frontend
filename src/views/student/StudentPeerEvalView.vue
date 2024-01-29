@@ -159,6 +159,7 @@ export default {
          this.peerEvalEntriesForSelectedWeek = []
          var ratingList = []
          for (const criteria of this.rubric) {
+            console.log(criteria)
             const rating = {
                score : 0,
                criteria
@@ -181,6 +182,17 @@ export default {
                
             })
          }
+         const ownStudent = {
+            evaluateeFirstName: storeUser.firstName,
+            evaluateeLastName: storeUser.lastName,
+            evaluateeId: storeUser.userID,
+            evaluatorId: storeUser.userID,
+            week: storeWeek.currentWeekId,
+            comment: '',
+            ratings : _.cloneDeep(ratingList),
+         }
+         this.peerEvalEntriesForSelectedWeek.push(ownStudent)
+
          this.setPeerEvalVisibility(storeWeek.currentWeekId, storeWeek.selectedWeekId)
          console.log(this.peerEvalEntriesForSelectedWeek)
       },

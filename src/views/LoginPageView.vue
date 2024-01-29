@@ -127,7 +127,7 @@ export default {
          storeUser.updateLoginStatus("1", true)
          console.log(storeUser.isLoggedIn)
          console.log(storeUser.userID)
-         this.$router.push('/instructorhome')
+         this.$router.push('/instructorhome/section')
       },
       pushInstructor2()
       {

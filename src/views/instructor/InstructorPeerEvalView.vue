@@ -54,6 +54,7 @@ export default {
          })
          .then((response) => {
             this.rubric = response.data.data.criteria
+            this.fetchEvaluationReports();
          })
       },
     async fetchEvaluationReports() {
@@ -119,7 +120,7 @@ export default {
      
    },
   created() {
-    this.getRubric()
+    this.getRubric();
     this.fetchEvaluationReports();
   },
 };
