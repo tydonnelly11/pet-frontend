@@ -1,11 +1,13 @@
 <template>
-   <div class="sidebar">
-      <InstructorNavbarSide />
-   </div>
+   <div class="home-container">
+     <div class="sidebar">
+       <InstructorNavbarSide />
+     </div>
 
    <div class="main-item">
       
       <router-view> </router-view>
+   </div>
    </div>
 </template>
 
@@ -39,14 +41,22 @@ export default {
 </script>
 
 <style scoped>
+
+.home-container {
+  display: flex;
+  height: 100vh;
+  background-color: #E4E9F7; /* Set background color for the whole page */
+}
 .sidebar {
-   width: 20%;
-   margin-left: 3.5%;
+   width: 78px;
+   margin-left: auto;
+
 }
 
 .main-item {
    width: 100%;
    display: flex;
    flex-direction: column;
+   background-color: #E4E9F7;
 }
 </style>
