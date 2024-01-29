@@ -1,39 +1,43 @@
-<template>
-   <div class="login-container">
-      <div class="logo-container">
-         <img src="/img/logo.png" alt="Logo">
-      </div>
-      <h1>Login</h1>
-      <div @submit.prevent="">
-         <div class="form-container">
-            <div class="input-field">
-               <label for="email">Email:</label>
-               <input type="email" id="email" v-model="email" required />
-            </div>
-            <div class="input-field">
-               <label for="password">Password:</label>
-               <input
-                  type="password"
-                  id="password"
-                  v-model="password"
-                  required
-               />
-            </div>
-            <button type="submit" @click="loginStudent()">Login Student</button>
-            <button type="submit2" @click=loginInstructor()>Login Instructor</button>
-            <div v-if="isLoading">
-               <p>Logging in...</p>
-            </div>
+      <template>
+         <div class="full-page">
+         <div class="main">
+            <div class="row g-0">
+               <!-- Side Image -->
+               <div class="side-image col-md-6 d-flex align-items-center justify-content-center">
+               </div>
 
-
-            
+         <!-- Right Side (Login Form) -->
+         <div class="right col-md-6">
+           <div class="input-box">
+             <header>Login</header>
+             <form @submit.prevent="loginStudent">
+               <div class="input-field">
+                 <input type="email" id="email" class="input" v-model="email" required>
+                 <label for="email">Email</label>
+               </div>
+               <div class="input-field">
+                 <input type="password" id="password" class="input" v-model="password" required>
+                 <label for="password">Password</label>
+               </div>
+               <button type="submit" class="submit">Login</button>
+             <!-- <button type="button" class="submit" @click="loginInstructor">Login Instructor</button> -->
+             </form>
+             <div class="signin">
+               <div>
+                <a href="#" @click="pushInstructor">Login bypass to make first Instructor</a>
+               </div>
+                <div>
+                <a href="#" @click="pushInstructor2">Login bypass to get to students</a>
+               </div>
+            </div>
+           </div>
          </div>
       </div>
-      <button type="submit2" @click=pushInstructor()>Login bypass to make first Instructor</button>
-      <button type="submit2" @click=pushInstructor2()>Login bypass to get to students</button>
+       </div>
+     </div>
+ </template>
+ 
 
-   </div>
-</template>
 
 <script>
 import { storeUser } from '../stores/store.js'
@@ -141,34 +145,184 @@ export default {
 }
 </script>
 
-<style scoped>
-.login-container {
-   display: flex;
-   width: 50%;
-   flex-direction: column;
-   flex-direction: column;
-   width: 50%;
-   margin-top: -10px;
+<style scooped>
+/* POPPINS FONT */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+*{
+    font-family: 'Poppins', sans-serif;
 }
-.form-container {
-   display: flex;
-   flex-direction: column;
-   justify-content: space-around;
-   height: 25vh;
+.full-page {
+  min-height: 100vh; 
+  width: 100vw; 
+  background-color: #11101D; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px; 
+}
+.main{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+.side-image{
+    background-image: url("/img/logo.png");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 10px 0 0 10px;
+    position: relative;
+    max-width: 300px;
+}
+.row{
+  width:  900px;
+  height:550px;
+  border-radius: 10px;
+  background: #E4E9F7;
+  padding: 0px;
+  box-shadow: 5px 5px 10px 1px rgba(0,0,0,0.2);
+}
+.text{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.text p{
+    color: #000;
+    font-size: 20px; 
+}
+i{
+    font-weight: 400;
+    font-size: 15px;
+}
+.right{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+.input-box{
+  width: 330px;
+  box-sizing: border-box;
+  color: #000;
+}
+img{
+    width: 100px;
+    position: static;
+    top: 30px;
+    left: 30px;
+}
+.input-box header{
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 45px;
+}
+.input-field{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding: 0 10px 0 10px;
+}
+.input{
+    height: 45px;
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    outline: none;
+    margin-bottom: 20px;
+    color: #40414a;
+}
+.input-box .input-field label{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    pointer-events: none;
+    transition: .5s;
+}
+.input-field input:focus ~ label
+   {
+    top: -10px;
+    font-size: 13px;
+  }
+  .input-field input:valid ~ label
+  {
+   top: -10px;
+   font-size: 13px;
+   color: #5d5076;
+ }
+ .input-field .input:focus, .input-field .input:valid{
+    border-bottom: 1px solid #743ae1;
+ }
+ .submit{
+    border: none;
+    outline: none;
+    height: 45px;
+    background: #E4E9F7;
+    border-radius: 5px;
+    transition: .4s;
+    color: #000;
+ }
+ .submit:hover{
+    background: rgba(37, 95, 156, 0.937);
+    color: #fff;
+ }
+ .signin{
+    text-align: center;
+    font-size: small;
+    margin-top: 25px;
+}
+span a{
+    text-decoration: none;
+    font-weight: 700;
+    color: #000;
+    transition: .5s;
+}
+span a:hover{
+    text-decoration: underline;
+    color: #000;
 }
 
-button {
-   padding: 0;
-   border-color: black;
+@media only screen and (max-width: 768px){
+    .side-image{
+        border-radius: 10px 10px 0 0;
+    }
+    img{
+        width: 35px;
+        position: absolute;
+        top: 20px;
+        left: 47%;
+    }
+    .text{
+        position: absolute;
+        top: 70%;
+        text-align: center;
+    }
+    .text p, i{
+        font-size: 16px;
+    }
+    .row{
+        max-width:420px;
+        width: 100%;
+    }
+
+    .logo {
+      max-width: 200px;
+      height: auto;
+    }
+
+    .signin div{
+      margin-top: 10px;
+    }
+
+    .side-image {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 }
 
-.input-field {
-   display: flex;
-   flex-direction: row;
-   justify-content: space-between;
-}
-.login-container{
-   margin-bottom: -175px;
-   margin-top: -300px;
-}
 </style>
