@@ -7,7 +7,7 @@ export const storeUser = reactive({
   sectionId: null,
   teamId: null,
   firstName: null,
-  lastName: null,
+lastName: null,
   // Method to update the store
   updateLoginStatus(id, status) {
       this.userID = id;

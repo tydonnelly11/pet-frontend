@@ -10,7 +10,18 @@
          <div class="right col-md-6">
            <div class="input-box">
              <header>Login</header>
-             
+             <form @submit.prevent="loginStudent">
+               <div class="input-field">
+                 <input type="email" id="email" class="input" v-model="email" required>
+                 <label for="email">Email</label>
+               </div>
+               <div class="input-field">
+                 <input type="password" id="password" class="input" v-model="password" required>
+                 <label for="password">Password</label>
+               </div>
+               <button type="submit" class="submit">Login</button>
+             <!-- <button type="button" class="submit" @click="loginInstructor">Login Instructor</button> -->
+             </form>
              <form @submit.prevent="loginInstructor">
                <div class="input-field">
                  <input type="email" id="email" class="input" v-model="email" required>
@@ -20,10 +31,9 @@
                  <input type="password" id="password" class="input" v-model="password" required>
                  <label for="password">Password</label>
                </div>
+               <button type="submit" class="submit">LoginINS</button>
              <!-- <button type="button" class="submit" @click="loginInstructor">Login Instructor</button> -->
              </form>
-             <button @click="loginStudent" type="submit" class="submit">Login Student</button>
-             <button @click="loginInstructor" type="submit" class="submit">Login Instructor</button>
              <div class="signin">
                
                <div>
@@ -45,7 +55,6 @@
 <script>
 import { storeUser } from '../stores/store.js'
 import axios from 'axios'
-import { storeSection } from '../stores/storeSection'
 export default {
    // Will need to be changed - Ty Donnelly
    name: 'LoginPageView',
@@ -77,12 +86,16 @@ export default {
             sections: [],
          })
          .then((response) => {
+            console.log(response)
             this.isLoading = false
             storeUser.updateLoginStatus(response.data.data.id, true)
-            storeSection.setSections(response.data.data.sections)
-            
+            storeUser.setSectionId(response.data.data.sections[0].id)
+            console.log(storeUser.isLoggedIn)
+            console.log(storeUser.userID)
             // storeUser.setSectionId(response.data.data.sections[0].id)
+            
             storeUser.setName(response.data.data.firstName,response.data.data.lastName)
+
             this.$router.push('/instructorhome')
          }, (error) => {
             console.log(error)

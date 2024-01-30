@@ -77,7 +77,6 @@
 import { storeUser } from '@/stores/store.js'
 import axios from 'axios'
 import ErrorPopUp from '@/components/utilities/ErrorPopUp.vue'
-import { storeSection } from '../../stores/storeSection'
 export default {
    name: 'InstructorSectionView',
    components: {
@@ -159,12 +158,6 @@ export default {
             rubric: this.criteria ,
          }
          const auth = localStorage.getItem('auth')
-
-         const section = {
-            id: null,
-            name: this.sectionName,
-
-         }
          
          axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/save`, {
             id : null,
@@ -178,8 +171,6 @@ export default {
                console.log(res)
                console.log(res.data.data)
                this.sectionId = res.data.data
-               section.id = res.data.data
-               storeSection.addSection(section)
                this.hasCreatedSection = true
                storeUser.setSectionId(this.sectionId)
             })
