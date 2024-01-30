@@ -89,6 +89,7 @@ export default {
             console.log(response)
             this.isLoading = false
             storeUser.updateLoginStatus(response.data.data.id, true)
+            storeUser.setSectionId(response.data.data.sections[0].id)
             console.log(storeUser.isLoggedIn)
             console.log(storeUser.userID)
             // storeUser.setSectionId(response.data.data.sections[0].id)
