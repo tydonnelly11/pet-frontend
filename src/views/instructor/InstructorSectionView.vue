@@ -172,6 +172,7 @@ export default {
                console.log(res.data.data)
                this.sectionId = res.data.data
                this.hasCreatedSection = true
+               storeUser.setSectionId(this.sectionId)
             })
             .catch(err => {
                console.log(err)
