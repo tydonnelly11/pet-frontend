@@ -19,7 +19,7 @@
                  <input type="password" id="password" class="input" v-model="password" required>
                  <label for="password">Password</label>
                </div>
-             <!-- <button type="button" class="submit" @click="loginInstructor">Login Instructor</button> -->
+               <button type="submit" class="submit">Login</button>
              </form>
              <button @click="loginStudent" type="submit" class="submit">Login Student</button>
              <button @click="loginInstructor" type="submit" class="submit">Login Instructor</button>
@@ -55,7 +55,6 @@ export default {
          storeUser,
          email: "",
          password: "",
-         isLoading: false,
          
       }
    },
@@ -65,20 +64,25 @@ export default {
       },
       loginInstructor() 
       {
-         
-         this.isLoading = true
-         let creds = this.encodeCredentials(this.email, this.password)
-         axios.post('https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/login/instructor', {},{
-            headers: {
-               'Authorization': `Basic ${creds}`
-            }
+         axios.post('https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/login/instructor', {
+            firstName: "",
+            middleName: "",
+            lastName: "",
+            id: "",
+            email: this.email,
+            password: this.password,
+            roles: "",
+            sections: [],
          })
          .then((response) => {
             console.log(response)
-            this.isLoading = false
-            storeUser.updateLoginStatus(response.data.data.userInfo.id, true)
-            localStorage.setItem('auth', response.data.data.token);
-            localStorage.setItem('logginstatus', true)
+
+            storeUser.updateLoginStatus(response.data.data.id, true)
+            console.log(storeUser.isLoggedIn)
+            console.log(storeUser.userID)
+            storeUser.setSectionId(response.data.data.sections[0].id)
+            console.log(storeUser.sectionId)
+            storeUser.setName(response.data.data.firstName,response.data.data.lastName)
 
 
             // storeUser.setSectionId(response.data.data.sections[0].id)
@@ -104,17 +108,23 @@ export default {
       },
       loginStudent()
       {
-         this.isLoading = true
-         let creds = this.encodeCredentials(this.email, this.password)
-         axios.post('https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/login/student', {}, {
-            headers: {
-               Authorization: `Basic ${creds}`
-            }
+         axios.post('https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/login/student', {
+            firstName: "",
+            middleName: "",
+            lastName: "",
+            id: "",
+            email: this.email,
+            password: this.password,
+            roles: "",
          })
          .then((response) => {
             console.log(response)
-            this.isLoading = false
-            storeUser.updateLoginStatus(response.data.data.userInfo.id, true)
+
+            storeUser.updateLoginStatus(response.data.data.id, true)
+            
+            storeUser.setTeamId(response.data.data.teamId)
+            storeUser.setName(response.data.data.firstName,response.data.data.lastName)
+            storeUser.setSectionId(response.data.data.sectionId)
             
             storeUser.setTeamId(response.data.data.userInfo.teamId)
             storeUser.setName(response.data.data.userInfo.firstName,response.data.data.userInfo.lastName)
@@ -133,7 +143,6 @@ export default {
             }
          }, (error) => {
             console.log(error)
-            this.isLoading = false
          })
       },
       pushInstructor()
@@ -141,13 +150,7 @@ export default {
          storeUser.updateLoginStatus("1", true)
          console.log(storeUser.isLoggedIn)
          console.log(storeUser.userID)
-         localStorage.setItem('auth', this.encodeCredentials(this.email, this.password));
-         this.$router.push('/instructorhome/section')
-         localStorage.setItem('logginstatus', true)
-
-         localStorage.setItem('storeUser', JSON.stringify(storeUser));
-
-
+         this.$router.push('/instructorhome')
       },
       pushInstructor2()
       {
