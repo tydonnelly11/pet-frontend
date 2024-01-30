@@ -54,6 +54,9 @@ export default {
         inviteStudent() {
             this.listOfEmails = this.emails.split(';');
             for(const item of this.listOfEmails){
+                if(item.trimStart() === ""){
+                    continue
+                }
                 
                 this.listOfStudents.push({
                 firstName: "",
