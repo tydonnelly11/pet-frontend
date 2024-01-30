@@ -62,6 +62,7 @@
 <script>
 import axios from 'axios'
 import { storeUser } from '@/stores/store.js'
+import { storeSection } from '../../stores/storeSection'
 
 export default {
    name: 'InstructorTeamEditView',
@@ -80,6 +81,7 @@ export default {
             students: [],
 
         },
+        storeSection,
         isLoading: false,
         isSuccess: false,
         isProcessingTeamCreation: false,
@@ -98,7 +100,7 @@ export default {
          const config = {
             headers: { 'Authorization': `Basic ${auth}` }
          };
-        axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getAllStudents/${storeUser.sectionId}`,
+        axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getAllStudents/${storeSection.selectedSectionId}`,
         {  headers: { 'Authorization': `Basic ${auth}` }}
         )
         .then(response => {
@@ -125,7 +127,7 @@ export default {
          const config = {
             headers: { 'Authorization': `Basic ${auth}` }
          };
-        axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getAllTeams/${storeUser.sectionId}`,
+        axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getAllTeams/${storeSection.selectedSectionId}`,
         {  headers: { 'Authorization': `Basic ${auth}` }}
         )
         .then(response => {
@@ -196,7 +198,7 @@ export default {
          axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/team/save`, {
             id : null,
             name: this.teamName,
-            sectionId: storeUser.sectionId,
+            sectionId: storeSection.selectedSectionId,
             students: null,
          },
          {  headers: { 'Authorization': `Basic ${auth}` }}
