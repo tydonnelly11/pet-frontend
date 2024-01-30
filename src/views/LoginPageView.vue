@@ -91,8 +91,7 @@ export default {
             storeUser.updateLoginStatus(response.data.data.id, true)
             console.log(storeUser.isLoggedIn)
             console.log(storeUser.userID)
-            storeUser.setSectionId(response.data.data.sections[0].id)
-            console.log(storeUser.sectionId)
+            // storeUser.setSectionId(response.data.data.sections[0].id)
             
             storeUser.setName(response.data.data.firstName,response.data.data.lastName)
 
