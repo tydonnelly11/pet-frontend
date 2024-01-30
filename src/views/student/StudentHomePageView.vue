@@ -44,9 +44,11 @@ export default {
    },
    methods: {
       getTeamMembers() {
+         const auth = localStorage.getItem('auth')
+
          axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/team/getStudents/${storeUser.teamId}`,
          {
-             withCredentials: true,
+             headers: { 'Authorization': `Basic ${auth}` },
          }
          )
          .then((response) => {

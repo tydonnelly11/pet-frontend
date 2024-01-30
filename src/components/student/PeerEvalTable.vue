@@ -9,7 +9,7 @@
                   <p>Desc:{{ item.criterionDesc }}</p>
                </th>
                <th scope="col">Comments</th>
-               <th>Total</th>
+               <!-- <th>Total</th> -->
             </tr>
          </thead>
          <tbody>
@@ -24,18 +24,14 @@
                   <p type="text">{{ student.comment }}</p>
                </td>
 
-               <!-- <td scope="col">
-                  {{
-                      student.ratings.reduce((a, b) => a + b.score, 0)
-                  }}
-               </td> -->
+               
             </tr>
             <tr v-else v-for="student in this.peerEval">
                <td scope="col">
                   {{ student.evaluateeFirstName + student.evaluateeLastName }}
                </td>
                <td scope="col" v-for="item in student.ratings">
-                  <input type="number" v-model="item.score" min="1" max="10" />
+                  <input type="number" v-model="item.score" min="0" :max='item.criterion.maxScore' />
                </td>
                <td scope="col">
                   <input type="text" v-model="student.comment" />
@@ -108,10 +104,11 @@ export default {
          // }
          // testPayload.evaluatorId = '1'
          // console.log(targetPayload)
+         const auth = localStorage.getItem('auth')
 
          axios
             .post('https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/peerEvaluation/submitPeerEvaluation', targetPayload, {
-               withCredentials: true,
+               headers: { 'Authorization': `Basic ${auth}` },
             })
             .then((response) => {
                console.log(response)
@@ -132,7 +129,7 @@ export default {
       // },
       
    },
-   computed: {},
+   
    created() {
       // this.rubric = this.getRubric()
       

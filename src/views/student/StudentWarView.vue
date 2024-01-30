@@ -4,16 +4,12 @@
          War For <b>{{ storeUser.userFullName }} </b>for Week {{ storeWeek.selectedWeek.start }} to {{ storeWeek.selectedWeek.end }}
       </div>
       <WarList
-         v-if="(!isFutureWeek) && (!isLoading)"
+         v-if="(!isFutureWeek)"
          :isTeamWar="false"
          :studentTasks="studentTasks"
          @editTask="editTaskStart"
          @deleteTask="deleteTask"
       />
-      <div v-if="isLoading" class="loading">
-         <h1>Loading...</h1>
-      </div>
-
       <div v-if="isFutureWeek">
          Come back during {{ storeWeek.selectedWeek.start }} to {{ storeWeek.selectedWeek.end }} to submit your war
       </div>
@@ -21,12 +17,11 @@
          v-if="isEditTaskTrue"
          @editTaskComplete="editTaskComplete"
          :editTaskProp="this.editTask"
-         
       />
       
       <AddWarTask v-else-if="(!isPastWeek && !isFutureWeek)"  @add-task="addTask" />
       <button v-if="(!isEditTaskTrue) && (!isPastWeek && !isFutureWeek)" @click="submitWarEntry">Submit Task</button>
-   <p v-if="hasSubmited" class="submit-msg">War Submitted for {{ this.selectedWeek }}</p>
+   <p v-if="hasSubmited" class="submit-msg">War Submitted for {{ storeWeek.selectedWeek.start }} to {{ storeWeek.selectedWeek.end }}</p>
       
    </div>
 </template>
@@ -67,30 +62,35 @@ export default {
          editTask: null,
          isEditTaskTrue: false,
          editTaskIndex: 0,
-         isLoading: false,
          isFutureWeek: false,
          isPastWeek: false,
          hasSubmited : false,
-         storeUser,storeWeek
+         storeUser,storeWeek,
+         newTasks : []
+         
       }
    },
    methods: {
       submitWarEntry() {
-         axios.post('https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/activity/submit', {
-            weekId: storeWeek.currentWeekId,
-            studentId : storeUser.userID,
-            taskCategories : this.studentTasks.tasks[0].taskCategories,
-            plannedTask: this.studentTasks.tasks[0].plannedTask,
-            description: this.studentTasks.tasks[0].description,
-            plannedHours: this.studentTasks.tasks[0].plannedHours,
-            actualHours: this.studentTasks.tasks[0].actualHours,
-            status: this.studentTasks.tasks[0].status,
-            comments : this.studentTasks.tasks[0].comments,
-
-     
-         },
+         var listOfActivities = []
+         for(const task of this.studentTasks.tasks){
+            listOfActivities.push({
+               weekId: storeWeek.currentWeekId,
+               studentId : storeUser.userID,
+               taskCategories : task.taskCategories,
+               plannedTask: task.plannedTask,
+               description: task.description,
+               plannedHours: task.plannedHours,
+               actualHours: task.actualHours,
+               status: task.status,
+               comments : task.comments,
+            })
+         }
+         const auth = localStorage.getItem('auth')
+         
+         axios.post('https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/activity/submit', this.newTasks,
          {
-            withCredentials: true,
+            headers: { 'Authorization': `Basic ${auth}` }
          }).then(response => {
             console.log(response)
          }).catch(error => {
@@ -100,6 +100,10 @@ export default {
          this.hasSubmited = true
       },
       addTask(task) {
+         
+         task.studentId = storeUser.userID
+         task.weekId = storeWeek.selectedWeekId
+         this.newTasks.push(task)
          this.studentTasks.tasks.push(task)
       },
       editTaskStart(task, index) {
@@ -116,16 +120,16 @@ export default {
       },
 
       getStudentWar() {
-         this.isLoading = true
+         const auth = localStorage.getItem('auth')
          axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/war/get`,
          {
+            headers: { 'Authorization': `Basic ${auth}` },
             params: {
                teamId: storeUser.teamId,
                weekId: storeWeek.selectedWeekId,
             },
-            withCredentials: true,
-         }).then(response => {
-            this.isLoading = false
+         },
+         ).then(response => {
             console.log(response)
             for(const activity of response.data.data.activities){
                if(activity.studentId == storeUser.userID){
@@ -135,11 +139,7 @@ export default {
             
             
          }).catch(error => {
-            this.isLoading = false
             console.log(error)
-            if(error.response.data.status == 500){
-               this.setWARVisibility(storeWeek.currentWeekId, storeWeek.selectedWeekId)
-            }
          })
       },
       
@@ -180,15 +180,10 @@ export default {
     }
      
    },
-   // mounted() {
-   //    this.getStudentWar()
-   // },
 
    created() {
       this.getStudentWar()
       this.setWARVisibility(storeWeek.currentWeekId, storeWeek.selectedWeekId)
-
-      
    },
 }
 </script>

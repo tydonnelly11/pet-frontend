@@ -14,12 +14,18 @@
         <tr>
           <th>Student Name</th>
           <th>Grade</th>
+          <th>Comments</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(report, index) in reports" :key="index">
           <td>{{ report.name }}</td>
           <td>{{ report.score }}</td>
+          <td>
+            <td v-for="(commentValue, commentKey) in report.comments" :key="commentKey">
+              {{ commentKey }}: {{ commentValue }}
+            </td>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -49,11 +55,14 @@ export default {
   },
   methods: {
     getRubric() {
-         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getRubric/${storeUser.sectionId}`, {
-            withCredentials: true,
-         })
+        const auth = localStorage.getItem('auth')
+         
+         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getRubric/${storeUser.sectionId}`, 
+         {headers: { 'Authorization': `Basic ${auth}` }}
+         )
          .then((response) => {
             this.rubric = response.data.data.criteria
+            this.fetchEvaluationReports();
          })
       },
     async fetchEvaluationReports() {
@@ -63,6 +72,7 @@ export default {
       let tempReports = [];
       console.log(storeWeek.currentWeekId)
       console.log(storeUser.sectionId)
+      const auth = localStorage.getItem('auth')
       // Fetch reports for each student
         try {
           const response = await axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/peerEvaluation/getEvaluationReport`, {
@@ -71,9 +81,10 @@ export default {
               week: storeWeek.selectedWeekId,
               sectionId: storeUser.sectionId,
             },
-            withCredentials : true,
+            headers: { 'Authorization': `Basic ${auth}` }
             
-          });
+          },
+          );
           console.log(response)
           if (response.data.flag && response.data.code === 200 && response.data.data.length > 0) {
             const studentReport = response.data.data;
@@ -81,6 +92,7 @@ export default {
               tempReports.push({
               name: `${student.firstName} ${student.lastName}`,
               score: `${student.averageScore}/${this.totalScore}`, 
+              comments: student.comments
             });
             }
             
@@ -119,7 +131,7 @@ export default {
      
    },
   created() {
-    this.getRubric()
+    this.getRubric();
     this.fetchEvaluationReports();
   },
 };

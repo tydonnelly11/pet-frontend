@@ -81,11 +81,11 @@ export default {
    methods: {
       async getPeerEvalEntriesForWeek() {
          this.isLoading = true
+         const auth = localStorage.getItem('auth')
          axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/peerEvaluation/getPeerEvaluation/${storeUser.userID}/${storeWeek.selectedWeekId}`,
                {
                   crossdomain: true,
-                  withCredentials: true,
-                 
+                  headers: { 'Authorization': `Basic ${auth}` }            
                }
             )
             .then((response) => {
@@ -96,6 +96,12 @@ export default {
                   const peerEvalEntriesForWeek = response.data.data
                   
                   console.log(peerEvalEntriesForWeek)
+                  for(const entry of peerEvalEntriesForWeek){
+                     for(const rating of entry.ratings){
+                        rating.criterion = this.rubric.find((criteria) => criteria.id == rating.criteriaId)
+                     }
+                  }
+
                   this.peerEvalEntriesForSelectedWeek = peerEvalEntriesForWeek
                   this.setPeerEvalVisibility(
                      storeWeek.currentWeekId,
@@ -159,9 +165,11 @@ export default {
          this.peerEvalEntriesForSelectedWeek = []
          var ratingList = []
          for (const criteria of this.rubric) {
+            const criterion = _.cloneDeep(criteria)
+            console.log(criterion)
             const rating = {
                score : 0,
-               criteria
+               criterion,
             }
             ratingList.push(rating)
 
@@ -181,6 +189,17 @@ export default {
                
             })
          }
+         const ownStudent = {
+            evaluateeFirstName: storeUser.firstName,
+            evaluateeLastName: storeUser.lastName,
+            evaluateeId: storeUser.userID,
+            evaluatorId: storeUser.userID,
+            week: storeWeek.currentWeekId,
+            comment: '',
+            ratings : _.cloneDeep(ratingList),
+         }
+         this.peerEvalEntriesForSelectedWeek.push(ownStudent)
+
          this.setPeerEvalVisibility(storeWeek.currentWeekId, storeWeek.selectedWeekId)
          console.log(this.peerEvalEntriesForSelectedWeek)
       },
@@ -205,8 +224,10 @@ export default {
          }
       },
       getRubric() {
+         const auth = localStorage.getItem('auth')
+
          axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getRubric/${storeUser.sectionId}`, {
-            withCredentials: true,
+            headers: { 'Authorization': `Basic ${auth}` }
          })
          .then((response) => {
             console.log('RUBRIC')

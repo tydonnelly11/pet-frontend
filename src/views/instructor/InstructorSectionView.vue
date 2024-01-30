@@ -1,33 +1,29 @@
 <template>
    <div class="InstructorSectionView">
-      <h1>InstructorSectionView</h1>
-   </div>
-   <!-- <div class="error-popup">
-      <ErrorPopUp v-if="hasError" :errorMessage="errorMessage" />
-   </div> -->
-
-   <div class="register-instructor">
-      <div class="input-field">
-         <label>First Name</label>
-         <input type="text"  v-model="firstName" required />
-      </div>
-      <div class="input-field">
-         <label>Middle Name</label>
-         <input type="text"  v-model="middleName" required />
-      </div>
-      <div class="input-field">
-         <label>Last Name</label>
-         <input type="text" v-model="lastName" required />
-      </div>
-      <div class="input-field">
-         <label>Email</label>
-         <input type="text"  v-model="email" required />
-      </div>
-      <div class="input-field">
-         <label>Password</label>
-         <input type="text"  v-model="password" required />
-      </div>
-      <button type="submit" @click="registerInstructor">Register Instructor</button>
+     <h1>Instructor Section View</h1>
+     <div class="register-instructor">
+       <div class="input-field">
+         <label for="firstName">First Name</label>
+         <input type="text" id="firstName" class="input" v-model="firstName" required />
+       </div>
+       <div class="input-field">
+         <label for="middleName">Middle Name</label>
+         <input type="text" id="middleName" class="input" v-model="middleName" required />
+       </div>
+       <div class="input-field">
+         <label for="lastName">Last Name</label>
+         <input type="text" id="lastName" class="input" v-model="lastName" required />
+       </div>
+       <div class="input-field">
+         <label for="email">Email</label>
+         <input type="email" id="email" class="input" v-model="email" required />
+       </div>
+       <div class="input-field">
+         <label for="password">Password</label>
+         <input type="password" id="password" class="input" v-model="password" required />
+       </div>
+       <button type="submit" @click="registerInstructor">Register Instructor</button>
+     </div>
       <div v-if="hasSubmittedInstructor" class="success">
          <p>Instructor Succesfully Added!</p>
       </div>
@@ -161,15 +157,15 @@ export default {
             instructorId: storeUser.userID,
             rubric: this.criteria ,
          }
+         const auth = localStorage.getItem('auth')
+         
          axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/save`, {
             id : null,
             name: this.sectionName,
             instructorId: storeUser.userID,
             rubric: rubric,
          },
-         { 
-            withCredentials: true
-         }
+         {  headers: { 'Authorization': `Basic ${auth}` }}
          )
             .then(res => {
                console.log(res)
@@ -182,15 +178,17 @@ export default {
             })
       },
       createTeams() {
+         const auth = localStorage.getItem('auth')
+         const config = {
+            headers: { 'Authorization': `Basic ${auth}` }
+         };
          axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/team/save`, {
             id : null,
             name: this.teamName,
             sectionId: this.sectionId,
             students: null,
          },
-         { 
-            withCredentials: true
-         }
+         {  headers: { 'Authorization': `Basic ${auth}` }}
          )
             .then(res => {
                console.log(res)
@@ -210,65 +208,55 @@ export default {
 }
 
 </script>
+<style scooped>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
-<style scoped>
-.register-instructor {
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-   justify-content: space-evenly;
-   margin-top: 50px;
-   height: 80%;
+* {
+  font-family: 'Poppins', sans-serif;
 }
 
-.create-section{
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-   justify-content: space-evenly;
-   margin-top: 50px;
-   height: 80%;
-
+.InstructorSectionView {
+  padding: 20px;
 }
+
 .input-field {
-   display: flex;
-   flex-direction: row;
-   align-items: center;
-   justify-content: space-evenly;
-   width: 90%;
-
-}
-label{
-   display: flex;
-   flex: 0 0 50%;
+  position: relative;
+  margin-bottom: 30px;
 }
 
-input{
-   flex: 0 0 50%;
+.input-field label {
+  display: block;
+  margin-bottom: 5px;
+  color: #5d5076; 
 }
-.list-of-rubrics{
-   width: 100%
-}
-
-.rubric{
-   display: flex;
-   flex-direction: row;
-   justify-content: space-evenly;
-   width: 100%;
-}
-.error-popup {
-   position: fixed;
-   top: 50%;
-   left: 50%;
-   transform: translate(-50%, -50%);
-   z-index: 1000;
-   background-color: white;
-
-   ;
-   /* Add more styles for background, padding, etc. */
+.input-field input {
+  width: 100%;
+  padding: 10px 0;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid #000; 
+  font-size: 16px; 
+  color: #40414a; 
+  transition: border-color 0.2s; 
 }
 
-.rubric > p{
-   flex: 0 0 33%;
+.input-field input:focus {
+  outline: none;
+  border-bottom: 2px solid #743ae1;
 }
+
+
+button {
+  background: #5d5076;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background: #743ae1; 
+}
+
 </style>
