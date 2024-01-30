@@ -19,21 +19,11 @@
                  <input type="password" id="password" class="input" v-model="password" required>
                  <label for="password">Password</label>
                </div>
-               <button type="submit" class="submit">Login</button>
              <!-- <button type="button" class="submit" @click="loginInstructor">Login Instructor</button> -->
              </form>
-             <form @submit.prevent="loginInstructor">
-               <div class="input-field">
-                 <input type="email" id="email" class="input" v-model="email" required>
-                 <label for="email">Email</label>
-               </div>
-               <div class="input-field">
-                 <input type="password" id="password" class="input" v-model="password" required>
-                 <label for="password">Password</label>
-               </div>
-               <button type="submit" class="submit">LoginINS</button>
-             <!-- <button type="button" class="submit" @click="loginInstructor">Login Instructor</button> -->
-             </form>
+             <button @click="loginStudent" type="submit" class="submit">Login Student</button>
+             <button @click="loginInstructor" type="submit" class="submit">Login Instructor</button>
+
              <div class="signin">
                
                <div>
@@ -89,6 +79,7 @@ export default {
             console.log(response)
             this.isLoading = false
             storeUser.updateLoginStatus(response.data.data.id, true)
+
             storeUser.setSectionId(response.data.data.sections[0].id)
             console.log(storeUser.isLoggedIn)
             console.log(storeUser.userID)
