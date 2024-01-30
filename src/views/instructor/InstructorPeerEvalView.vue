@@ -132,7 +132,6 @@ export default {
    },
   created() {
     this.getRubric();
-    this.fetchEvaluationReports();
   },
 };
 </script>
