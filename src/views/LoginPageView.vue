@@ -20,7 +20,6 @@
                  <label for="password">Password</label>
                </div>
                <button type="submit" class="submit">Login</button>
-             <!-- <button type="button" class="submit" @click="loginInstructor">Login Instructor</button> -->
              </form>
              <div class="signin">
                <div>
@@ -50,14 +49,12 @@ export default {
          storeUser,
          email: "",
          password: "",
-         isLoading: false,
          
       }
    },
    methods: {
       loginInstructor() 
       {
-         this.isLoading = true
          axios.post('https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/login/instructor', {
             firstName: "",
             middleName: "",
@@ -70,7 +67,7 @@ export default {
          })
          .then((response) => {
             console.log(response)
-            this.isLoading = false
+
             storeUser.updateLoginStatus(response.data.data.id, true)
             console.log(storeUser.isLoggedIn)
             console.log(storeUser.userID)
@@ -94,7 +91,6 @@ export default {
       },
       loginStudent()
       {
-         this.isLoading = true
          axios.post('https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/login/student', {
             firstName: "",
             middleName: "",
@@ -106,7 +102,7 @@ export default {
          })
          .then((response) => {
             console.log(response)
-            this.isLoading = false
+
             storeUser.updateLoginStatus(response.data.data.id, true)
             
             storeUser.setTeamId(response.data.data.teamId)
@@ -123,7 +119,6 @@ export default {
             }
          }, (error) => {
             console.log(error)
-            this.isLoading = false
          })
       },
       pushInstructor()
@@ -131,7 +126,7 @@ export default {
          storeUser.updateLoginStatus("1", true)
          console.log(storeUser.isLoggedIn)
          console.log(storeUser.userID)
-         this.$router.push('/instructorhome/section')
+         this.$router.push('/instructorhome')
       },
       pushInstructor2()
       {

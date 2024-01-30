@@ -6,35 +6,36 @@
             <h1>REGISTER</h1>
           </div>
           <div class="student-info">
-            <p> {{ studentInfo.email }} </p> 
-
             <p>Confirm the email is you and then enter in a password. DO NOT USE your TCU password</p>
           </div>
-          <input type="text" v-model="studentInfo.firstName" placeholder="Enter your First Name"/>
-        <input type="text" v-model="studentInfo.middleName" placeholder="Enter your Middle Intial"/>
-        <input type="text" v-model="studentInfo.lastName" placeholder="Enter your Last Name"/>
-        <input type="text" v-model="password2" placeholder="Enter your Password"/>
-        <input type="text" v-model="password1" placeholder="Enter your Password"/>
-
-          <!-- <div class="input-box">
-            <label for="password1" class="label">Enter your Password</label>
-            <input type="password" id="password1" v-model="password1" placeholder="Enter your Password"/>
-          </div>
           <div class="input-box">
-            <label for="password2" class="label">Re-Enter your Password</label>
-            <input type="password" id="password2" v-model="password2" placeholder="Re-Enter your Password"/>
-          </div> -->
+            <input type="text" id="firstname" v-model="studentInfo.firstName" placeholder="Enter your First Name"/>
+        </div>
+        <div class="input-box">
+            <input type="text" id="middleInitial" v-model="studentInfo.middleName" placeholder="Enter your Middle Initial"/>
+        </div>
+        <div class="input-box">
+            <input type="text" id="lastname" v-model="studentInfo.lastName" placeholder="Enter your Last Name"/>
+        </div>
+        <div class="input-box">
+            <input type="password" id="password" v-model="password2" placeholder="Enter your Password"/>
+        </div>
+        <div class="input-box">
+            <input type="password" id="confirmPassword" v-model="password1" placeholder="Re-Enter your Password"/>
+        </div>
           <button @click="registerStudent">Register</button>
           <div class="loading" v-if="isLoading">
             <p>Request being processed...DO NOT REFRESH</p>
           </div>
-          <div class="success" v-if="hasSubmittedStudents">
+          <div class="success" v-if="hasRegistered">
             <p>Succesfully Registered</p>
             <button @click="goToLogin">Go to Login</button>
-            </div>
+          </div>
+        </div>
       </div>
     </div>
   </template>
+  
 
 <script>
 import axios from 'axios'
@@ -153,14 +154,18 @@ export default {
 
 .registration-box {
   width: 900px;
-  height: 550px;
+  /* Adjust the height to auto to accommodate all children */
+  height: auto;
   background-color: #E4E9F7;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  /* Adjust padding as needed, giving enough space for the button */
   padding: 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  /* Add some space at the bottom to prevent elements from sticking to the edge */
+  padding-bottom: 60px;
 }
 
 .registration-header h1 {
@@ -175,9 +180,39 @@ export default {
 }
 
 .input-box {
+  width: 80%; /* or any other percentage or fixed width depending on design */
+  margin-bottom: 10px; /* Adjust space between input boxes */
+}
+
+.input-box input[type="text"],
+.input-box input[type="password"] {
   width: 100%;
-  margin-bottom: 20px;
-  position: relative;
+  padding: 10px 0;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid #ccc;
+  outline: none;
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 20px; /* Adjust if needed */
+}
+
+.input-box input[type="text"]::placeholder,
+.input-box input[type="password"]::placeholder {
+  color: #aaa;
+  font-weight: 500;
+}
+
+.input-box input[type="text"]:focus,
+.input-box input[type="password"]:focus {
+  border-bottom: 2px solid #646cff;
+}
+.input-box:last-child input[type="password"] {
+  margin-bottom: 10px; /* Less space after the last input box */
+}
+
+.input-box:last-child {
+  margin-bottom: 5px; /* Less space after the last input box */
 }
 
 .label {
@@ -208,9 +243,11 @@ input[type="password"]:focus {
   border-bottom: 2px solid #646cff;
 }
 
+
 button {
-  width: 100%;
   padding: 15px 0;
+  margin-top: 20px; /* Add margin on top of the button */
+  width: 80%; /* Match the width of input boxes */
   background-color: #646cff;
   color: #fff;
   border: none;
