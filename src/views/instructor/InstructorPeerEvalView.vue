@@ -37,7 +37,6 @@ import axios from 'axios';
 import { storeWeek } from '../../stores/storeWeek.js';
 import { storeUser } from '../../stores/store.js';
 import WeekDropdown from '@/components/WeekDropdown.vue';
-import { storeSection } from '../../stores/storeSection';
 export default {
   name: 'InstructorPeerEvalView',
   components: {
@@ -50,7 +49,7 @@ export default {
       error: null,
       
       // week: '15', 
-      storeWeek,storeUser,storeSection,
+      storeWeek,storeUser,
       rubric: null,
     };
   },
@@ -71,7 +70,8 @@ export default {
       this.error = null;
       // Temporary container for the reports
       let tempReports = [];
-      console.log(storeSection.selectedSectionId)
+      console.log(storeWeek.currentWeekId)
+      console.log(storeUser.sectionId)
       const auth = localStorage.getItem('auth')
       // Fetch reports for each student
         try {
@@ -79,7 +79,7 @@ export default {
             params: {
               
               week: storeWeek.selectedWeekId,
-              sectionId: storeSection.selectedSectionId,
+              sectionId: storeUser.sectionId,
             },
             headers: { 'Authorization': `Basic ${auth}` }
             
@@ -88,22 +88,16 @@ export default {
           console.log(response)
           if (response.data.flag && response.data.code === 200 && response.data.data.length > 0) {
             const studentReport = response.data.data;
-            if(studentReport.length === 0){
-              this.error = `No evaluation report found for week ${storeWeek.selectedWeekId}`;
-            }
-            else{
-              for(const student of studentReport){
+            for(const student of studentReport){
               tempReports.push({
               name: `${student.firstName} ${student.lastName}`,
               score: `${student.averageScore}/${this.totalScore}`, 
               comments: student.comments
             });
             }
-            }
             
           } else {
-            this.error = `No evaluation reports found for week ${storeWeek.selectedWeekId}`;
-            // this.error = response.data.message || `Failed to fetch evaluation report for student ID ${studentId}`;
+            this.error = response.data.message || `Failed to fetch evaluation report for student ID ${studentId}`;
             // Consider how you want to handle partial failures
           }
         } catch (error) {
@@ -130,6 +124,7 @@ export default {
   },
   watch: {
       'storeWeek.selectedWeekId': function(newVal, oldVal) {
+         console.log(`currentWeekId changed from ${oldVal} to ${newVal}`);
          // Call your function here
          this.fetchEvaluationReports();
     }

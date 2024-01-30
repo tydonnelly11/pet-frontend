@@ -5,7 +5,7 @@
      </div>
 
    <div class="main-item">
-      <!-- <SectionDropdown/> -->
+      
       <router-view> </router-view>
    </div>
    </div>
@@ -15,8 +15,6 @@
 import InstructorNavbarSide from '../../components/InstructorNavbarSide.vue'
 import WeekDropdown from '../../components/WeekDropdown.vue';
 import {storeWeek} from '@/stores/storeWeek.js';
-import { storeSection } from '../../stores/storeSection';
-import SectionDropdown from '../../components/instructor/SectionDropdown.vue';
 </script>
 
 <script>
@@ -25,19 +23,12 @@ export default {
    components: {
       InstructorNavbarSide,
       WeekDropdown,
-      SectionDropdown
    },
    data() {
-      return {
-         storeWeek,
-         storeSection
-      }
+      return {}
    },
    methods: {},
    computed: {
-      
-   },
-   watch: {
       
    },
    created() {

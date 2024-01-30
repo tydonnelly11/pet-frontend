@@ -10,8 +10,7 @@
          <div class="right col-md-6">
            <div class="input-box">
              <header>Login</header>
-             
-             <form @submit.prevent="loginInstructor">
+             <form @submit.prevent="loginStudent">
                <div class="input-field">
                  <input type="email" id="email" class="input" v-model="email" required>
                  <label for="email">Email</label>
@@ -24,7 +23,8 @@
              </form>
              <button @click="loginStudent" type="submit" class="submit">Login Student</button>
              <button @click="loginInstructor" type="submit" class="submit">Login Instructor</button>
-             <div class="signin">
+
+             <!-- <div class="signin">
                
                <div>
                 <a href="#" @click="pushInstructor">Login bypass to make first Instructor</a>
@@ -32,7 +32,7 @@
                 <div>
                 <a href="#" @click="pushInstructor2">Login bypass to get to students</a>
                </div>
-            </div>
+            </div> -->
            </div>
          </div>
       </div>
@@ -45,7 +45,6 @@
 <script>
 import { storeUser } from '../stores/store.js'
 import axios from 'axios'
-import { storeSection } from '../stores/storeSection'
 export default {
    // Will need to be changed - Ty Donnelly
    name: 'LoginPageView',
@@ -77,12 +76,17 @@ export default {
             sections: [],
          })
          .then((response) => {
+            console.log(response)
             this.isLoading = false
             storeUser.updateLoginStatus(response.data.data.id, true)
-            storeSection.setSections(response.data.data.sections)
-            
+
+            storeUser.setSectionId(response.data.data.sections[0].id)
+            console.log(storeUser.isLoggedIn)
+            console.log(storeUser.userID)
             // storeUser.setSectionId(response.data.data.sections[0].id)
+            
             storeUser.setName(response.data.data.firstName,response.data.data.lastName)
+
             this.$router.push('/instructorhome')
          }, (error) => {
             console.log(error)
