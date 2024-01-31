@@ -35,6 +35,9 @@
      logout() {
        localStorage.removeItem('auth');
         this.$router.push('/');
+        localStorage.removeItem('logginstatus')
+        localStorage.removeItem('storeUser');
+        localStorage.removeItem('storeSection');
      },
    },
  };

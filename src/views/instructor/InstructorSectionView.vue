@@ -206,6 +206,11 @@ export default {
       },
    },
    computed: {},
+   watch: {
+      'storeSection.selectedSectionId': function(newVal, oldVal) {
+         
+      }
+   }
 }
 
 </script>

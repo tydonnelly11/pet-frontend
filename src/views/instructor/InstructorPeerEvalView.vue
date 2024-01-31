@@ -22,9 +22,7 @@
           <td>{{ report.name }}</td>
           <td>{{ report.score }}</td>
           <td>
-            <td v-for="(commentValue, commentKey) in report.comments" :key="commentKey">
-              {{ commentKey }}: {{ commentValue }}
-            </td>
+            <CommentTable :comments="report.comments" />
           </td>
         </tr>
       </tbody>
@@ -37,10 +35,13 @@ import axios from 'axios';
 import { storeWeek } from '../../stores/storeWeek.js';
 import { storeUser } from '../../stores/store.js';
 import WeekDropdown from '@/components/WeekDropdown.vue';
+import { storeSection } from '../../stores/storeSection';
+import CommentTable from '../../components/instructor/CommentTable.vue';
 export default {
   name: 'InstructorPeerEvalView',
   components: {
     WeekDropdown,
+    CommentTable
   },
   data() {
     return {
@@ -49,7 +50,7 @@ export default {
       error: null,
       
       // week: '15', 
-      storeWeek,storeUser,
+      storeWeek,storeUser,storeSection, 
       rubric: null,
     };
   },
@@ -57,7 +58,7 @@ export default {
     getRubric() {
         const auth = localStorage.getItem('auth')
          
-         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getRubric/${storeUser.sectionId}`, 
+         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getRubric/${storeSection.selectedSectionId}`, 
          {headers: { 'Authorization': `Basic ${auth}` }}
          )
          .then((response) => {
@@ -79,7 +80,7 @@ export default {
             params: {
               
               week: storeWeek.selectedWeekId,
-              sectionId: storeUser.sectionId,
+              sectionId: storeSection.selectedSectionId,
             },
             headers: { 'Authorization': `Basic ${auth}` }
             
@@ -88,7 +89,9 @@ export default {
           console.log(response)
           if (response.data.flag && response.data.code === 200 && response.data.data.length > 0) {
             const studentReport = response.data.data;
-            for(const student of studentReport){
+           
+            
+              for(const student of studentReport){
               tempReports.push({
               name: `${student.firstName} ${student.lastName}`,
               score: `${student.averageScore}/${this.totalScore}`, 
@@ -96,8 +99,10 @@ export default {
             });
             }
             
+           
+            
           } else {
-            this.error = response.data.message || `Failed to fetch evaluation report for student ID ${studentId}`;
+            this.error = "No reports for week " + storeWeek.selectedWeek.start + " - " + storeWeek.selectedWeek.end + " found";
             // Consider how you want to handle partial failures
           }
         } catch (error) {

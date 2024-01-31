@@ -80,11 +80,14 @@ export default {
             this.isPastWeek = false
             this.isFutureWeek = false
             this.hasEntry = true
+            
          } else if (currentWeekId < selectedWeekId) {
             this.isFutureWeek = true
             this.isPastWeek = false
+            this.isLoading = false
          } else {
             this.isPastWeek = true
+            this.isLoading = false
             this.isFutureWeek = false
          }
       },

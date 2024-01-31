@@ -168,7 +168,7 @@ export default {
             const criterion = _.cloneDeep(criteria)
             console.log(criterion)
             const rating = {
-               score : 0,
+               score : criterion.maxScore,
                criterion,
             }
             ratingList.push(rating)

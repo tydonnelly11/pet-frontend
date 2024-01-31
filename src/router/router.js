@@ -14,6 +14,8 @@ import InstructorInviteStudentsView from '../views/instructor/InstructorInviteSt
 import InstructorTeamEditView from '../views/instructor/InstructorTeamEditView.vue'
 import { storeUser } from '../stores/store.js'
 import WaitingForTeam from '@/components/student/WaitingForTeam.vue'
+import InstructorRubricView from '../views/instructor/InstructorRubricView.vue'
+import InstructorWarView from '../views/instructor/InstructorWarView.vue'
 
 
 const routes = [
@@ -69,6 +71,17 @@ const routes = [
             component: InstructorPeerEvalView,
          },
          {
+            path: 'rubric',
+            name: 'InstructorRubric',
+            component: InstructorRubricView,
+
+         },
+         {
+            path: 'war',
+            name: 'InstructorWar',
+            component: InstructorWarView,
+         },
+         {
             path: 'team/:teamId', // Dynamic segment for team ID
             name: 'InstructorTeam',
             component: InstructorTeamView,
@@ -107,7 +120,8 @@ const router = createRouter({
 })
 
   router.beforeEach(async (to, from) => {
-   if (!storeUser.isLoggedIn) {
+   const loggedIn = localStorage.getItem('logginstatus')
+   if (!loggedIn) {
       // Allow access to the login page
       if (to.path === '/') {
           return true;

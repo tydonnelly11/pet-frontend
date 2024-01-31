@@ -64,6 +64,8 @@ export const storeWeek = reactive({
         return `${month}-${day}-${year}`
      },
       updateSelectedWeek(week) {
+         console.log(week)
+         console.log("CHANGING WEEK")
          this.selectedWeekId = week.id
          this.selectedWeek = week
        },

@@ -15,6 +15,16 @@
          </router-link>
        </li>
        <li class="nav-item">
+         <router-link class="nav-link" to="/instructorhome/war">
+           <span class="link-text">Instructor War</span>
+         </router-link>
+       </li>
+       <li class="nav-item">
+         <router-link class="nav-link" to="/instructorhome/rubric">
+           <span class="link-text">Rubric</span>
+         </router-link>
+       </li>
+       <li class="nav-item">
          <router-link class="nav-link" to="/instructorhome/section">
            <span class="link-text">Section</span>
          </router-link>
@@ -54,6 +64,9 @@
      logout() {
        localStorage.removeItem('auth');
         this.$router.push('/');
+        localStorage.removeItem('logginstatus');
+        localStorage.removeItem('storeUser');
+        localStorage.removeItem('storeSection');
      },
    },
  };

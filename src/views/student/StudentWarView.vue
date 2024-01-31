@@ -153,6 +153,7 @@ export default {
             this.hasEntry = true
             this.isPastWeek = false
             this.isFutureWeek = false
+            
          } else if (currentWeekId < selectedWeekId) {
             this.hasEntry = false
             this.isFutureWeek = true
