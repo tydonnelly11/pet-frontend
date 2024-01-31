@@ -41,11 +41,12 @@ export default {
    data() {
       return {
             emails: "",
+
             firstName: "",
             lastName: "",
             email: "",
             listOfStudents: [],
-            storeUser,
+            storeUser,storeSection,
             isLoading: false,
             hasSubmittedStudents: false,
             listOfEmails: [],

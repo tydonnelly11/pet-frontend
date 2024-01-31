@@ -23,6 +23,7 @@
             then select all the students you wish to add to that team 
             and click the save button.
         </h3>
+    <div v-if="this.isLoading" class="loading"><h1>Loading...</h1></div>
     <div v-if="hasLoaded" class="page">
         <!-- Teams Section -->
         
@@ -100,7 +101,7 @@ export default {
          const config = {
             headers: { 'Authorization': `Basic ${auth}` }
          };
-        axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getAllStudents/${storeUser.sectionId}`,
+        axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getAllStudents/${storeSection.selectedSectionId}`,
         {  headers: { 'Authorization': `Basic ${auth}` }}
         )
         .then(response => {
@@ -127,7 +128,7 @@ export default {
          const config = {
             headers: { 'Authorization': `Basic ${auth}` }
          };
-        axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getAllTeams/${storeUser.sectionId}`,
+        axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getAllTeams/${storeSection.selectedSectionId}`,
         {  headers: { 'Authorization': `Basic ${auth}` }}
         )
         .then(response => {
@@ -198,7 +199,7 @@ export default {
          axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/team/save`, {
             id : null,
             name: this.teamName,
-            sectionId: storeUser.sectionId,
+            sectionId: storeSection.selectedSectionId,
             students: null,
          },
          {  headers: { 'Authorization': `Basic ${auth}` }}
@@ -218,7 +219,11 @@ export default {
             })
       },
 },
-   computed: {},
+   computed: {
+        isLoading() {
+            return (this.students === null || this.teams === null)
+        }
+   },
    watch: {
     'storeSection.selectedSectionId': function(newVal, oldVal) {
          this.getStudents()
