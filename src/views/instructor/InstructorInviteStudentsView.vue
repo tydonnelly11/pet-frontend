@@ -32,6 +32,8 @@
 <script>
 import axios from 'axios'
 import { storeUser } from '@/stores/store.js'
+import { storeSection } from '../../stores/storeSection'
+
 
 export default {
    name: 'InstructorInviteStudentsView',
@@ -63,7 +65,7 @@ export default {
                 middleName: "",
                 lastName: "",
                 email: item.trimStart(),
-                sectionId : storeUser.sectionId,
+                sectionId : storeSection.selectedSectionId,
                 password: null,
                 roles : "user"
              })
@@ -93,6 +95,11 @@ export default {
             })
             
         },
+     },
+     watch: {
+        'storeSection.selectedSectionId': function(newVal, oldVal) {
+         
+    }
      }
    }
 

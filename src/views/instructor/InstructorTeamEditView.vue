@@ -62,6 +62,7 @@
 <script>
 import axios from 'axios'
 import { storeUser } from '@/stores/store.js'
+import { storeSection } from '@/stores/storeSection.js'
 
 export default {
    name: 'InstructorTeamEditView',
@@ -76,7 +77,7 @@ export default {
         updatedTeam: {
             id: "",
             name: "",
-            sectionId: storeUser.sectionId,
+            sectionId: storeSection.selectedSectionId,
             students: [],
 
         },
@@ -88,6 +89,7 @@ export default {
         hasSavedTeam: false,
         hasLoaded: false,
         teamName: "",
+        storeSection,
          
       }
    },
@@ -217,6 +219,13 @@ export default {
       },
 },
    computed: {},
+   watch: {
+    'storeSection.selectedSectionId': function(newVal, oldVal) {
+         this.getStudents()
+        this.getTeams()
+        }
+   },
+
    created() {
     this.getStudents()
     this.getTeams()

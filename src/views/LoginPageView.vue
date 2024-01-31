@@ -24,7 +24,7 @@
              <button @click="loginStudent" type="submit" class="submit">Login Student</button>
              <button @click="loginInstructor" type="submit" class="submit">Login Instructor</button>
 
-             <!-- <div class="signin">
+             <div class="signin">
                
                <div>
                 <a href="#" @click="pushInstructor">Login bypass to make first Instructor</a>
@@ -32,7 +32,7 @@
                 <div>
                 <a href="#" @click="pushInstructor2">Login bypass to get to students</a>
                </div>
-            </div> -->
+            </div>
            </div>
          </div>
       </div>
@@ -45,6 +45,7 @@
 <script>
 import { storeUser } from '../stores/store.js'
 import axios from 'axios'
+import { storeSection } from '../stores/storeSection';
 export default {
    // Will need to be changed - Ty Donnelly
    name: 'LoginPageView',
@@ -80,11 +81,11 @@ export default {
             this.isLoading = false
             storeUser.updateLoginStatus(response.data.data.id, true)
 
-            storeUser.setSectionId(response.data.data.sections[0].id)
-            console.log(storeUser.isLoggedIn)
-            console.log(storeUser.userID)
             // storeUser.setSectionId(response.data.data.sections[0].id)
             
+            // storeUser.setSectionId(response.data.data.sections[0].id)
+            storeSection.setSections(response.data.data.sections)
+            console.log(storeSection.sections)
             storeUser.setName(response.data.data.firstName,response.data.data.lastName)
 
             this.$router.push('/instructorhome')

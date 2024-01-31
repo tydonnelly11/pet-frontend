@@ -37,6 +37,7 @@ import axios from 'axios';
 import { storeWeek } from '../../stores/storeWeek.js';
 import { storeUser } from '../../stores/store.js';
 import WeekDropdown from '@/components/WeekDropdown.vue';
+import { storeSection } from '../../stores/storeSection';
 export default {
   name: 'InstructorPeerEvalView',
   components: {
@@ -79,7 +80,7 @@ export default {
             params: {
               
               week: storeWeek.selectedWeekId,
-              sectionId: storeUser.sectionId,
+              sectionId: storeSection.selectedSectionId,
             },
             headers: { 'Authorization': `Basic ${auth}` }
             
