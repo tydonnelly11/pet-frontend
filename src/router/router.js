@@ -15,7 +15,7 @@ import InstructorTeamEditView from '../views/instructor/InstructorTeamEditView.v
 import { storeUser } from '../stores/store.js'
 import WaitingForTeam from '@/components/student/WaitingForTeam.vue'
 import InstructorRubricView from '../views/instructor/InstructorRubricView.vue'
-import InstructorWarView from '../views/instructor/InstructorWarView.vue'
+import InstructorWARView from '../views/instructor/InstructorWARView.vue'
 
 
 const routes = [
@@ -79,7 +79,7 @@ const routes = [
          {
             path: 'war',
             name: 'InstructorWar',
-            component: InstructorWarView,
+            component: InstructorWARView,
          },
          {
             path: 'team/:teamId', // Dynamic segment for team ID
