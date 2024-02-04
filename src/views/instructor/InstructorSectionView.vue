@@ -125,7 +125,7 @@ export default {
          this.hasError = true
       },
       registerInstructor() {
-         axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/register/instructor`, {
+         axios.post(`http://localhost:80/api/v1/auth/register/instructor`, {
                firstName: this.firstName,
                middleName: this.middleName,
                lastName: this.lastName,
@@ -159,7 +159,7 @@ export default {
          }
          const auth = localStorage.getItem('auth')
          
-         axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/save`, {
+         axios.post(`http://localhost:80/api/v1/section/save`, {
             id : null,
             name: this.sectionName,
             instructorId: storeUser.userID,
@@ -183,7 +183,7 @@ export default {
          const config = {
             headers: { 'Authorization': `Basic ${auth}` }
          };
-         axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/team/save`, {
+         axios.post(`http://localhost:80/api/v1/team/save`, {
             id : null,
             name: this.teamName,
             sectionId: this.sectionId,

@@ -107,7 +107,7 @@ export default {
          const auth = localStorage.getItem('auth')
 
          axios
-            .post('https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/peerEvaluation/submitPeerEvaluation', targetPayload, {
+            .post('http://localhost:80/api/v1/peerEvaluation/submitPeerEvaluation', targetPayload, {
                headers: { 'Authorization': `Basic ${auth}` },
             })
             .then((response) => {
@@ -119,7 +119,7 @@ export default {
             })
       },
       // getRubric() {
-      //    axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getRubric/${storeUser.sectionId}`, {
+      //    axios.get(`http://localhost:80/api/v1/section/getRubric/${storeUser.sectionId}`, {
       //       withCredentials: true,
       //    })
       //    .then((response) => {

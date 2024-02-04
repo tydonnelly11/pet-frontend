@@ -3,7 +3,7 @@
       
       <!--@select-week is the emit from child component with week as first arg of the func-->
       <div v-if="this.isPastWeek" class="display-grade">
-         <h1>Grade for {{ storeWeek.selectedWeek.start }} to {{ storeWeek.selectedWeek.end }} :</h1>
+         <h1>Grade for {{ storeWeek.selectedWeek.start }} to {{ storeWeek.selectedWeek.end }} : {{ this.gradeForWeek }} / {{ this.totalScore }}</h1>
          <!-- {{ this.gradeForWeek }} -->
       </div>
       <div class="loading">
@@ -63,6 +63,7 @@ export default {
          isFutureWeek: false,
          isLoading: false,
          rubric: null,
+         totalScore: 0,
       }
    },
    /*
@@ -82,7 +83,7 @@ export default {
       async getPeerEvalEntriesForWeek() {
          this.isLoading = true
          const auth = localStorage.getItem('auth')
-         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/peerEvaluation/getPeerEvaluation/${storeUser.userID}/${storeWeek.selectedWeekId}`,
+         axios.get(`http://localhost:80/api/v1/peerEvaluation/getPeerEvaluation/${storeUser.userID}/${storeWeek.selectedWeekId}`,
                {
                   crossdomain: true,
                   headers: { 'Authorization': `Basic ${auth}` }            
@@ -220,13 +221,13 @@ export default {
             this.hasEntry = true
             this.isPastWeek = true
             this.isFutureWeek = false
-            // this.getGradeForWeek(this.selectedWeekId, )
+            this.getGradeAndCommentsForPastWeek()
          }
       },
       getRubric() {
          const auth = localStorage.getItem('auth')
 
-         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getRubric/${storeUser.sectionId}`, {
+         axios.get(`http://localhost:80/api/v1/section/getRubric/${storeUser.sectionId}`, {
             headers: { 'Authorization': `Basic ${auth}` }
          })
          .then((response) => {
@@ -234,7 +235,24 @@ export default {
             
             this.rubric = response.data.data.criteria
             console.log(this.rubric)
+            for(const criteria of this.rubric){
+               this.totalScore += criteria.maxScore
+            }
             this.getPeerEvalEntriesForWeek()
+         })
+      },
+      getGradeAndCommentsForPastWeek(){      
+         const auth = localStorage.getItem('auth')
+         axios.get(`http://localhost:80/api/v1/peerEvaluation/getEvaluationReport`, {
+            headers: { 'Authorization': `Basic ${auth}` },
+            params: {
+               week: storeWeek.selectedWeekId,
+               studentId: storeUser.userID,
+            }
+         })
+         .then((response) => {
+            console.log(response)
+            this.gradeForWeek = response.data.data.averageScore
          })
       },
       

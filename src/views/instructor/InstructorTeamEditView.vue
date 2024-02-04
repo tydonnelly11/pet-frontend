@@ -101,7 +101,7 @@ export default {
          const config = {
             headers: { 'Authorization': `Basic ${auth}` }
          };
-        axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getAllStudents/${storeSection.selectedSectionId}`,
+        axios.get(`http://localhost:80/api/v1/section/getAllStudents/${storeSection.selectedSectionId}`,
         {  headers: { 'Authorization': `Basic ${auth}` }}
         )
         .then(response => {
@@ -128,7 +128,7 @@ export default {
          const config = {
             headers: { 'Authorization': `Basic ${auth}` }
          };
-        axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getAllTeams/${storeSection.selectedSectionId}`,
+        axios.get(`http://localhost:80/api/v1/section/getAllTeams/${storeSection.selectedSectionId}`,
         {  headers: { 'Authorization': `Basic ${auth}` }}
         )
         .then(response => {
@@ -168,7 +168,7 @@ export default {
          const config = {
             headers: { 'Authorization': `Basic ${auth}` }
          };
-    axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/team/edit`,
+    axios.post(`http://localhost:80/api/v1/team/edit`,
     {
         id: this.updatedTeam.id,
         name: this.updatedTeam.name,
@@ -196,7 +196,7 @@ export default {
             headers: { 'Authorization': `Basic ${auth}` }
     };
 
-         axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/team/save`, {
+         axios.post(`http://localhost:80/api/v1/team/save`, {
             id : null,
             name: this.teamName,
             sectionId: storeSection.selectedSectionId,

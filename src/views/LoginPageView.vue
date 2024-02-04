@@ -63,31 +63,29 @@ export default {
       },
       loginInstructor() 
       {
-         localStorage.setItem('auth', this.encodeCredentials(this.email, this.password));
-         localStorage.setItem('logginstatus', true)
+         
          this.isLoading = true
-         axios.post('https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/login/instructor', {
-            firstName: "",
-            middleName: "",
-            lastName: "",
-            id: "",
-            email: this.email,
-            password: this.password,
-            roles: "",
-            sections: [],
+         let creds = this.encodeCredentials(this.email, this.password)
+         axios.post('http://localhost:80/api/v1/auth/login/instructor', {
+            headers: {
+               'Authorization': `Basic ${creds}`
+            }
          })
          .then((response) => {
             console.log(response)
             this.isLoading = false
-            storeUser.updateLoginStatus(response.data.data.id, true)
+            storeUser.updateLoginStatus(response.data.data.userInfo.id, true)
+            localStorage.setItem('auth', response.data.data.token);
+            localStorage.setItem('logginstatus', true)
+
 
             // storeUser.setSectionId(response.data.data.sections[0].id)
             
             // storeUser.setSectionId(response.data.data.sections[0].id)
-            storeSection.setSections(response.data.data.sections)
+            storeSection.setSections(response.data.data.userInfo.sections)
 
             
-            storeUser.setName(response.data.data.firstName,response.data.data.lastName)
+            storeUser.setName(response.data.data.userInfo.firstName,response.data.data.userInfo.lastName)
             localStorage.setItem('storeUser', JSON.stringify(storeUser));
             localStorage.setItem('storeSection', JSON.stringify(storeSection));
             this.$router.push('/instructorhome')
@@ -95,37 +93,28 @@ export default {
             console.log(error)
          })
          
-// UNCOMMENT THIS CODE 
-
-         // storeUser.updateLoginStatus("1", true)
-         // console.log(storeUser.isLoggedIn)
-         // console.log(storeUser.studentId)
-         // this.$router.push('/instructorhome')
 
                 
       },
       loginStudent()
       {
-         localStorage.setItem('logginstatus', true)
-         localStorage.setItem('auth', this.encodeCredentials(this.email, this.password));
          this.isLoading = true
-         axios.post('https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/login/student', {
-            firstName: "",
-            middleName: "",
-            lastName: "",
-            id: "",
-            email: this.email,
-            password: this.password,
-            roles: "",
+         
+         axios.post('http://localhost:80/api/v1/auth/login/student', {
+            header: {
+               Authorization: `Basic ${this.encodeCredentials(this.email, this.password)}`
+            }
          })
          .then((response) => {
             console.log(response)
             this.isLoading = false
-            storeUser.updateLoginStatus(response.data.data.id, true)
+            storeUser.updateLoginStatus(response.data.data.userInfo.id, true)
             
-            storeUser.setTeamId(response.data.data.teamId)
-            storeUser.setName(response.data.data.firstName,response.data.data.lastName)
-            storeUser.setSectionId(response.data.data.sectionId)
+            storeUser.setTeamId(response.data.data.userInfo.teamId)
+            storeUser.setName(response.data.data.firstName,response.data.data.userInfo.lastName)
+            storeUser.setSectionId(response.data.data.userInfo.sectionId)
+            localStorage.setItem('auth', response.data.data.token);
+            localStorage.setItem('logginstatus', true)
             localStorage.setItem('storeUser', JSON.stringify(storeUser));
 
             if(storeUser.teamId == null)
