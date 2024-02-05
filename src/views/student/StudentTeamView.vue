@@ -129,6 +129,10 @@ export default {
     }
      
    },
+   mounted() {
+      this.getTeamMatesWar();
+      this.setWARVisibility(storeWeek.currentWeekId, storeWeek.selectedWeekId)
+   },
    created() {
       this.getTeamMatesWar();
    },
