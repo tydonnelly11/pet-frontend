@@ -102,7 +102,7 @@ export default {
 
     getTeams(){
         this.isLoading = true
-
+        this.teams = []
         const auth = localStorage.getItem('auth')
          const config = {
             headers: { 'Authorization': `Bearer ${auth}` }
@@ -118,6 +118,9 @@ export default {
         })
         .catch(error => {
             console.log(error)
+            if(error.response.data.code == 500){
+
+            }
         })
     },
       
