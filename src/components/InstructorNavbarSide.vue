@@ -66,10 +66,11 @@ import { storeSection } from '../stores/storeSection';
      logout() {
       storeSection.resetSection();
        localStorage.removeItem('auth');
-        this.$router.push('/');
+        
         localStorage.removeItem('logginstatus');
         localStorage.removeItem('storeUser');
         localStorage.removeItem('storeSection');
+        this.$router.push('/');
      },
    },
  };
