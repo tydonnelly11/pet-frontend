@@ -257,6 +257,10 @@ export default {
          .then((response) => {
             console.log(response)
             this.gradeForWeek = response.data.data[0].averageScore
+            console.log("GRADE")
+            console.log(response.data.data)
+            console.log(response.data.data[0].averageScore)
+            console.log(this.gradeForWeek)
             // this.publicComments = response.data.data[0].publicComments
          })
       },
