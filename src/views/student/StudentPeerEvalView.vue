@@ -89,7 +89,6 @@ export default {
          const auth = localStorage.getItem('auth')
          axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/peerEvaluation/getPeerEvaluation/${storeUser.userID}/${storeWeek.selectedWeekId}`,
                {
-                  crossdomain: true,
                   headers: { 'Authorization': `Bearer ${auth}` }            
                }
             )

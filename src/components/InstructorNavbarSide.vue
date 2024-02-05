@@ -50,6 +50,8 @@
  
  
  <script>
+import { storeSection } from '../stores/storeSection';
+
  export default {
    name: 'InstructorNavbarSide',
    data() {
@@ -62,6 +64,7 @@
        this.isSidebarOpen = !this.isSidebarOpen;
      },
      logout() {
+      storeSection.resetSection();
        localStorage.removeItem('auth');
         this.$router.push('/');
         localStorage.removeItem('logginstatus');
