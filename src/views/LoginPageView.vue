@@ -85,12 +85,16 @@ export default {
             
             // storeUser.setSectionId(response.data.data.sections[0].id)
             storeSection.setSections(response.data.data.userInfo.sections)
-
             
+            console.log(storeSection.sections)
+            console.log(storeSection.selectedSectionId);
+            console.log(storeSection.selectedSectionName)
+
             storeUser.setName(response.data.data.userInfo.firstName,response.data.data.userInfo.lastName)
             localStorage.setItem('storeUser', JSON.stringify(storeUser));
             localStorage.setItem('storeSection', JSON.stringify(storeSection));
             this.$router.push('/instructorhome')
+            
          }, (error) => {
             console.log(error)
          })
