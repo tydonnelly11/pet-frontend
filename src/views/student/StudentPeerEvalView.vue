@@ -188,7 +188,6 @@ export default {
                evaluatorId: storeUser.userID,
                week: storeWeek.currentWeekId,
                comment: '',
-               isCommentPublic : false,
                ratings : _.cloneDeep(ratingList),
                
                

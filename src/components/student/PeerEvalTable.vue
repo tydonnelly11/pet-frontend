@@ -91,7 +91,7 @@ export default {
                week: item.week,
                ratings: item.ratings,
                comment: item.comment,
-               isCommentPublic: item.isCommentPublic,
+               // isCommentPublic: item.isCommentPublic,
                
             })
             console.log(targetPayload)
