@@ -8,7 +8,7 @@
             :errorMessageProp="errorMessage"/>
 
       </div>
-      <WarTeamTable v-if="hasEntry && !isFutureWeek" :teamProp="team"></WarTeamTable>
+      <WarTeamTable v-if="hasEntry && (!isFutureWeek)" :teamProp="this.team"></WarTeamTable>
       <div v-if="isLoading">
          <h1>Loading...</h1>
       </div>
