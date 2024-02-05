@@ -75,6 +75,7 @@
 
 <script>
 import { storeUser } from '@/stores/store.js'
+import { storeSection } from '../../stores/storeSection'
 import axios from 'axios'
 import ErrorPopUp from '@/components/utilities/ErrorPopUp.vue'
 export default {
@@ -165,14 +166,20 @@ export default {
             instructorId: storeUser.userID,
             rubric: rubric,
          },
-         {  headers: { 'Authorization': `Basic ${auth}` }}
+         {  headers: { 'Authorization': `Bearer ${auth}` }}
          )
             .then(res => {
                console.log(res)
                console.log(res.data.data)
                this.sectionId = res.data.data
                this.hasCreatedSection = true
+               var section = {
+                  name: this.sectionName,
+                  id: this.sectionId
+               }
                storeUser.setSectionId(this.sectionId)
+               storeSection.setSections(section)
+
             })
             .catch(err => {
                console.log(err)
@@ -181,7 +188,7 @@ export default {
       createTeams() {
          const auth = localStorage.getItem('auth')
          const config = {
-            headers: { 'Authorization': `Basic ${auth}` }
+            headers: { 'Authorization': `Bearer ${auth}` }
          };
          axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/team/save`, {
             id : null,
@@ -189,7 +196,7 @@ export default {
             sectionId: this.sectionId,
             students: null,
          },
-         {  headers: { 'Authorization': `Basic ${auth}` }}
+         {  headers: { 'Authorization': `Bearer ${auth}` }}
          )
             .then(res => {
                console.log(res)

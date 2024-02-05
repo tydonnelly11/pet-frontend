@@ -83,7 +83,7 @@ export default {
                 
                     this.listOfStudents
             ,{
-                headers: { 'Authorization': `Basic ${auth}` }
+                headers: { 'Authorization': `Bearer ${auth}` }
             }
             ).then(response => {
                 console.log(response)

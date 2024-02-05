@@ -48,7 +48,7 @@ export default {
 
          axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/team/getStudents/${storeUser.teamId}`,
          {
-             headers: { 'Authorization': `Basic ${auth}` },
+             headers: { 'Authorization': `Bearer ${auth}` },
          }
          )
          .then((response) => {

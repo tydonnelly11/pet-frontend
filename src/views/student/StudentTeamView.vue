@@ -57,7 +57,7 @@ export default {
                teamId: storeUser.teamId,
                weekId: storeWeek.selectedWeekId,
             },
-            headers: { 'Authorization': `Basic ${auth}` }
+            headers: { 'Authorization': `Bearer ${auth}` }
          }).then(response => {
             this.isLoading = false
             this.formatActivities(response.data.data.activities)

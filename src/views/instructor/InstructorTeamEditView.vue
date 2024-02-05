@@ -99,10 +99,10 @@ export default {
         this.isLoading = true
         const auth = localStorage.getItem('auth')
          const config = {
-            headers: { 'Authorization': `Basic ${auth}` }
+            headers: { 'Authorization': `Bearer ${auth}` }
          };
         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getAllStudents/${storeSection.selectedSectionId}`,
-        {  headers: { 'Authorization': `Basic ${auth}` }}
+        {  headers: { 'Authorization': `Bearer ${auth}` }}
         )
         .then(response => {
             this.students = []
@@ -126,10 +126,10 @@ export default {
         this.isLoading = true
         const auth = localStorage.getItem('auth')
          const config = {
-            headers: { 'Authorization': `Basic ${auth}` }
+            headers: { 'Authorization': `Bearer ${auth}` }
          };
         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getAllTeams/${storeSection.selectedSectionId}`,
-        {  headers: { 'Authorization': `Basic ${auth}` }}
+        {  headers: { 'Authorization': `Bearer ${auth}` }}
         )
         .then(response => {
             this.teams = response.data.data
@@ -166,7 +166,7 @@ export default {
     this.isProcessingTeamSave = true
     const auth = localStorage.getItem('auth')
          const config = {
-            headers: { 'Authorization': `Basic ${auth}` }
+            headers: { 'Authorization': `Bearer ${auth}` }
          };
     axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/team/edit`,
     {
@@ -175,7 +175,7 @@ export default {
         sectionId: this.updatedTeam.sectionId,
         students: this.updatedTeam.students,
     },
-    {  headers: { 'Authorization': `Basic ${auth}` }}
+    {  headers: { 'Authorization': `Bearer ${auth}` }}
     ).then(response => {
         this.hasSavedTeam = true
         this.isProcessingTeamSave = false
@@ -193,7 +193,7 @@ export default {
     this.isProcessingTeamCreation = true
     const auth = localStorage.getItem('auth')
     const config = {
-            headers: { 'Authorization': `Basic ${auth}` }
+            headers: { 'Authorization': `Bearer ${auth}` }
     };
 
          axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/team/save`, {
@@ -202,7 +202,7 @@ export default {
             sectionId: storeSection.selectedSectionId,
             students: null,
          },
-         {  headers: { 'Authorization': `Basic ${auth}` }}
+         {  headers: { 'Authorization': `Bearer ${auth}` }}
          )
             .then(res => {
                console.log(res)

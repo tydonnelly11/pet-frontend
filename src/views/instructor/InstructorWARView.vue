@@ -57,7 +57,7 @@ export default {
                teamId: team.id,
                weekId: storeWeek.selectedWeekId,
             },
-            headers: { 'Authorization': `Basic ${auth}` }
+            headers: { 'Authorization': `Bearer ${auth}` }
          }).then(response => {
             this.isLoading = false
             
@@ -104,10 +104,10 @@ export default {
 
         const auth = localStorage.getItem('auth')
          const config = {
-            headers: { 'Authorization': `Basic ${auth}` }
+            headers: { 'Authorization': `Bearer ${auth}` }
          };
         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getAllTeams/${storeSection.selectedSectionId}`,
-        {  headers: { 'Authorization': `Basic ${auth}` }}
+        {  headers: { 'Authorization': `Bearer ${auth}` }}
         )
         .then(response => {
             this.teams = response.data.data
