@@ -101,10 +101,10 @@ export default {
       loginStudent()
       {
          this.isLoading = true
-         
+         let creds = this.encodeCredentials(this.email, this.password)
          axios.post('https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/login/student', {}, {
-            header: {
-               Authorization: `Basic ${this.encodeCredentials(this.email, this.password)}`
+            headers: {
+               Authorization: `Basic ${creds}`
             }
          })
          .then((response) => {
