@@ -67,7 +67,7 @@ export const storeWeek = reactive({
          console.log(week)
          console.log("CHANGING WEEK")
 
-         this.selectedWeekId = week.id
+         this.selectedWeekId = String(week.id)
          this.selectedWeek = week
          console.log(this.selectedWeekId)
        },
