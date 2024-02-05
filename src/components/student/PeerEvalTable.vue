@@ -35,7 +35,7 @@
                </td>
                <td scope="col">
                   <input type="text" v-model="student.comment" />
-                  <input type="checkbox" v-model="student.isCommentPublic"/>
+                  <!-- <input type="checkbox" v-model="student.isCommentPublic"/> -->
                </td>
             </tr>
          </tbody>
