@@ -10,7 +10,8 @@
         <div class="grid-container">
             <div 
             v-for="team in teams" 
-            class="grid-item" 
+            :class="{'selected-item': selectedTeam && team.id === selectedTeam.id}"
+            :key="team.id"
             @click="getTeamWar(team)">
             <p>{{ team.name }}</p>
             
@@ -167,5 +168,8 @@ export default {
   width: 100px;
   border: 1px solid #ccc;
   cursor: pointer;
+}
+.selected-item {
+  border: 4px solid blue; /* Adjust the color and border size as needed */
 }
 </style>
