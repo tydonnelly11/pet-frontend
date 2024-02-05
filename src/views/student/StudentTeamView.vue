@@ -89,6 +89,7 @@ export default {
             this.isPastWeek = true
             this.isLoading = false
             this.isFutureWeek = false
+            this.hasEntry = true
          }
       },
       formatActivities(activities){
