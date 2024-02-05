@@ -126,7 +126,7 @@ export default {
             headers: { 'Authorization': `Bearer ${auth}` },
             params: {
                teamId: storeUser.teamId,
-               weekId: storeWeek.selectedWeekId,
+               weekId: String(storeWeek.selectedWeekId),
             },
          },
          ).then(response => {
