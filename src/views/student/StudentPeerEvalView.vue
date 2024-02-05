@@ -4,8 +4,12 @@
       <!--@select-week is the emit from child component with week as first arg of the func-->
       <div v-if="this.isPastWeek" class="display-grade">
          <h1>Grade for {{ storeWeek.selectedWeek.start }} to {{ storeWeek.selectedWeek.end }} : {{ this.gradeForWeek }} / {{ this.totalScore }}</h1>
-         <!-- {{ this.gradeForWeek }} -->
+         <div v-for="(commentValue, commentKey) in comments">
+            <h2>Comment from {{ commentKey }}</h2>
+            <p>{{ commentValue }}</p>
+         </div>
       </div>
+
       <div class="loading">
          <div v-if="isLoading">
             <h1>Loading...</h1>
@@ -83,10 +87,10 @@ export default {
       async getPeerEvalEntriesForWeek() {
          this.isLoading = true
          const auth = localStorage.getItem('auth')
-         axios.get(`http://localhost:80/api/v1/peerEvaluation/getPeerEvaluation/${storeUser.userID}/${storeWeek.selectedWeekId}`,
+         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/peerEvaluation/getPeerEvaluation/${storeUser.userID}/${storeWeek.selectedWeekId}`,
                {
                   crossdomain: true,
-                  headers: { 'Authorization': `Basic ${auth}` }            
+                  headers: { 'Authorization': `Bearer ${auth}` }            
                }
             )
             .then((response) => {
@@ -185,6 +189,7 @@ export default {
                evaluatorId: storeUser.userID,
                week: storeWeek.currentWeekId,
                comment: '',
+               isCommentPublic : false,
                ratings : _.cloneDeep(ratingList),
                
                
@@ -197,6 +202,7 @@ export default {
             evaluatorId: storeUser.userID,
             week: storeWeek.currentWeekId,
             comment: '',
+            isCommentPublic : false,
             ratings : _.cloneDeep(ratingList),
          }
          this.peerEvalEntriesForSelectedWeek.push(ownStudent)
@@ -227,8 +233,8 @@ export default {
       getRubric() {
          const auth = localStorage.getItem('auth')
 
-         axios.get(`http://localhost:80/api/v1/section/getRubric/${storeUser.sectionId}`, {
-            headers: { 'Authorization': `Basic ${auth}` }
+         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getRubric/${storeUser.sectionId}`, {
+            headers: { 'Authorization': `Bearer ${auth}` }
          })
          .then((response) => {
             console.log('RUBRIC')
@@ -243,8 +249,8 @@ export default {
       },
       getGradeAndCommentsForPastWeek(){      
          const auth = localStorage.getItem('auth')
-         axios.get(`http://localhost:80/api/v1/peerEvaluation/getEvaluationReport`, {
-            headers: { 'Authorization': `Basic ${auth}` },
+         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/peerEvaluation/getEvaluationReport`, {
+            headers: { 'Authorization': `Bearer ${auth}` },
             params: {
                week: storeWeek.selectedWeekId,
                studentId: storeUser.userID,
@@ -253,6 +259,7 @@ export default {
          .then((response) => {
             console.log(response)
             this.gradeForWeek = response.data.data.averageScore
+            this.publicComments = response.data.data.publicComments
          })
       },
       

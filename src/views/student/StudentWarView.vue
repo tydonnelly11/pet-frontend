@@ -88,9 +88,9 @@ export default {
          }
          const auth = localStorage.getItem('auth')
          
-         axios.post('http://localhost:80/api/v1/activity/submit', this.newTasks,
+         axios.post('https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/activity/submit', this.newTasks,
          {
-            headers: { 'Authorization': `Basic ${auth}` }
+            headers: { 'Authorization': `Bearer ${auth}` }
          }).then(response => {
             console.log(response)
          }).catch(error => {
@@ -121,9 +121,9 @@ export default {
 
       getStudentWar() {
          const auth = localStorage.getItem('auth')
-         axios.get(`http://localhost:80/api/v1/war/get`,
+         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/war/get`,
          {
-            headers: { 'Authorization': `Basic ${auth}` },
+            headers: { 'Authorization': `Bearer ${auth}` },
             params: {
                teamId: storeUser.teamId,
                weekId: storeWeek.selectedWeekId,

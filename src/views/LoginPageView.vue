@@ -23,7 +23,9 @@
              </form>
              <button @click="loginStudent" type="submit" class="submit">Login Student</button>
              <button @click="loginInstructor" type="submit" class="submit">Login Instructor</button>
-
+             <div v-if="this.isLoading" class="loading">
+               <h1>Logging In...</h1>
+            </div>
              <div class="signin">
                
                <div>
@@ -66,7 +68,7 @@ export default {
          
          this.isLoading = true
          let creds = this.encodeCredentials(this.email, this.password)
-         axios.post('http://localhost:80/api/v1/auth/login/instructor', {
+         axios.post('https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/login/instructor', {},{
             headers: {
                'Authorization': `Basic ${creds}`
             }
@@ -100,7 +102,7 @@ export default {
       {
          this.isLoading = true
          
-         axios.post('http://localhost:80/api/v1/auth/login/student', {
+         axios.post('https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/login/student', {}, {
             header: {
                Authorization: `Basic ${this.encodeCredentials(this.email, this.password)}`
             }
@@ -137,6 +139,8 @@ export default {
          console.log(storeUser.userID)
          localStorage.setItem('auth', this.encodeCredentials(this.email, this.password));
          this.$router.push('/instructorhome/section')
+         localStorage.setItem('logginstatus', true)
+
          localStorage.setItem('storeUser', JSON.stringify(storeUser));
 
 

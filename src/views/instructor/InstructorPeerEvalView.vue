@@ -58,8 +58,8 @@ export default {
     getRubric() {
         const auth = localStorage.getItem('auth')
          
-         axios.get(`http://localhost:80/api/v1/section/getRubric/${storeSection.selectedSectionId}`, 
-         {headers: { 'Authorization': `Basic ${auth}` }}
+         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getRubric/${storeSection.selectedSectionId}`, 
+         {headers: { 'Authorization': `Bearer ${auth}` }}
          )
          .then((response) => {
             this.rubric = response.data.data.criteria
@@ -76,13 +76,13 @@ export default {
       const auth = localStorage.getItem('auth')
       // Fetch reports for each student
         try {
-          const response = await axios.get(`http://localhost:80/api/v1/peerEvaluation/getEvaluationReport`, {
+          const response = await axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/peerEvaluation/getEvaluationReport`, {
             params: {
               
               week: storeWeek.selectedWeekId,
               sectionId: storeSection.selectedSectionId,
             },
-            headers: { 'Authorization': `Basic ${auth}` }
+            headers: { 'Authorization': `Bearer ${auth}` }
             
           },
           );

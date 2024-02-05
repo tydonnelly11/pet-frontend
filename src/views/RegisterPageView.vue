@@ -67,7 +67,7 @@ export default {
         getRegistrationInfo(){
 
             
-            axios.get(`http://localhost:80/api/v1/auth/register/student/getStudentRegistrationTokenInfo/${this.token}`, {
+            axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/register/student/getStudentRegistrationTokenInfo/${this.token}`, {
                 
             }).then(response => {
                 console.log(response)
@@ -89,7 +89,7 @@ export default {
             }
             this.isLoading = true
             this.hasRegistered = false
-            axios.post(`http://localhost:80/api/v1/auth/register/student`, {
+            axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/register/student`, {
                 
                 firstName: this.studentInfo.firstName,
                 middleName: this.studentInfo.middleName,

@@ -21,7 +21,7 @@
                   <p type="number" min="0" >{{ item.score }}</p>
                </td>
                <td scope="col">
-                  <p type="text">{{ student.comment }}</p>
+                  <p v-for="(commentValue, commentKey) in student.publicComments" type="text">{{commentKey}} {{ commentValue }}</p>
                </td>
 
                
@@ -35,6 +35,7 @@
                </td>
                <td scope="col">
                   <input type="text" v-model="student.comment" />
+                  <input type="checkbox" v-model="student.isCommentPublic"/>
                </td>
             </tr>
          </tbody>
@@ -90,6 +91,7 @@ export default {
                week: item.week,
                ratings: item.ratings,
                comment: item.comment,
+               isCommentPublic: item.isCommentPublic,
                
             })
             console.log(targetPayload)
@@ -107,8 +109,8 @@ export default {
          const auth = localStorage.getItem('auth')
 
          axios
-            .post('http://localhost:80/api/v1/peerEvaluation/submitPeerEvaluation', targetPayload, {
-               headers: { 'Authorization': `Basic ${auth}` },
+            .post('https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/peerEvaluation/submitPeerEvaluation', targetPayload, {
+               headers: { 'Authorization': `Bearer ${auth}` },
             })
             .then((response) => {
                console.log(response)
@@ -119,7 +121,7 @@ export default {
             })
       },
       // getRubric() {
-      //    axios.get(`http://localhost:80/api/v1/section/getRubric/${storeUser.sectionId}`, {
+      //    axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getRubric/${storeUser.sectionId}`, {
       //       withCredentials: true,
       //    })
       //    .then((response) => {
