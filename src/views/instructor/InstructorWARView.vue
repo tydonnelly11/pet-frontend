@@ -50,6 +50,7 @@ export default {
    methods: {
     getTeamWar(team){
         this.selectedTeam = team
+        this.hasSelectedTeam = false;
         const auth = localStorage.getItem('auth')
 
         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/war/get`,
