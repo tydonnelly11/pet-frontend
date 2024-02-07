@@ -96,7 +96,7 @@ export default {
          hasCreatedSection: false,
          hasSubmittedInstructor: false,
          hasCreatedTeams: false,
-         storeUser,
+         storeUser, storeSection,
          sectionName: "",
          firstName: "",
          middleName: "",
@@ -178,7 +178,7 @@ export default {
                   id: this.sectionId
                }
                storeUser.setSectionId(this.sectionId)
-               storeSection.setSections(section)
+               storeSection.addSection(section)
 
             })
             .catch(err => {

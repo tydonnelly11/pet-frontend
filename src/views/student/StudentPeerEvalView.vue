@@ -111,6 +111,7 @@ export default {
                      storeWeek.currentWeekId,
                      storeWeek.selectedWeekId
                   )
+                  this.getGradeAndCommentsForPastWeek()
                   this.isLoading = false
                } else if (response.data.code == 409) {
                   //Will be changed to new code
@@ -225,7 +226,6 @@ export default {
             this.hasEntry = true
             this.isPastWeek = true
             this.isFutureWeek = false
-            this.getGradeAndCommentsForPastWeek()
          }
       },
       getRubric() {

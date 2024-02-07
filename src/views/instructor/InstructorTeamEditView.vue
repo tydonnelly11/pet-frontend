@@ -1,6 +1,6 @@
 <template>
     <SectionDropdown/>
-    <h2> Add teams to section</h2>
+    <h2> Add teams to {{ storeSection.selectedSectionName }}</h2>
     <div>
       <!-- Add Teams for Section: {{sectionName}} -->
       <div class="input-field">
@@ -228,7 +228,7 @@ export default {
    },
    watch: {
     'storeSection.selectedSectionId': function(newVal, oldVal) {
-         this.getStudents()
+        this.getStudents()
         this.getTeams()
         }
         

@@ -1,7 +1,8 @@
 <template>
+    <SectionDropdown/>
     <div class="invite-students-container">
         <div class="invite-students-header">
-            <h1>Invite Students</h1>
+            <h1>Invite Students to {{ storeSection.selectedSectionName }}</h1>
             <h2>Enter the Students First Name, Last Name and Email</h2>
         </div>
         <div class="form">
@@ -33,11 +34,12 @@
 import axios from 'axios'
 import { storeUser } from '@/stores/store.js'
 import { storeSection } from '../../stores/storeSection'
+import SectionDropdown from '@/components/instructor/SectionDropdown.vue'
 
 
 export default {
    name: 'InstructorInviteStudentsView',
-   components: {},
+   components: { SectionDropdown },
    data() {
       return {
             emails: "",
