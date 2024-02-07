@@ -23,7 +23,7 @@ lastName: null,
   {
     this.firstName = first;
     this.lastName = last;
-      this.userFullName = first + " " + last;
+    this.userFullName = first + " " + last;
   },
   logoutUser(){
         this.userID = null;
