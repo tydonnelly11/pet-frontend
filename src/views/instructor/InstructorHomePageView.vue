@@ -1,11 +1,7 @@
 <template>
    <div class="home-container">
-     <div class="sidebar">
-       <InstructorNavbarSide />
-     </div>
-
-   <div class="main-item">
-      
+      <InstructorNavbarSide @update:sidebarState="toggleSidebar" />
+   <div class="main-item" :class="{'shifted': isSidebarOpen }">
       <router-view> </router-view>
    </div>
    </div>
@@ -25,12 +21,18 @@ export default {
       WeekDropdown,
    },
    data() {
-      return {}
+      return {
+         isSidebarOpen: false,
+      };
    },
-   methods: {},
-   computed: {
+   methods: {
+      toggleSidebar(isOpen) {
+      this.isSidebarOpen = isOpen;
+   },
+},
+   //computed: {
       
-   },
+  // },
    created() {
       storeWeek.calcCurrentWeek();
       console.log(storeWeek.currentWeek)
@@ -45,18 +47,26 @@ export default {
 .home-container {
   display: flex;
   height: 100vh;
-  background-color: #E4E9F7; /* Set background color for the whole page */
+  background-color: #E4E9F7;
 }
+
+/*
 .sidebar {
    width: 78px;
-   margin-left: auto;
+   margin-left: auto; 
 
 }
+*/
 
 .main-item {
-   width: 100%;
-   display: flex;
-   flex-direction: column;
-   background-color: #E4E9F7;
+   flex-grow: 1; 
+  transition: margin-left 0.5s; 
+  overflow-x: unset; 
+  margin-left: 78px;
 }
+
+.main-item.shifted {
+  margin-left: 250px;
+}
+
 </style>

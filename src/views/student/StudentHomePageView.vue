@@ -1,14 +1,9 @@
 <template>
-   <div class="sidebar">
-      <NavbarSide />
-   </div>
-   
-
-      
-   <div class="main-item">
+<div class="home-container">
+   <NavbarSide @update:sidebarState="toggleSidebar"/> 
+   <div class="main-item" :class="{ 'shifted': isSidebarOpen}">
       <div class="top-bar">
-         
-      <WeekDropdown :displayedWeeks="storeWeek.weeksForSemester" 
+         <WeekDropdown :displayedWeeks="storeWeek.weeksForSemester" 
       :selectWeek="storeWeek.currentWeekId" 
       :currentWeekProp="storeWeek.currentWeek"
       :style="'width: 100%;'">
@@ -17,8 +12,8 @@
          <p>{{ storeUser.userFullName }}</p>
       </div>
       </div>
-
       <router-view></router-view>
+   </div>
    </div>
 </template>
 
@@ -40,9 +35,13 @@ export default {
          storeWeek,
          storeTeam,
          storeUser,
-      }
+         isSidebarOpen: false,
+      };
    },
    methods: {
+      toggleSidebar(isOpen) {
+         this.isSidebarOpen = isOpen;
+      },
       getTeamMembers() {
          const auth = localStorage.getItem('auth')
 
@@ -75,16 +74,19 @@ export default {
 </script>
 
 <style scoped>
-.sidebar {
-   width: 20%;
-   margin-left: 3.5%;
+
+.home-container {
+   display:  flex;
+   height: 100vh;
+}
+.main-item {
+   flex-grow: 1;
+  transition: margin-left 0.5s; /* Smooth transition for margin changes */
+  margin-left: 78px; 
 }
 
-.main-item {
-   width: 100%;
-   display: flex;
-   flex-direction: column;
-   flex: 1 0 80%;
+.main-item.shifted {
+   margin-left: 300px;
 }
 .top-bar{
    display: flex;

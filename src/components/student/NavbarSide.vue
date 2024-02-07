@@ -31,6 +31,7 @@
    methods: {
      toggleSidebar() {
        this.isSidebarOpen = !this.isSidebarOpen;
+       this.$emit('update:sidebarState', this.isSidebarOpen);
      },
      logout() {
        localStorage.removeItem('auth');
