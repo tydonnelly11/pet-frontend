@@ -1,4 +1,5 @@
 <template>
+    <SectionDropdown/>
     <h2> Add teams to section</h2>
     <div>
       <!-- Add Teams for Section: {{sectionName}} -->
@@ -64,11 +65,12 @@
 import axios from 'axios'
 import { storeUser } from '@/stores/store.js'
 import { storeSection } from '@/stores/storeSection.js'
+import SectionDropdown from '../../components/instructor/SectionDropdown.vue'
 
 export default {
    name: 'InstructorTeamEditView',
    components: {
-    
+    SectionDropdown
 
    },
    data() {
@@ -229,6 +231,7 @@ export default {
          this.getStudents()
         this.getTeams()
         }
+        
    },
 
    created() {

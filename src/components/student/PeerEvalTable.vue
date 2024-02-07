@@ -35,7 +35,7 @@
                </td>
                <td scope="col">
                   <input type="text" v-model="student.comment" />
-                  <input type="checkbox" v-model="student.isCommentPublic"/>
+                  <!-- <input type="checkbox" v-model="student.isCommentPublic"/> -->
                </td>
             </tr>
          </tbody>
@@ -91,7 +91,7 @@ export default {
                week: item.week,
                ratings: item.ratings,
                comment: item.comment,
-               isCommentPublic: item.isCommentPublic,
+               // isCommentPublic: item.isCommentPublic,
                
             })
             console.log(targetPayload)

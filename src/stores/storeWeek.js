@@ -3,7 +3,7 @@ import { reactive } from 'vue'
 export const storeWeek = reactive({
     currentWeek: null,
     currentWeekId : null,
-    selectedWeekId: null,
+    selectedWeekId: "",
     selectedWeek: null,
     weeksForSemester: [],
     calcCurrentWeek() {
@@ -22,8 +22,8 @@ export const storeWeek = reactive({
         })
         this.currentWeekId = currentWeek.id
         this.currentWeek = currentWeek
-        if(this.selectedWeekId == null){
-            this.selectedWeekId = currentWeek.id
+        if(this.selectedWeekId == ""){
+            this.selectedWeekId = String(currentWeek.id)
             this.selectedWeek = currentWeek
         }
 
@@ -66,8 +66,10 @@ export const storeWeek = reactive({
       updateSelectedWeek(week) {
          console.log(week)
          console.log("CHANGING WEEK")
-         this.selectedWeekId = week.id
+
+         this.selectedWeekId = String(week.id)
          this.selectedWeek = week
+         console.log(this.selectedWeekId)
        },
 
       convertWeekFormat(week) {

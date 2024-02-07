@@ -89,7 +89,6 @@ export default {
          const auth = localStorage.getItem('auth')
          axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/peerEvaluation/getPeerEvaluation/${storeUser.userID}/${storeWeek.selectedWeekId}`,
                {
-                  crossdomain: true,
                   headers: { 'Authorization': `Bearer ${auth}` }            
                }
             )
@@ -189,7 +188,6 @@ export default {
                evaluatorId: storeUser.userID,
                week: storeWeek.currentWeekId,
                comment: '',
-               isCommentPublic : false,
                ratings : _.cloneDeep(ratingList),
                
                
@@ -258,8 +256,12 @@ export default {
          })
          .then((response) => {
             console.log(response)
-            this.gradeForWeek = response.data.data.averageScore
-            this.publicComments = response.data.data.publicComments
+            this.gradeForWeek = response.data.data[0].averageScore
+            console.log("GRADE")
+            console.log(response.data.data)
+            console.log(response.data.data[0].averageScore)
+            console.log(this.gradeForWeek)
+            // this.publicComments = response.data.data[0].publicComments
          })
       },
       

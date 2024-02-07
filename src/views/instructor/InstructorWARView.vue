@@ -10,7 +10,8 @@
         <div class="grid-container">
             <div 
             v-for="team in teams" 
-            class="grid-item" 
+            :class="{'selected-item': selectedTeam && team.id === selectedTeam.id}"
+            :key="team.id"
             @click="getTeamWar(team)">
             <p>{{ team.name }}</p>
             
@@ -49,6 +50,7 @@ export default {
    methods: {
     getTeamWar(team){
         this.selectedTeam = team
+        this.hasSelectedTeam = false;
         const auth = localStorage.getItem('auth')
 
         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/war/get`,
@@ -101,7 +103,7 @@ export default {
 
     getTeams(){
         this.isLoading = true
-
+        this.teams = []
         const auth = localStorage.getItem('auth')
          const config = {
             headers: { 'Authorization': `Bearer ${auth}` }
@@ -117,6 +119,9 @@ export default {
         })
         .catch(error => {
             console.log(error)
+            if(error.response.data.code == 500){
+
+            }
         })
     },
       
@@ -167,5 +172,8 @@ export default {
   width: 100px;
   border: 1px solid #ccc;
   cursor: pointer;
+}
+.selected-item {
+  border: 4px solid blue; /* Adjust the color and border size as needed */
 }
 </style>

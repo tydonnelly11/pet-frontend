@@ -8,7 +8,7 @@
             :errorMessageProp="errorMessage"/>
 
       </div>
-      <WarTeamTable v-if="hasEntry && !isFutureWeek" :teamProp="team"></WarTeamTable>
+      <WarTeamTable v-if="hasEntry && (!isFutureWeek)" :teamProp="this.team"></WarTeamTable>
       <div v-if="isLoading">
          <h1>Loading...</h1>
       </div>
@@ -89,6 +89,7 @@ export default {
             this.isPastWeek = true
             this.isLoading = false
             this.isFutureWeek = false
+            this.hasEntry = true
          }
       },
       formatActivities(activities){
@@ -128,6 +129,10 @@ export default {
          this.setWARVisibility(storeWeek.currentWeekId, storeWeek.selectedWeekId)
     }
      
+   },
+   mounted() {
+      this.getTeamMatesWar();
+      this.setWARVisibility(storeWeek.currentWeekId, storeWeek.selectedWeekId)
    },
    created() {
       this.getTeamMatesWar();

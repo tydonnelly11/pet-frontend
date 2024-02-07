@@ -121,12 +121,14 @@ export default {
 
       getStudentWar() {
          const auth = localStorage.getItem('auth')
+         console.log("WEEK BEFORE REQ")
+         console.log(storeWeek.selectedWeekId)
          axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/war/get`,
          {
             headers: { 'Authorization': `Bearer ${auth}` },
             params: {
                teamId: storeUser.teamId,
-               weekId: storeWeek.selectedWeekId,
+               weekId: String(storeWeek.selectedWeekId),
             },
          },
          ).then(response => {
