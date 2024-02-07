@@ -62,11 +62,11 @@ import { storeSection } from '../stores/storeSection';
    methods: {
      toggleSidebar() {
        this.isSidebarOpen = !this.isSidebarOpen;
+       this.$emit('update:sidebarState', this.isSidebarOpen);
      },
      logout() {
       storeSection.resetSection();
        localStorage.removeItem('auth');
-        
         localStorage.removeItem('logginstatus');
         localStorage.removeItem('storeUser');
         localStorage.removeItem('storeSection');
@@ -191,5 +191,14 @@ import { storeSection } from '../stores/storeSection';
  .sidebar.open .link-text {
    display: initial;
  }
+ .content {
+  transition: margin-left 0.5s;
+  padding-left: 78px; /* Initial padding equal to the sidebar width */
+}
+
+.content.shifted {
+  padding-left: 250px; /* Padding equal to the expanded sidebar width */
+}
+
  </style>
  
