@@ -27,14 +27,14 @@
          <h1>Logging In...</h1>
       </div>
        <div class="signin">
-        <!--  
+         
          <div>
           <a href="#" @click="pushInstructor">Login bypass to make first Instructor</a>
          </div>
           <div>
           <a href="#" @click="pushInstructor2">Login bypass to get to students</a>
          </div>
-         -->
+        
       </div>
      </div>
    </div>
