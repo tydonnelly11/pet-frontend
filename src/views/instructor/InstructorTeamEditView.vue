@@ -11,12 +11,17 @@
       
 
    <button type="submit" @click="createTeams()">Create Team</button>
-   <div class="success" v-if="hasCreatedTeams">
-      <p>Teams Succesfully Created!</p>
-    </div>
-    <div class="loading" v-if="isProcessingTeamCreation">
-        Process being requested... DO NOT REFRESH
-    </div>
+   <div v-if="hasCreatedTeams" class="popup-overlay">
+      <div class="success">
+         <p>Team Successfully Created!</p>
+         <!-- Add a button or a way to close the overlay -->
+         <button @click="hasCreatedTeams = false">Close</button>
+      </div>
+      </div>
+    <div v-if="isProcessingTeamCreation" class="popup-overlay">
+         <img src="/img/loading-gif.gif">
+      </div>
+    
 
    </div>
 
@@ -24,8 +29,10 @@
             then select all the students you wish to add to that team 
             and click the save button.
         </h3>
-    <div v-if="this.isLoading" class="loading"><h1>Loading...</h1></div>
-    <div v-if="hasLoaded" class="page">
+        <div v-if="isLoading" class="popup-overlay">
+         <img src="/img/loading-gif.gif">
+      </div>    
+      <div v-if="hasLoaded" class="page">
         <!-- Teams Section -->
         
         <div class="teams">
@@ -35,7 +42,9 @@
                 <input type="radio" :value="team.id" v-model="updatedTeam.id" @change="selectTeam(team)">
                 <div class="team-students">
                     <div class="student" v-for="student in team.students" :key="student.id">
-                        {{ student.firstName }} {{ student.lastName }}
+                        <label>{{ student.firstName }} {{ student.lastName }}</label>
+                        <p @click="toggleStudentOnTeam(student, team)">Remove</p>
+
                     </div>
                 </div>
             </div>
@@ -44,7 +53,7 @@
         <!-- Students Section -->
         <div class="students">
             <h2>Students</h2>
-            <div class="student" v-for="student in students" :key="student.id">
+            <div v-for="student in students" :key="student.id">
                 <label>{{ student.firstName }} {{ student.lastName }}</label>
                 <input type="checkbox" :value="student.id" @change="toggleStudent(student)">
             </div>
@@ -52,12 +61,16 @@
 
     </div>
     <button type="submit" @click="saveTeam()">Save Team</button>
-    <div class="success" v-if="hasSavedTeam">
-      <p>Teams Succesfully Saved!</p>
-    </div>
-    <div class="loading" v-if="isProcessingTeamSave">
-        Process being requested... DO NOT REFRESH
-    </div>
+    <div v-if="hasSavedTeam" class="popup-overlay">
+      <div class="success">
+         <p>Team Successfully Saved!</p>
+         <!-- Add a button or a way to close the overlay -->
+         <button @click="hasSavedTeam = false">Close</button>
+      </div>
+      </div>
+    <div v-if="isProcessingTeamSave" class="popup-overlay">
+         <img src="/img/loading-gif.gif">
+      </div>
     <button type="submit" @click="clearSelection()">Clear Selection</button>
 </template>
 
@@ -98,12 +111,14 @@ export default {
    },
    methods: {
     getStudents(){
+        
         this.isLoading = true
         const auth = localStorage.getItem('auth')
          const config = {
             headers: { 'Authorization': `Bearer ${auth}` }
          };
-        axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getAllStudents/${storeSection.selectedSectionId}`,
+        
+        axios.get(`http://localhost:80/api/v1/section/getAllStudents/${storeSection.selectedSectionId}`,
         {  headers: { 'Authorization': `Bearer ${auth}` }}
         )
         .then(response => {
@@ -124,13 +139,24 @@ export default {
             console.log(error)
         })
     },
+    toggleStudentOnTeam(student, team){
+        const index = team.students.indexOf(student);
+        team.students.splice(index, 1);
+
+        // if(index = this.students.indexOf(student)){
+        //     this.students.push(student);
+        // }
+        this.students.push(student);
+        console.log(student);
+        console.log(team);
+    },
     getTeams(){
         this.isLoading = true
         const auth = localStorage.getItem('auth')
          const config = {
             headers: { 'Authorization': `Bearer ${auth}` }
          };
-        axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getAllTeams/${storeSection.selectedSectionId}`,
+        axios.get(`http://localhost:80/api/v1/section/getAllTeams/${storeSection.selectedSectionId}`,
         {  headers: { 'Authorization': `Bearer ${auth}` }}
         )
         .then(response => {
@@ -164,13 +190,14 @@ export default {
       },
    
    saveTeam(){
+    
     this.hasSavedTeam = false
     this.isProcessingTeamSave = true
     const auth = localStorage.getItem('auth')
          const config = {
             headers: { 'Authorization': `Bearer ${auth}` }
          };
-    axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/team/edit`,
+    axios.post(`http://localhost:80/api/v1/team/edit`,
     {
         id: this.updatedTeam.id,
         name: this.updatedTeam.name,
@@ -191,6 +218,10 @@ export default {
     })
    },
    createTeams() {
+    if(this.teamName == " " || this.teamName == ""){
+        alert("Please enter a team name")
+        return
+    }
     this.hasCreatedTeams = false
     this.isProcessingTeamCreation = true
     const auth = localStorage.getItem('auth')
@@ -198,7 +229,7 @@ export default {
             headers: { 'Authorization': `Bearer ${auth}` }
     };
 
-         axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/team/save`, {
+         axios.post(`http://localhost:80/api/v1/team/save`, {
             id : null,
             name: this.teamName,
             sectionId: storeSection.selectedSectionId,
@@ -265,6 +296,15 @@ export default {
     display: flex;
     flex-direction: column;
     flex : 0 0 50%;
+}
+.student{
+    display: flex;
+    flex-direction: row;
+    text-align: left;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 50%;
+
 }
 
 </style>

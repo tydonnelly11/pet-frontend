@@ -24,7 +24,7 @@
        <button @click="loginStudent" type="submit" class="submit">Login Student</button>
        <button @click="loginInstructor" type="submit" class="submit">Login Instructor</button>
        <div v-if="this.isLoading" class="loading">
-         <h1>Logging In...</h1>
+         <h1>Logging In...<img src="/img/loading-gif.gif"></h1>
       </div>
        <div class="signin">
 
@@ -72,7 +72,7 @@ loginInstructor()
    
    this.isLoading = true
    let creds = this.encodeCredentials(this.email, this.password)
-   axios.post('https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/login/instructor', {},{
+   axios.post('http://localhost:80/api/v1/auth/login/instructor', {},{
       headers: {
          'Authorization': `Basic ${creds}`
       }
@@ -98,6 +98,11 @@ loginInstructor()
       this.$router.push('/instructorhome')
    }, (error) => {
       console.log(error)
+      this.isLoading = false
+      if(error.response.status == 401)
+      {
+         alert("Invalid Credentials")
+      }
    })
    
 
@@ -107,7 +112,7 @@ loginStudent()
 {
    this.isLoading = true
    let creds = this.encodeCredentials(this.email, this.password)
-   axios.post('https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/login/student', {}, {
+   axios.post('http://localhost:80/api/v1/auth/login/student', {}, {
       headers: {
          Authorization: `Basic ${creds}`
       }
@@ -135,6 +140,11 @@ loginStudent()
    }, (error) => {
       console.log(error)
       this.isLoading = false
+      console.log(error.response.status)
+      if(error.response.status == 401)
+      {
+         alert("Invalid Credentials")
+      }
    })
 },
 pushInstructor()

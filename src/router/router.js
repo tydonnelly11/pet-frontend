@@ -7,7 +7,7 @@ import StudentPeerEvalView from '../views/student/StudentPeerEvalView.vue'
 import StudentTeamView from '../views/student/StudentTeamView.vue'
 import InstructorHomePage from '../views/instructor/InstructorHomePageView.vue'
 import InstructorPeerEvalView from '../views/instructor/InstructorPeerEvalView.vue'
-import InstructorTeamView from '../views/instructor/InstructorTeamView.vue';
+// import InstructorTeamView from '../views/instructor/InstructorTeamView.vue';
 import RegisterPageView from '../views/RegisterPageView.vue'
 import InstructorSectionView from '../views/instructor/InstructorSectionView.vue'
 import InstructorInviteStudentsView from '../views/instructor/InstructorInviteStudentsView.vue'
@@ -81,12 +81,12 @@ const routes = [
             name: 'InstructorWar',
             component: InstructorWARView,
          },
-         {
-            path: 'team/:teamId', // Dynamic segment for team ID
-            name: 'InstructorTeam',
-            component: InstructorTeamView,
-            props: true // This allows you to pass the teamId as a prop to the component
-         },
+         // {
+         //    path: 'team/:teamId', // Dynamic segment for team ID
+         //    name: 'InstructorTeam',
+         //    component: InstructorTeamView,
+         //    props: true // This allows you to pass the teamId as a prop to the component
+         // },
          {
             path: 'section',
             name: 'InstructorSection',

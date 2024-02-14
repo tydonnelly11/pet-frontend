@@ -62,9 +62,16 @@
             </div>
         </div>
       <button type="submit" @click="submitSection">Create Section</button>
-      <div class="success" v-if="hasCreatedSection">
-         <p>Section Succesfully Created!</p>
-
+      <div v-if="isLoading" class="popup-overlay">
+         <img src="/img/loading-gif.gif">
+      </div>
+      
+      <div v-if="hasCreatedSection" class="popup-overlay">
+      <div class="success">
+         <p>Section Successfully Created!</p>
+         <!-- Add a button or a way to close the overlay -->
+         <button @click="hasCreatedSection = false">Close</button>
+      </div>
       </div>
    </div>
    
@@ -93,6 +100,7 @@ export default {
          criteriaName: "",
          criteriaDesc: "",
          sectionId: "",
+         isLoading: false,
          hasCreatedSection: false,
          hasSubmittedInstructor: false,
          hasCreatedTeams: false,
@@ -126,7 +134,7 @@ export default {
          this.hasError = true
       },
       registerInstructor() {
-         axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/register/instructor`, {
+         axios.post(`http://localhost:80/api/v1/auth/register/instructor`, {
                firstName: this.firstName,
                middleName: this.middleName,
                lastName: this.lastName,
@@ -148,6 +156,7 @@ export default {
             })
       },
       submitSection() {
+         this.isLoading = true
          const rubric = {
             criteria : this.criteria
             
@@ -160,7 +169,7 @@ export default {
          }
          const auth = localStorage.getItem('auth')
          
-         axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/save`, {
+         axios.post(`http://localhost:80/api/v1/section/save`, {
             id : null,
             name: this.sectionName,
             instructorId: storeUser.userID,
@@ -173,6 +182,7 @@ export default {
                console.log(res.data.data)
                this.sectionId = res.data.data
                this.hasCreatedSection = true
+               this.isLoading = false
                var section = {
                   name: this.sectionName,
                   id: this.sectionId
@@ -190,7 +200,7 @@ export default {
          const config = {
             headers: { 'Authorization': `Bearer ${auth}` }
          };
-         axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/team/save`, {
+         axios.post(`http://localhost:80/api/v1/team/save`, {
             id : null,
             name: this.teamName,
             sectionId: this.sectionId,
@@ -252,6 +262,31 @@ export default {
   color: #333; 
   margin-bottom: 15px; 
   box-sizing: border-box; 
+}
+
+.overlay {
+  position: fixed; /* or absolute */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  z-index: 1000; /* Ensure it's above other content */
+}
+
+/* Style for the success message box */
+.success {
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 400px;
+  width: 80%; /* Responsive width */
+  z-index: 1001; /* Above the overlay */
 }
 
 .input-field input::placeholder {
