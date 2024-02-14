@@ -27,13 +27,17 @@
          <h1>Logging In...</h1>
       </div>
        <div class="signin">
-  
+
          <div>
+
+         
           <a href="#" @click="pushInstructor">Login bypass to make first Instructor</a>
          </div>
           <div>
           <a href="#" @click="pushInstructor2">Login bypass to get to students</a>
+
          </div>
+
       </div>
      </div>
    </div>
@@ -87,7 +91,8 @@ loginInstructor()
       storeSection.setSections(response.data.data.userInfo.sections)
 
       
-      storeUser.setName(response.data.data.userInfo.firstName,response.data.data.userInfo.lastName)
+      storeUser.setName(response.data.data.userInfo.firstName, response.data.data.userInfo.lastName)
+      console.log(response.data.data.userInfo.firstName)
       localStorage.setItem('storeUser', JSON.stringify(storeUser));
       localStorage.setItem('storeSection', JSON.stringify(storeSection));
       this.$router.push('/instructorhome')
@@ -113,7 +118,7 @@ loginStudent()
       storeUser.updateLoginStatus(response.data.data.userInfo.id, true)
       
       storeUser.setTeamId(response.data.data.userInfo.teamId)
-      storeUser.setName(response.data.data.firstName,response.data.data.userInfo.lastName)
+      storeUser.setName(response.data.data.userInfo.firstName,response.data.data.userInfo.lastName)
       storeUser.setSectionId(response.data.data.userInfo.sectionId)
       localStorage.setItem('auth', response.data.data.token);
       localStorage.setItem('logginstatus', true)

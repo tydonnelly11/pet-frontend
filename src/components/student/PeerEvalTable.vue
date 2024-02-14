@@ -84,6 +84,9 @@ export default {
          for (const item of this.peerEval) {
             console.log(item)
             console.log(storeUser.userId)
+            if(item.comment == ""){
+               item.comment = "None"
+            }
             targetPayload.push({
                evaluatorId: item.evaluatorId,
                evaluateeId: item.evaluateeId,

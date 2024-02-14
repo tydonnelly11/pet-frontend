@@ -17,6 +17,16 @@ export const storeSection = reactive({
     setSelectedSection(section) {
         this.selectedSectionId = section.id;
         this.selectedSectionName = section.name;
+    },
+    addSection(section) {
+        if(this.sections.length == 0){
+            this.selectedSectionId = section.id;
+            this.selectedSectionName = section.name;
+            this.sections.push(section);
+        }
+        else{
+            this.sections.push(section);
+        }
     }, 
     resetSection(){
         this.sections = [];

@@ -59,6 +59,8 @@ export default {
             name : storeUser.userFullName,
             tasks : []
          },
+         tasksToBeSubmitted : [],
+
          editTask: null,
          isEditTaskTrue: false,
          editTaskIndex: 0,
@@ -72,20 +74,20 @@ export default {
    },
    methods: {
       submitWarEntry() {
-         var listOfActivities = []
-         for(const task of this.studentTasks.tasks){
-            listOfActivities.push({
-               weekId: storeWeek.currentWeekId,
-               studentId : storeUser.userID,
-               taskCategories : task.taskCategories,
-               plannedTask: task.plannedTask,
-               description: task.description,
-               plannedHours: task.plannedHours,
-               actualHours: task.actualHours,
-               status: task.status,
-               comments : task.comments,
-            })
-         }
+         // var listOfActivities = []
+         // for(const task of this.tasksToBeSubmitted){
+         //    listOfActivities.push({
+         //       weekId: storeWeek.currentWeekId,
+         //       studentId : storeUser.userID,
+         //       taskCategories : task.taskCategories,
+         //       plannedTask: task.plannedTask,
+         //       description: task.description,
+         //       plannedHours: task.plannedHours,
+         //       actualHours: task.actualHours,
+         //       status: task.status,
+         //       comments : task.comments,
+         //    })
+         // }
          const auth = localStorage.getItem('auth')
          
          axios.post('https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/activity/submit', this.newTasks,
@@ -93,11 +95,13 @@ export default {
             headers: { 'Authorization': `Bearer ${auth}` }
          }).then(response => {
             console.log(response)
+
          }).catch(error => {
             console.log(error)
          })
          // Send the student's war to the database
          this.hasSubmited = true
+         this.newTasks = []
       },
       addTask(task) {
          
@@ -113,6 +117,7 @@ export default {
       },
       editTaskComplete(task) {
          this.studentTasks.tasks[this.editTaskIndex] = task
+         this.newTasks.push(task);
          this.isEditTaskTrue = false
       },
       deleteTask(task, index) {
@@ -120,7 +125,9 @@ export default {
       },
 
       getStudentWar() {
+         this.hasSubmited = false
          const auth = localStorage.getItem('auth')
+         this.studentTasks.tasks = []
          console.log("WEEK BEFORE REQ")
          console.log(storeWeek.selectedWeekId)
          axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/war/get`,

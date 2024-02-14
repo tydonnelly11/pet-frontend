@@ -9,6 +9,9 @@
 
       </div>
       <WarTeamTable v-if="hasEntry && (!isFutureWeek)" :teamProp="this.team"></WarTeamTable>
+      <div v-if="!hasEntry && (!isFutureWeek)">
+         <p>Team mates have not filled out any activities for {{ storeWeek.selectedWeek.start }} to {{ storeWeek.selectedWeek.end }}</p>
+      </div>
       <div v-if="isLoading">
          <h1>Loading...</h1>
       </div>
@@ -63,10 +66,16 @@ export default {
             this.formatActivities(response.data.data.activities)
          }).catch(error => {
             this.isLoading = false
-            console.log(error)
-            if(error.response.data.status == 500){
-               this.formatActivities([])
-               this.hasEntry = true
+            console.log(error.response.data.code)
+            if(error.response.data.code == 500){
+               // this.formatActivities([])
+               this.hasEntry = false
+            }
+            else if(error.response.data.code == 404){
+               
+               this.hasEntry = false
+
+
             }
          })
          this.setWARVisibility(storeWeek.currentWeekId, storeWeek.selectedWeekId)
