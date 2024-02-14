@@ -24,10 +24,10 @@
             <input type="password" id="confirmPassword" v-model="password1" placeholder="Re-Enter your Password"/>
         </div>
           <button @click="registerStudent">Register</button>
-          <div class="loading" v-if="isLoading">
+          <div class="loading" v-if="this.isLoading">
             <p>Request being processed...DO NOT REFRESH</p>
           </div>
-          <div class="success" v-if="hasRegistered">
+          <div class="success" v-if="this.hasRegistered">
             <p>Succesfully Registered</p>
             <button @click="goToLogin">Go to Login</button>
           </div>
