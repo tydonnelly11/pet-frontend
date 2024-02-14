@@ -81,7 +81,7 @@ export default {
             
         },
         
-        registerStrudent(){
+        registerStudent(){
             if(this.password1 != this.password2){
                 alert("Passwords do not match")
                 return
