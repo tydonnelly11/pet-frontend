@@ -1,31 +1,29 @@
 <template>
-   <div class="home-container">
-      <NavbarSide @update:sidebarState="toggleSidebar" />
-      <div class="main-item" :class="{ shifted: isSidebarOpen }">
-         <div class="top-bar">
-            <WeekDropdown
-               :displayedWeeks="storeWeek.weeksForSemester"
-               :selectWeek="storeWeek.currentWeekId"
-               :currentWeekProp="storeWeek.currentWeek"
-               :style="'width: 100%;'"
-            >
-            </WeekDropdown>
-            <div class="profile">
-               <p>{{ storeUser.userFullName }}</p>
-            </div>
-         </div>
-         <router-view></router-view>
+<div class="home-container">
+   <NavbarSide @update:sidebarState="toggleSidebar"/> 
+   <div class="main-item" :class="{ 'shifted': isSidebarOpen}">
+      <div class="top-bar">
+         <WeekDropdown :displayedWeeks="storeWeek.weeksForSemester" 
+      :selectWeek="storeWeek.currentWeekId" 
+      :currentWeekProp="storeWeek.currentWeek"
+      :style="'width: 100%;'">
+      </WeekDropdown>
+      <div class="profile">
+         <p>{{ storeUser.userFullName }}</p>
       </div>
+      </div>
+      <router-view></router-view>
+   </div>
    </div>
 </template>
 
 <script>
 import NavbarSide from '@/components/student/NavbarSide.vue'
-import WeekDropdown from '@/components/WeekDropdown.vue'
-import { storeWeek } from '@/stores/storeWeek.js'
-import { storeTeam } from '@/stores/storeTeam.js'
-import { storeUser } from '@/stores/store.js'
-import axios from 'axios'
+import WeekDropdown from '@/components/WeekDropdown.vue';
+import { storeWeek } from '@/stores/storeWeek.js';
+import { storeTeam } from '@/stores/storeTeam.js';
+import { storeUser } from '@/stores/store.js';
+import axios from 'axios';
 export default {
    name: 'StudentHomePageView',
    components: {
@@ -38,64 +36,65 @@ export default {
          storeTeam,
          storeUser,
          isSidebarOpen: false,
-      }
+      };
    },
    methods: {
       toggleSidebar(isOpen) {
-         this.isSidebarOpen = isOpen
+         this.isSidebarOpen = isOpen;
       },
       getTeamMembers() {
          const auth = localStorage.getItem('auth')
 
-         axios
-            .get(
-               `http://localhost:80/api/v1/team/getStudents/${storeUser.teamId}`,
-               {
-                  headers: { Authorization: `Bearer ${auth}` },
-               }
-            )
-            .then((response) => {
-               console.log(response.data.data)
-               storeTeam.setTeamMembers(response.data.data)
-               console.log(storeTeam.teamMembers)
-            })
-            .catch((error) => {
-               console.log(error)
-            })
-      },
+         axios.get(`http://localhost:80/api/v1/team/getStudents/${storeUser.teamId}`,
+         {
+             headers: { 'Authorization': `Bearer ${auth}` },
+         }
+         )
+         .then((response) => {
+            console.log(response.data.data)
+            storeTeam.setTeamMembers(response.data.data);
+            console.log(storeTeam.teamMembers);
+         })
+         .catch((error) => {
+            console.log(error);
+         })
+      }
    },
-   computed: {},
+   computed: {
+      
+   },
    created() {
-      storeWeek.calcCurrentWeek()
-      this.getTeamMembers()
+      storeWeek.calcCurrentWeek();
+      this.getTeamMembers();
       console.log(storeWeek.currentWeek)
       console.log(storeWeek.currentWeekId)
       console.log(storeWeek.weeksForSemester)
-   },
+   }
 }
 </script>
 
 <style scoped>
+
 .home-container {
-   display: flex;
+   display:  flex;
    height: 100vh;
 }
 .main-item {
    flex-grow: 1;
-   transition: margin-left 0.5s; /* Smooth transition for margin changes */
-   margin-left: 78px;
+  transition: margin-left 0.5s; /* Smooth transition for margin changes */
+  margin-left: 78px; 
 }
 
 .main-item.shifted {
    margin-left: 300px;
 }
-.top-bar {
+.top-bar{
    display: flex;
    flex-direction: row;
    position: relative;
    right: 2.5%;
 }
-.profile {
+.profile{
    position: relative;
    right: 2.5%;
    width: 20%;

@@ -9,6 +9,7 @@
 </template>
 
 <script>
+
 import WarList from './WarList.vue'
 export default {
    name: 'WarTeamTable',
@@ -19,13 +20,18 @@ export default {
       teamProp: Array,
    },
    data() {
-      return {}
+      return {
+        
+        
+      }
    },
-   methods: {},
+   methods: {
+      
+   },
    computed: {},
    created() {
-      console.log('teamProp')
-      console.log(this.teamProp)
+      console.log("teamProp")
+      console.log(this.teamProp)   
    },
 }
 </script>

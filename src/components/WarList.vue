@@ -2,7 +2,7 @@
    <div class="WarList-container">
       <!--Moved task addition to its own component AddWarTask-->
       <!-- Task List Table -->
-      <!--Replace with teammates name-->
+       <!--Replace with teammates name-->
       <table v-if="hasTaskForWeek" class="table">
          <!-- Table headers -->
          <thead>
@@ -34,15 +34,12 @@
                   <button @click="$emit('editTask', task, index)">Edit</button>
                </div>
             </tr>
+            
          </tbody>
       </table>
       <div v-else>
-         <p>
-            No Tasks for {{ studentTasks.name }} for
-            {{ storeWeek.selectedWeek.start }} to
-            {{ storeWeek.selectedWeek.end }}
-         </p>
-      </div>
+               <p>No Tasks for {{ studentTasks.name }} for {{ storeWeek.selectedWeek.start}} to {{ storeWeek.selectedWeek.end }}</p>
+            </div>
    </div>
 </template>
 
@@ -60,6 +57,7 @@ export default {
    props: {
       studentTasks: Object,
       isTeamWar: Boolean,
+      
    },
    components: {
       WeekDropdown,
@@ -67,7 +65,10 @@ export default {
    data() {
       return {
          // hasTasksForWeek: true,
-         storeWeek,
+         storeWeek
+         
+         
+        
       }
    },
    emits: ['deleteTask', 'editTask'],
@@ -75,24 +76,23 @@ export default {
       toggleFormVisibility() {
          const tasks = this.studentTasks.tasks
          console.log(tasks)
-         if (tasks.length == 0) {
+         if(tasks.length == 0){
             this.hasTasksForWeek = false
-         } else {
+         }
+         else{
             this.hasTasksForWeek = true
          }
+         
       },
    },
    computed: {
       hasTaskForWeek() {
          // Make sure studentTasks and studentTasks.tasks are not null or undefined
-         return (
-            this.studentTasks &&
-            this.studentTasks.tasks &&
-            this.studentTasks.tasks.length > 0
-         )
-      },
+         return this.studentTasks && this.studentTasks.tasks && this.studentTasks.tasks.length > 0;
+      }
    },
    created() {
+
       console.log(this.studentTasks)
       // this.toggleFormVisibility()
       // console.log(this.studentTasks.tasks)

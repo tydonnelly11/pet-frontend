@@ -8,7 +8,8 @@ export default defineConfig({
    resolve: {
       alias: {
          '@': '/src',
-         baseurl: 'http://localhost:80/',
+         'baseurl':'http://localhost:80/'
+         
       },
       test: {
          globals: true,

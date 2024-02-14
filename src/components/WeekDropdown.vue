@@ -33,7 +33,9 @@ import { ref, toRaw } from 'vue'
 import { storeWeek } from '../stores/storeWeek.js'
 export default {
    name: 'WeekDropdown',
-   props: {},
+   props: {
+      
+   },
    data() {
       return {
          storeWeek,
@@ -47,15 +49,19 @@ export default {
          console.log(this.displayedWeeks)
          this.hasSelectedWeek = true
       },
-
+      
       convertWeekFormat(week) {
          var weekStart = week.start
          var weekEnd = week.end
          return weekStart + ' to ' + weekEnd
       },
    },
-   computed: {},
-   mounted() {},
+   computed: {
+      
+   },
+   mounted() {
+     
+   },
 
    //Note for future self while doing visual only, so i think I
    //should try to emit event to warList which I think will handle what week is
@@ -64,4 +70,5 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>

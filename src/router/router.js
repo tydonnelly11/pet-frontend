@@ -17,11 +17,13 @@ import WaitingForTeam from '@/components/student/WaitingForTeam.vue'
 import InstructorRubricView from '../views/instructor/InstructorRubricView.vue'
 import InstructorWARView from '../views/instructor/InstructorWARView.vue'
 
+
 const routes = [
    {
       path: '/', //This is the parent route
       name: 'Login',
       component: LoginPageView,
+      
    },
    {
       ///register/student?token=:token
@@ -29,12 +31,13 @@ const routes = [
       name: 'Register',
       component: RegisterPageView,
       //http://localhost:5173/auth/register/student?token=1
+   
    },
    {
       path: '/waitingroom',
       component: WaitingForTeam,
    },
-
+   
    {
       path: '/studenthome', //Will need to add id param to this route
       component: StudentHomePageView,
@@ -71,6 +74,7 @@ const routes = [
             path: 'rubric',
             name: 'InstructorRubric',
             component: InstructorRubricView,
+
          },
          {
             path: 'war',
@@ -87,6 +91,7 @@ const routes = [
             path: 'section',
             name: 'InstructorSection',
             component: InstructorSectionView,
+
          },
          {
             path: 'invite',
@@ -97,7 +102,7 @@ const routes = [
             path: 'editteams',
             name: 'InstructorEditTeams',
             component: InstructorTeamEditView,
-         },
+         }
          // The Instructor WAR is going to be added later
       ],
    },
@@ -114,25 +119,25 @@ const router = createRouter({
    routes,
 })
 
-router.beforeEach(async (to, from) => {
+  router.beforeEach(async (to, from) => {
    const loggedIn = localStorage.getItem('logginstatus')
    if (!loggedIn) {
       // Allow access to the login page
       if (to.path === '/') {
-         return true
+          return true;
       }
 
       // Allow access to the registration page (adjust the condition to match your register route pattern)
       if (to.path.startsWith('/auth/register/student/token=')) {
-         return true
+          return true;
       }
 
       // For all other routes, redirect to the login page
-      return { name: 'Login' }
-   }
+      return {name: 'Login'};
+  }
 
-   // If logged in, continue as normal
-   return true
+  // If logged in, continue as normal
+  return true;
 })
 
 export default router

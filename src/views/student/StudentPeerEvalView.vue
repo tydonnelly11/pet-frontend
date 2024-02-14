@@ -1,12 +1,9 @@
 <template>
    <div class="student-pe-container">
+      
       <!--@select-week is the emit from child component with week as first arg of the func-->
       <div v-if="this.isPastWeek" class="display-grade">
-         <h1>
-            Grade for {{ storeWeek.selectedWeek.start }} to
-            {{ storeWeek.selectedWeek.end }} : {{ this.gradeForWeek }} /
-            {{ this.totalScore }}
-         </h1>
+         <h1>Grade for {{ storeWeek.selectedWeek.start }} to {{ storeWeek.selectedWeek.end }} : {{ this.gradeForWeek }} / {{ this.totalScore }}</h1>
          <div v-for="(commentValue, commentKey) in comments">
             <h2>Comment from {{ commentKey }}</h2>
             <p>{{ commentValue }}</p>
@@ -14,17 +11,18 @@
       </div>
 
       <div v-if="isLoading" class="popup-overlay">
-         <img src="/img/loading-gif.gif" />
+         <img src="/img/loading-gif.gif">
       </div>
       <PeerEvalTable
-         v-if="!this.isFutureWeek & this.hasEntry"
+         v-if="(!this.isFutureWeek) & this.hasEntry"
          :isPastWeek="isPastWeek"
          :peerEvalProp="this.peerEvalEntriesForSelectedWeek"
          :rubricProp="this.rubric"
+
       />
       <div
          class="week-not-started"
-         v-else-if="!this.errorFlag & !this.hasEntry & this.isFutureWeek"
+         v-else-if="(!this.errorFlag & !this.hasEntry) & this.isFutureWeek"
       >
          It is not the week yet for this peer eval, check back during
          {{ storeWeek.selectedWeek.start }} to {{ storeWeek.selectedWeek.end }}.
@@ -87,25 +85,22 @@ export default {
       async getPeerEvalEntriesForWeek() {
          this.isLoading = true
          const auth = localStorage.getItem('auth')
-         axios
-            .get(
-               `http://localhost:80/api/v1/peerEvaluation/getPeerEvaluation/${storeUser.userID}/${storeWeek.selectedWeekId}`,
+         axios.get(`http://localhost:80/api/v1/peerEvaluation/getPeerEvaluation/${storeUser.userID}/${storeWeek.selectedWeekId}`,
                {
-                  headers: { Authorization: `Bearer ${auth}` },
+                  headers: { 'Authorization': `Bearer ${auth}` }            
                }
             )
             .then((response) => {
+              
                if (response.data.code == 200) {
                   this.errorFlag = false
                   this.hasEntry = true
                   const peerEvalEntriesForWeek = response.data.data
-
+                  
                   console.log(peerEvalEntriesForWeek)
-                  for (const entry of peerEvalEntriesForWeek) {
-                     for (const rating of entry.ratings) {
-                        rating.criterion = this.rubric.find(
-                           (criteria) => criteria.id == rating.criteriaId
-                        )
+                  for(const entry of peerEvalEntriesForWeek){
+                     for(const rating of entry.ratings){
+                        rating.criterion = this.rubric.find((criteria) => criteria.id == rating.criteriaId)
                      }
                   }
 
@@ -133,44 +128,56 @@ export default {
             })
             .catch((error) => {
                console.log(error.response)
-               if (error.response.data != null) {
+               if(error.response.data != null)
+               {
                   console.log(error.response.data.code)
                   console.log(error.response.data.code == 409)
-                  if (error.response.data.code == 401) {
+                  if(error.response.data.code == 401){
                      this.hasEntry = false // No existing eval
                      // this.responseFlag = error.response.data.code //For error comp
                      this.errorFlag = true //Shows error
                      this.responseFlag = 401
-                     this.errorMessage =
-                        'Unauthorized Access, Please log in again' //FOr error comp
+                     this.errorMessage = "Unauthorized Access, Please log in again"//FOr error comp
                      this.isLoading = false
-                  } else if (error.response.data.code == 409) {
+
+
+                     }
+                  else if(error.response.data.code == 409){
                      this.errorFlag = false
                      this.hasEntry = false
 
                      this.createNewPeerEvalEntry()
                      this.isLoading = false // Make this function create an empty peer eval entry for the week then pass to table for completion
                   }
-               } else {
+                  
+               }
+               
+               else{
                   this.hasEntry = false // No existing eval
                   // this.responseFlag = error.response.data.code //For error comp
                   this.errorFlag = true //Shows error
                   // this.errorMessage = error.response.data.message//FOr error comp
                }
-            })
+            }
+            )
       },
-
+      
+      
       createNewPeerEvalEntry() {
+         
          this.peerEvalEntriesForSelectedWeek = []
          var ratingList = []
          for (const criteria of this.rubric) {
             const criterion = _.cloneDeep(criteria)
             console.log(criterion)
             const rating = {
-               score: criterion.maxScore,
+               score : criterion.maxScore,
                criterion,
             }
             ratingList.push(rating)
+
+
+            
          }
          for (const student of storeTeam.teamMembers) {
             this.peerEvalEntriesForSelectedWeek.push({
@@ -180,7 +187,9 @@ export default {
                evaluatorId: storeUser.userID,
                week: storeWeek.currentWeekId,
                comment: '',
-               ratings: _.cloneDeep(ratingList),
+               ratings : _.cloneDeep(ratingList),
+               
+               
             })
          }
          const ownStudent = {
@@ -190,15 +199,12 @@ export default {
             evaluatorId: storeUser.userID,
             week: storeWeek.currentWeekId,
             comment: '',
-            isCommentPublic: false,
-            ratings: _.cloneDeep(ratingList),
+            isCommentPublic : false,
+            ratings : _.cloneDeep(ratingList),
          }
          this.peerEvalEntriesForSelectedWeek.push(ownStudent)
 
-         this.setPeerEvalVisibility(
-            storeWeek.currentWeekId,
-            storeWeek.selectedWeekId
-         )
+         this.setPeerEvalVisibility(storeWeek.currentWeekId, storeWeek.selectedWeekId)
          console.log(this.peerEvalEntriesForSelectedWeek)
       },
       setPeerEvalVisibility(currentWeekId, selectedWeekId) {
@@ -223,59 +229,57 @@ export default {
       getRubric() {
          const auth = localStorage.getItem('auth')
 
-         axios
-            .get(
-               `http://localhost:80/api/v1/section/getRubric/${storeUser.sectionId}`,
-               {
-                  headers: { Authorization: `Bearer ${auth}` },
-               }
-            )
-            .then((response) => {
-               console.log('RUBRIC')
-
-               this.rubric = response.data.data.criteria
-               console.log(this.rubric)
-               for (const criteria of this.rubric) {
-                  this.totalScore += criteria.maxScore
-               }
-               this.getPeerEvalEntriesForWeek()
-            })
+         axios.get(`http://localhost:80/api/v1/section/getRubric/${storeUser.sectionId}`, {
+            headers: { 'Authorization': `Bearer ${auth}` }
+         })
+         .then((response) => {
+            console.log('RUBRIC')
+            
+            this.rubric = response.data.data.criteria
+            console.log(this.rubric)
+            for(const criteria of this.rubric){
+               this.totalScore += criteria.maxScore
+            }
+            this.getPeerEvalEntriesForWeek()
+         })
       },
-      getGradeAndCommentsForPastWeek() {
+      getGradeAndCommentsForPastWeek(){      
          const auth = localStorage.getItem('auth')
-         axios
-            .get(
-               `http://localhost:80/api/v1/peerEvaluation/getEvaluationReport`,
-               {
-                  headers: { Authorization: `Bearer ${auth}` },
-                  params: {
-                     week: storeWeek.selectedWeekId,
-                     studentId: storeUser.userID,
-                  },
-               }
-            )
-            .then((response) => {
-               console.log(response)
-               this.gradeForWeek = response.data.data[0].averageScore
-               console.log('GRADE')
-               console.log(response.data.data)
-               console.log(response.data.data[0].averageScore)
-               console.log(this.gradeForWeek)
-               // this.publicComments = response.data.data[0].publicComments
-            })
+         axios.get(`http://localhost:80/api/v1/peerEvaluation/getEvaluationReport`, {
+            headers: { 'Authorization': `Bearer ${auth}` },
+            params: {
+               week: storeWeek.selectedWeekId,
+               studentId: storeUser.userID,
+            }
+         })
+         .then((response) => {
+            console.log(response)
+            this.gradeForWeek = response.data.data[0].averageScore
+            console.log("GRADE")
+            console.log(response.data.data)
+            console.log(response.data.data[0].averageScore)
+            console.log(this.gradeForWeek)
+            // this.publicComments = response.data.data[0].publicComments
+         })
       },
+      
+      
    },
    watch: {
-      'storeWeek.selectedWeekId': function (newVal, oldVal) {
-         console.log(`currentWeekId changed from ${oldVal} to ${newVal}`)
+      'storeWeek.selectedWeekId': function(newVal, oldVal) {
+         console.log(`currentWeekId changed from ${oldVal} to ${newVal}`);
          // Call your function here
-         this.getPeerEvalEntriesForWeek()
-      },
+         this.getPeerEvalEntriesForWeek();
+    }
+     
    },
 
-   computed: {},
+   computed: {
+      
+   },
    created() {
-      this.getRubric()
+     this.getRubric()
+     
    },
 }
 </script>

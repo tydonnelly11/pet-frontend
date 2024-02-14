@@ -18,30 +18,20 @@
                   {{ student.evaluateeFirstName + student.evaluateeLastName }}
                </td>
                <td scope="col" v-for="item in student.ratings">
-                  <p type="number" min="0">{{ item.score }}</p>
+                  <p type="number" min="0" >{{ item.score }}</p>
                </td>
                <td scope="col">
-                  <p
-                     v-for="(
-                        commentValue, commentKey
-                     ) in student.publicComments"
-                     type="text"
-                  >
-                     {{ commentKey }} {{ commentValue }}
-                  </p>
+                  <p v-for="(commentValue, commentKey) in student.publicComments" type="text">{{commentKey}} {{ commentValue }}</p>
                </td>
+
+               
             </tr>
             <tr v-else v-for="student in this.peerEval">
                <td scope="col">
                   {{ student.evaluateeFirstName + student.evaluateeLastName }}
                </td>
                <td scope="col" v-for="item in student.ratings">
-                  <input
-                     type="number"
-                     v-model="item.score"
-                     min="0"
-                     :max="item.criterion.maxScore"
-                  />
+                  <input type="number" v-model="item.score" min="0" :max='item.criterion.maxScore' />
                </td>
                <td scope="col">
                   <input type="text" v-model="student.comment" />
@@ -50,13 +40,13 @@
             </tr>
          </tbody>
       </table>
-      <button v-if="!this.isPastWeek" type="submit">Submit</button>
+      <button v-if="!(this.isPastWeek)" type="submit">Submit</button>
    </form>
-
+   
    <div v-if="this.submissionStatus == 200" class="popup-overlay">
       <div class="success">
-         <p>Submitted!</p>
-         <button @click="this.submissionStatus = 100">Close</button>
+      <p>Submitted!</p>
+      <button @click="this.submissionStatus = 100">Close</button>
       </div>
    </div>
 </template>
@@ -81,6 +71,7 @@ export default {
          peerEval: this.peerEvalProp,
          submissionStatus: 0,
          storeUser,
+         
       }
    },
    watch: {
@@ -97,17 +88,18 @@ export default {
          for (const item of this.peerEval) {
             console.log(item)
             console.log(storeUser.userId)
-            if (item.comment == '') {
-               item.comment = 'None'
+            if(item.comment == ""){
+               item.comment = "None"
             }
             targetPayload.push({
                evaluatorId: item.evaluatorId,
                evaluateeId: item.evaluateeId,
-
+               
                week: item.week,
                ratings: item.ratings,
                comment: item.comment,
                // isCommentPublic: item.isCommentPublic,
+               
             })
             console.log(targetPayload)
          }
@@ -124,13 +116,9 @@ export default {
          const auth = localStorage.getItem('auth')
 
          axios
-            .post(
-               'http://localhost:80/api/v1/peerEvaluation/submitPeerEvaluation',
-               targetPayload,
-               {
-                  headers: { Authorization: `Bearer ${auth}` },
-               }
-            )
+            .post('http://localhost:80/api/v1/peerEvaluation/submitPeerEvaluation', targetPayload, {
+               headers: { 'Authorization': `Bearer ${auth}` },
+            })
             .then((response) => {
                console.log(response)
                this.submissionStatus = response.data.code
@@ -148,10 +136,12 @@ export default {
       //       this.rubric = response.data.data.criteria
       //    })
       // },
+      
    },
-
+   
    created() {
       // this.rubric = this.getRubric()
+      
    },
 }
 </script>
