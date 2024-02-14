@@ -244,32 +244,37 @@ export default {
 }
 .input-field input {
   width: 100%;
-  padding: 10px 0;
-  background: transparent;
-  border: none;
-  border-bottom: 2px solid #000; 
-  font-size: 16px; 
-  color: #40414a; 
-  transition: border-color 0.2s; 
+  padding: 15px;
+  background: #E4E9F7;
+  border: 1px solid #000; 
+  border-radius: 4px; 
+  font-size: 14px; 
+  color: #333; 
+  margin-bottom: 15px; 
+  box-sizing: border-box; 
 }
 
-.input-field input:focus {
-  outline: none;
-  border-bottom: 2px solid #743ae1;
+.input-field input::placeholder {
+  color: #aaa; 
 }
-
 
 button {
-  background: #5d5076;
+  background: #743ae1; 
   color: white;
   border: none;
-  padding: 10px 20px;
+  padding: 14px 20px;
   cursor: pointer;
+  border-radius: 4px; 
+  text-transform: uppercase; 
+  font-weight: bold;
   transition: background-color 0.3s;
+  width: 100%; 
+  margin-top: 20px; 
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2); 
 }
 
 button:hover {
-  background: #743ae1; 
+  background: #11101D; 
 }
 
 </style>

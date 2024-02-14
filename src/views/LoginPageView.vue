@@ -27,14 +27,17 @@
          <h1>Logging In...</h1>
       </div>
        <div class="signin">
+
+         <div>
+
          
-         <!-- <div>
           <a href="#" @click="pushInstructor">Login bypass to make first Instructor</a>
          </div>
           <div>
           <a href="#" @click="pushInstructor2">Login bypass to get to students</a>
-         </div> -->
-        
+
+         </div>
+
       </div>
      </div>
    </div>
@@ -166,6 +169,7 @@ pushInstructor2()
 *{
 font-family: 'Poppins', sans-serif;
 }
+
 .full-page {
 min-height: 100vh; 
 width: 100vw; 
@@ -175,12 +179,14 @@ justify-content: center;
 align-items: center;
 padding: 20px; 
 }
+
 .main{
 display: flex;
 justify-content: center;
 align-items: center;
 min-height: 100vh;
 }
+
 .side-image{
 background-image: url("/img/logo.png");
 background-position: center;
@@ -190,6 +196,7 @@ border-radius: 10px 0 0 10px;
 position: relative;
 max-width: 300px;
 }
+
 .row{
 width:  900px;
 height:550px;
@@ -198,48 +205,57 @@ background: #E4E9F7;
 padding: 0px;
 box-shadow: 5px 5px 10px 1px rgba(0,0,0,0.2);
 }
+
 .text{
 position: absolute;
 top: 50%;
 left: 50%;
 transform: translate(-50%, -50%);
 }
+
 .text p{
 color: #000;
 font-size: 20px; 
 }
+
 i{
 font-weight: 400;
 font-size: 15px;
 }
+
 .right{
 display: flex;
 justify-content: center;
 align-items: center;
 position: relative;
 }
+
 .input-box{
 width: 330px;
 box-sizing: border-box;
 color: #000;
 }
+
 img{
 width: 100px;
 position: static;
 top: 30px;
 left: 30px;
 }
+
 .input-box header{
 font-weight: 700;
 text-align: center;
 margin-bottom: 45px;
 }
+
 .input-field{
 display: flex;
 flex-direction: column;
 position: relative;
 padding: 0 10px 0 10px;
 }
+
 .input{
 height: 45px;
 width: 100%;
@@ -250,6 +266,7 @@ outline: none;
 margin-bottom: 20px;
 color: #40414a;
 }
+
 .input-box .input-field label{
 position: absolute;
 top: 10px;
@@ -257,44 +274,53 @@ left: 10px;
 pointer-events: none;
 transition: .5s;
 }
+
 .input-field input:focus ~ label
 {
 top: -10px;
 font-size: 13px;
 }
+
 .input-field input:valid ~ label
 {
 top: -10px;
 font-size: 13px;
 color: #5d5076;
 }
+
 .input-field .input:focus, .input-field .input:valid{
 border-bottom: 1px solid #743ae1;
 }
+
 .submit{
 border: none;
 outline: none;
 height: 45px;
-background: #E4E9F7;
+background: #386ca4; 
 border-radius: 5px;
 transition: .4s;
-color: #000;
+color: #fff;
+margin: 10px 0;
 }
+
 .submit:hover{
-background: rgba(37, 95, 156, 0.937);
+background:  #11101D;
 color: #fff;
 }
+
 .signin{
 text-align: center;
 font-size: small;
 margin-top: 25px;
 }
+
 span a{
 text-decoration: none;
 font-weight: 700;
 color: #000;
 transition: .5s;
 }
+
 span a:hover{
 text-decoration: underline;
 color: #000;
