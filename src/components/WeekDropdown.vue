@@ -1,5 +1,5 @@
 <template>
-   <button @click="setPrevWeek()">Previous Week</button>
+   <button :style="'width:150px;'" @click="setPrevWeek()">Previous Week</button>
    <div class="dropdown-center">
       <a
          class="btn btn-primary dropdown-toggle"
@@ -29,7 +29,7 @@
          </li>
       </ul>
    </div>
-   <button @click="setNextWeek()">Next Week</button>
+   <button :style="'width:150px;'" @click="setNextWeek()">Next Week</button>
 </template>
 
 <script>
