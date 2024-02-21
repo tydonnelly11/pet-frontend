@@ -2,7 +2,7 @@
    <!-- Task Form (conditionally rendered based on isFormVisible) -->
    <form v-if="isFormVisible" @submit.prevent="addTask" class="war-form">
       <div class="task">
-         <label for="task">Task:</label>
+         <label for="task">Task Category:</label>
          <input
             class="input-field"
             v-model="newTask.taskCategories"

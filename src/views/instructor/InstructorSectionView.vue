@@ -24,8 +24,12 @@
        </div>
        <button type="submit" @click="registerInstructor">Register Instructor</button>
      </div>
-      <div v-if="hasSubmittedInstructor" class="success">
+
+      <div v-if="hasSubmittedInstructor" class="popup-overlay">
+         <div class="success">
          <p>Instructor Succesfully Added!</p>
+         <button @click="hasSubmittedInstructor = false">Close</button>
+         </div>
       </div>
    </div>
 
@@ -134,7 +138,7 @@ export default {
          this.hasError = true
       },
       registerInstructor() {
-         axios.post(`http://localhost:80/api/v1/auth/register/instructor`, {
+         axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net//api/v1/auth/register/instructor`, {
                firstName: this.firstName,
                middleName: this.middleName,
                lastName: this.lastName,
@@ -169,7 +173,7 @@ export default {
          }
          const auth = localStorage.getItem('auth')
          
-         axios.post(`http://localhost:80/api/v1/section/save`, {
+         axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net//api/v1/section/save`, {
             id : null,
             name: this.sectionName,
             instructorId: storeUser.userID,
@@ -200,7 +204,7 @@ export default {
          const config = {
             headers: { 'Authorization': `Bearer ${auth}` }
          };
-         axios.post(`http://localhost:80/api/v1/team/save`, {
+         axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net//api/v1/team/save`, {
             id : null,
             name: this.teamName,
             sectionId: this.sectionId,
