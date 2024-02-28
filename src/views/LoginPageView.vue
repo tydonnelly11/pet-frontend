@@ -27,8 +27,8 @@
          <h1>Logging In...<img src="/img/loading-gif.gif"></h1>
       </div>
        <div class="signin">
-
-         <!-- <div>
+<!-- 
+          <div>
 
          
           <a href="#" @click="pushInstructor">Login bypass to make first Instructor</a>
@@ -36,7 +36,8 @@
           <div>
           <a href="#" @click="pushInstructor2">Login bypass to get to students</a>
 
-         </div> -->
+         </div>
+         --> 
 
       </div>
      </div>

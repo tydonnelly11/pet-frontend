@@ -1,16 +1,16 @@
 <template>
     <SectionDropdown/>
-    <h2> Add teams to {{ storeSection.selectedSectionName }}</h2>
+    <h2> Add Teams To:  {{ storeSection.selectedSectionName }}</h2>
     <div>
       <!-- Add Teams for Section: {{sectionName}} -->
       <div class="input-field">
          <label>Team Name</label>
-         <input type="text" id="sectionName" v-model="this.teamName" required />
+         <input type="text" id="sectionName" v-model="this.teamName" required class="team-name-input"/>
       </div>
 
       
 
-   <button type="submit" @click="createTeams()">Create Team</button>
+      <button type="submit" class="small-button" @click="createTeams()">Create Team</button>
    <div v-if="hasCreatedTeams" class="popup-overlay">
       <div class="success">
          <p>Team Successfully Created!</p>
@@ -25,10 +25,15 @@
 
    </div>
 
-    <h3>To add students to a team, please select a team, 
+   <div class="centered-text">
+  To add students to a team, please select a team, then select all the students you wish to add to that team and click the save button.
+</div>
+
+    <!--<h3>To add students to a team, please select a team, 
             then select all the students you wish to add to that team 
             and click the save button.
         </h3>
+    -->
         <div v-if="isLoading" class="popup-overlay">
          <img src="/img/loading-gif.gif">
       </div>    
@@ -60,7 +65,7 @@
         </div>
 
     </div>
-    <button type="submit" @click="saveTeam()">Save Team</button>
+    <button type="submit" class="small-button" @click="saveTeam()">Save Team</button>
     <div v-if="hasSavedTeam" class="popup-overlay">
       <div class="success">
          <p>Team Successfully Saved!</p>
@@ -71,7 +76,7 @@
     <div v-if="isProcessingTeamSave" class="popup-overlay">
          <img src="/img/loading-gif.gif">
       </div>
-    <button type="submit" @click="clearSelection()">Clear Selection</button>
+      <button type="submit" class="small-button" @click="clearSelection()">Clear Selection</button>
 </template>
 
 <script>
@@ -274,6 +279,25 @@ export default {
 </script>
 
 <style scoped>
+.team-name-input {
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%; 
+   height: 100px; 
+   border-radius: 20px; 
+   border: 1px solid #cccccc; 
+   margin-bottom: 10px; 
+   font-size: 1rem; 
+   color: #333; 
+   background-color: #fff; 
+}
+
+
+.team-name-input:focus {
+   outline: none; 
+   border: 1px solid #6f42c1;
+   box-shadow: 0 0 0 2px rgba(111, 66, 193, 0.25);
+}
 .page{
     display: flex;
     flex-direction: row;
@@ -291,6 +315,13 @@ export default {
     text-align: center;
     border: 1px solid black;
 }
+.small-button {
+    width: 250px; 
+   height: 50px;
+   font-size: 1rem; 
+   margin: 1px; 
+   border-radius: 4px; 
+}
 
 .students{
     display: flex;
@@ -305,6 +336,12 @@ export default {
     justify-content: space-between;
     width: 50%;
 
+}
+
+.centered-text {
+   text-align: center;
+   font-size: 1.3rem;
+   margin: 20px;
 }
 
 </style>
