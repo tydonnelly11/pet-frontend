@@ -54,7 +54,7 @@ export default {
         this.hasSelectedTeam = false;
         const auth = localStorage.getItem('auth')
 
-        axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net//api/v1/war/get`,
+        axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/war/get`,
          {
             params: {
                teamId: team.id,
@@ -109,7 +109,7 @@ export default {
          const config = {
             headers: { 'Authorization': `Bearer ${auth}` }
          };
-        axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net//api/v1/section/getAllTeams/${storeSection.selectedSectionId}`,
+        axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getAllTeams/${storeSection.selectedSectionId}`,
         {  headers: { 'Authorization': `Bearer ${auth}` }}
         )
         .then(response => {

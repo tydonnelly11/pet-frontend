@@ -47,7 +47,7 @@ export default {
             this.hasLoaded = false
          const auth = localStorage.getItem('auth')
 
-         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net//api/v1/section/getRubric/${storeSection.selectedSectionId}`, {
+         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getRubric/${storeSection.selectedSectionId}`, {
             headers: { 'Authorization': `Bearer ${auth}` }
          })
          .then((response) => {
