@@ -1,4 +1,5 @@
 <template>
+   <button :style="'width:150px;'" @click="setPrevWeek()">Previous Week</button>
    <div class="dropdown-center">
       <a
          class="btn btn-primary dropdown-toggle"
@@ -16,16 +17,19 @@
 
       <ul class="dropdown-menu" :style="'columns : 3;'">
          <li
+            
             v-for="week in storeWeek.weeksForSemester"
             :value="week.id"
             @click="storeWeek.updateSelectedWeek(week)"
          >
             <!--@Click Sends week to parent-->
 
-            <a class="dropdown-item" href="#">{{ convertWeekFormat(week) }}</a>
+            <a v-if=(!isCurrentWeek(week.id)) class="dropdown-item" href="#">{{ convertWeekFormat(week) }}</a>
+            <a v-else class="active">{{ convertWeekFormat(week) }}</a> 
          </li>
       </ul>
    </div>
+   <button :style="'width:150px;'" @click="setNextWeek()">Next Week</button>
 </template>
 
 <script>
@@ -55,6 +59,18 @@ export default {
          var weekEnd = week.end
          return weekStart + ' to ' + weekEnd
       },
+      isCurrentWeek(weekId) {
+         return weekId == storeWeek.currentWeek.id
+      },
+      setPrevWeek(){
+         var prevWeek = (storeWeek.weeksForSemester[storeWeek.weeksForSemester.indexOf((storeWeek.selectedWeek)) - 1])
+         console.log(prevWeek)
+         storeWeek.updateSelectedWeek(prevWeek)},
+      setNextWeek(){
+         var nextWeek = (storeWeek.weeksForSemester[storeWeek.weeksForSemester.indexOf((storeWeek.selectedWeek)) + 1])
+         storeWeek.updateSelectedWeek(nextWeek)
+
+      }
    },
    computed: {
       
@@ -71,4 +87,8 @@ export default {
 </script>
 
 <style scoped>
+.active{
+   border-color: blue;
+   text-decoration: none;
+}
 </style>

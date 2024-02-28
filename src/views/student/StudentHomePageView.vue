@@ -45,7 +45,7 @@ export default {
       getTeamMembers() {
          const auth = localStorage.getItem('auth')
 
-         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/team/getStudents/${storeUser.teamId}`,
+         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net//api/v1/team/getStudents/${storeUser.teamId}`,
          {
              headers: { 'Authorization': `Bearer ${auth}` },
          }

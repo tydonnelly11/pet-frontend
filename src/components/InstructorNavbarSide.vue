@@ -159,7 +159,7 @@ import { storeSection } from '../stores/storeSection';
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  height: 100%;
+  height: 90%;
 }
 
 .nav-item {

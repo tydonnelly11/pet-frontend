@@ -1,31 +1,43 @@
 <template>
     <SectionDropdown/>
-    <h2> Add teams to {{ storeSection.selectedSectionName }}</h2>
+    <h2> Add Teams To:  {{ storeSection.selectedSectionName }}</h2>
     <div>
       <!-- Add Teams for Section: {{sectionName}} -->
       <div class="input-field">
          <label>Team Name</label>
-         <input type="text" id="sectionName" v-model="this.teamName" required />
+         <input type="text" id="sectionName" v-model="this.teamName" required class="team-name-input"/>
       </div>
 
       
 
-   <button type="submit" @click="createTeams()">Create Team</button>
-   <div class="success" v-if="hasCreatedTeams">
-      <p>Teams Succesfully Created!</p>
-    </div>
-    <div class="loading" v-if="isProcessingTeamCreation">
-        Process being requested... DO NOT REFRESH
-    </div>
+      <button type="submit" class="small-button" @click="createTeams()">Create Team</button>
+   <div v-if="hasCreatedTeams" class="popup-overlay">
+      <div class="success">
+         <p>Team Successfully Created!</p>
+         <!-- Add a button or a way to close the overlay -->
+         <button @click="hasCreatedTeams = false">Close</button>
+      </div>
+      </div>
+    <div v-if="isProcessingTeamCreation" class="popup-overlay">
+         <img src="/img/loading-gif.gif">
+      </div>
+    
 
    </div>
 
-    <h3>To add students to a team, please select a team, 
+   <div class="centered-text">
+  To add students to a team, please select a team, then select all the students you wish to add to that team and click the save button.
+</div>
+
+    <!--<h3>To add students to a team, please select a team, 
             then select all the students you wish to add to that team 
             and click the save button.
         </h3>
-    <div v-if="this.isLoading" class="loading"><h1>Loading...</h1></div>
-    <div v-if="hasLoaded" class="page">
+    -->
+        <div v-if="isLoading" class="popup-overlay">
+         <img src="/img/loading-gif.gif">
+      </div>    
+      <div v-if="hasLoaded" class="page">
         <!-- Teams Section -->
         
         <div class="teams">
@@ -35,7 +47,9 @@
                 <input type="radio" :value="team.id" v-model="updatedTeam.id" @change="selectTeam(team)">
                 <div class="team-students">
                     <div class="student" v-for="student in team.students" :key="student.id">
-                        {{ student.firstName }} {{ student.lastName }}
+                        <label>{{ student.firstName }} {{ student.lastName }}</label>
+                        <p @click="toggleStudentOnTeam(student, team)">Remove</p>
+
                     </div>
                 </div>
             </div>
@@ -44,21 +58,25 @@
         <!-- Students Section -->
         <div class="students">
             <h2>Students</h2>
-            <div class="student" v-for="student in students" :key="student.id">
+            <div v-for="student in students" :key="student.id">
                 <label>{{ student.firstName }} {{ student.lastName }}</label>
                 <input type="checkbox" :value="student.id" @change="toggleStudent(student)">
             </div>
         </div>
 
     </div>
-    <button type="submit" @click="saveTeam()">Save Team</button>
-    <div class="success" v-if="hasSavedTeam">
-      <p>Teams Succesfully Saved!</p>
-    </div>
-    <div class="loading" v-if="isProcessingTeamSave">
-        Process being requested... DO NOT REFRESH
-    </div>
-    <button type="submit" @click="clearSelection()">Clear Selection</button>
+    <button type="submit" class="small-button" @click="saveTeam()">Save Team</button>
+    <div v-if="hasSavedTeam" class="popup-overlay">
+      <div class="success">
+         <p>Team Successfully Saved!</p>
+         <!-- Add a button or a way to close the overlay -->
+         <button @click="hasSavedTeam = false">Close</button>
+      </div>
+      </div>
+    <div v-if="isProcessingTeamSave" class="popup-overlay">
+         <img src="/img/loading-gif.gif">
+      </div>
+      <button type="submit" class="small-button" @click="clearSelection()">Clear Selection</button>
 </template>
 
 <script>
@@ -98,12 +116,14 @@ export default {
    },
    methods: {
     getStudents(){
+        
         this.isLoading = true
         const auth = localStorage.getItem('auth')
          const config = {
             headers: { 'Authorization': `Bearer ${auth}` }
          };
-        axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getAllStudents/${storeSection.selectedSectionId}`,
+        
+        axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net//api/v1/section/getAllStudents/${storeSection.selectedSectionId}`,
         {  headers: { 'Authorization': `Bearer ${auth}` }}
         )
         .then(response => {
@@ -124,13 +144,24 @@ export default {
             console.log(error)
         })
     },
+    toggleStudentOnTeam(student, team){
+        const index = team.students.indexOf(student);
+        team.students.splice(index, 1);
+
+        // if(index = this.students.indexOf(student)){
+        //     this.students.push(student);
+        // }
+        this.students.push(student);
+        console.log(student);
+        console.log(team);
+    },
     getTeams(){
         this.isLoading = true
         const auth = localStorage.getItem('auth')
          const config = {
             headers: { 'Authorization': `Bearer ${auth}` }
          };
-        axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getAllTeams/${storeSection.selectedSectionId}`,
+        axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net//api/v1/section/getAllTeams/${storeSection.selectedSectionId}`,
         {  headers: { 'Authorization': `Bearer ${auth}` }}
         )
         .then(response => {
@@ -164,13 +195,14 @@ export default {
       },
    
    saveTeam(){
+    
     this.hasSavedTeam = false
     this.isProcessingTeamSave = true
     const auth = localStorage.getItem('auth')
          const config = {
             headers: { 'Authorization': `Bearer ${auth}` }
          };
-    axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/team/edit`,
+    axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net//api/v1/team/edit`,
     {
         id: this.updatedTeam.id,
         name: this.updatedTeam.name,
@@ -191,6 +223,10 @@ export default {
     })
    },
    createTeams() {
+    if(this.teamName == " " || this.teamName == ""){
+        alert("Please enter a team name")
+        return
+    }
     this.hasCreatedTeams = false
     this.isProcessingTeamCreation = true
     const auth = localStorage.getItem('auth')
@@ -198,7 +234,7 @@ export default {
             headers: { 'Authorization': `Bearer ${auth}` }
     };
 
-         axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/team/save`, {
+         axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net//api/v1/team/save`, {
             id : null,
             name: this.teamName,
             sectionId: storeSection.selectedSectionId,
@@ -243,6 +279,25 @@ export default {
 </script>
 
 <style scoped>
+.team-name-input {
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%; 
+   height: 100px; 
+   border-radius: 20px; 
+   border: 1px solid #cccccc; 
+   margin-bottom: 10px; 
+   font-size: 1rem; 
+   color: #333; 
+   background-color: #fff; 
+}
+
+
+.team-name-input:focus {
+   outline: none; 
+   border: 1px solid #6f42c1;
+   box-shadow: 0 0 0 2px rgba(111, 66, 193, 0.25);
+}
 .page{
     display: flex;
     flex-direction: row;
@@ -260,11 +315,33 @@ export default {
     text-align: center;
     border: 1px solid black;
 }
+.small-button {
+    width: 250px; 
+   height: 50px;
+   font-size: 1rem; 
+   margin: 1px; 
+   border-radius: 4px; 
+}
 
 .students{
     display: flex;
     flex-direction: column;
     flex : 0 0 50%;
+}
+.student{
+    display: flex;
+    flex-direction: row;
+    text-align: left;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 50%;
+
+}
+
+.centered-text {
+   text-align: center;
+   font-size: 1.3rem;
+   margin: 20px;
 }
 
 </style>

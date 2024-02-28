@@ -20,11 +20,15 @@
             </div>
         </div>
         <button type="submit" @click="submitStudents">Invite Students</button>
-        <div class="loading">
-            <p v-if="isLoading">Request being processed...</p>
+        <div v-if="isLoading" class="popup-overlay">
+            <img src="/img/loading-gif.gif">
         </div>
-        <div class="success">
-            <p v-if="hasSubmittedStudents">Students Succesfully Invited!</p>
+        <div v-if="hasSubmittedStudents" class="popup-overlay">
+            <div class="success">
+            <p>Students Succesfully Invited!</p>
+            <button @click="hasSubmittedStudents = false">Close</button>
+        </div>
+
         </div>
     </div>
 
@@ -81,7 +85,7 @@ export default {
             const auth = localStorage.getItem('auth')
             
 
-            axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/register/student/inviteStudents`, 
+            axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net//api/v1/auth/register/student/inviteStudents`, 
                 
                     this.listOfStudents
             ,{

@@ -6,8 +6,9 @@
             <h1>REGISTER</h1>
           </div>
           <div class="student-info">
-            <p>Confirm the email is you and then enter in a password. DO NOT USE your TCU password</p>
+            <p>Confirm the email is you and then enter in a password. DO NOT USE your TCU password : {{ this.studentInfo.email }}</p>
           </div>
+
           <div class="input-box">
             <input type="text" id="firstname" v-model="studentInfo.firstName" placeholder="Enter your First Name"/>
         </div>
@@ -25,7 +26,7 @@
         </div>
           <button @click="registerStudent">Register</button>
           <div class="loading" v-if="this.isLoading">
-            <p>Request being processed...DO NOT REFRESH</p>
+            <p>Request being processed...DO NOT REFRESH <img src="/img/loading-gif.gif"></p>
           </div>
           <div class="success" v-if="this.hasRegistered">
             <p>Succesfully Registered</p>
@@ -54,10 +55,11 @@ export default {
             middleName: "",
             lastName: "",
             sectionId: "",
-            isLoading: false,
-            hasRegistered: false,
+            
 
-        }
+        },
+        isLoading: false,
+        hasRegistered: false,
         
 
     }
@@ -66,7 +68,7 @@ export default {
         getRegistrationInfo(){
 
             
-            axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/register/student/getStudentRegistrationTokenInfo/${this.token}`, {
+            axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net//api/v1/auth/register/student/getStudentRegistrationTokenInfo/${this.token}`, {
                 
             }).then(response => {
                 console.log(response)
@@ -87,8 +89,8 @@ export default {
                 return
             }
             this.isLoading = true
-            this.hasSubmittedStudents = false
-            axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/register/student`, {
+            this.hasRegistered = false
+            axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net//api/v1/auth/register/student`, {
                 
                 firstName: this.studentInfo.firstName,
                 middleName: this.studentInfo.middleName,
@@ -103,13 +105,11 @@ export default {
                 params: {
                     token: this.token
                 },
-                withCredentials: true,
             }
             ).then((response) => {
                 console.log(response)
                 this.isLoading = false
                 this.hasRegistered = true
-                console.log(this.hasSubmittedStudents)
                 console.log(this.isLoading)
             }).catch((error) => {
                 console.log(error)
@@ -124,7 +124,7 @@ export default {
     created(){
         this.getRegistrationInfo()
         this.isLoading = false
-        this.hasSubmittedStudents = false
+        this.hasRegistered = false
     }
 }
 

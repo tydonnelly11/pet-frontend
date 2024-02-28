@@ -12,8 +12,8 @@
       <div v-if="!hasEntry && (!isFutureWeek)">
          <p>Team mates have not filled out any activities for {{ storeWeek.selectedWeek.start }} to {{ storeWeek.selectedWeek.end }}</p>
       </div>
-      <div v-if="isLoading">
-         <h1>Loading...</h1>
+      <div v-if="isLoading" class="popup-overlay">
+         <img src="/img/loading-gif.gif">
       </div>
       <div v-if="isFutureWeek">
          <p>Come back during {{ storeWeek.selectedWeek.start}} to {{ storeWeek.selectedWeek.end }} to view your team mates activities</p>
@@ -54,7 +54,7 @@ export default {
       getTeamMatesWar(){
          this.isLoading = true
          const auth = localStorage.getItem('auth')
-         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/war/get`,
+         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net//api/v1/war/get`,
          {
             params: {
                teamId: storeUser.teamId,
@@ -155,5 +155,17 @@ export default {
    flex-direction: column;
    justify-content: center;
    margin-top: 5%;
+}
+.overlay {
+  position: fixed; /* or absolute */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  z-index: 1000; /* Ensure it's above other content */
 }
 </style>

@@ -6,7 +6,9 @@
   <div>
     <h1>Instructor Peer Evaluation</h1>
     <!-- Display loading state or errors -->
-    <div v-if="isLoading">Loading...</div>
+    <div v-if="isLoading" class="popup-overlay">
+         <img src="/img/loading-gif.gif">
+      </div>
     <div v-if="error" class="error-message">{{ error }}</div>
     
     <table v-if="!isLoading && !error">
@@ -58,7 +60,7 @@ export default {
     getRubric() {
         const auth = localStorage.getItem('auth')
          
-         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getRubric/${storeSection.selectedSectionId}`, 
+         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net//api/v1/section/getRubric/${storeSection.selectedSectionId}`, 
          {headers: { 'Authorization': `Bearer ${auth}` }}
          )
          .then((response) => {
@@ -76,7 +78,7 @@ export default {
       const auth = localStorage.getItem('auth')
       // Fetch reports for each student
         try {
-          const response = await axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/peerEvaluation/getEvaluationReport`, {
+          const response = await axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net//api/v1/peerEvaluation/getEvaluationReport`, {
             params: {
               
               week: storeWeek.selectedWeekId,
@@ -153,5 +155,17 @@ table {
 th, td {
   border: 1px solid #ddd;
   padding: 8px;
+}
+.overlay {
+  position: fixed; /* or absolute */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  z-index: 1000; /* Ensure it's above other content */
 }
 </style>
