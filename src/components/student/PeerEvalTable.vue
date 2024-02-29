@@ -149,18 +149,21 @@ export default {
 <style scoped>
 table {
    height: 70vh;
+   width: 100%;
 }
-/* tr{
-    border: black 1px solid;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-} */
-td {
-   align-content: center;
+
+th, td {
+   max-width: 200px; /* Set maximum width for cells */
+   overflow: hidden; /* Hide overflow content */
+   white-space: nowrap; /* Prevent line breaks */
+   text-overflow: ellipsis; /* Show ellipsis for overflow content */
 }
 
 form {
    margin-top: 2.5%;
+}
+
+button {
+   margin-top: 10px;
 }
 </style>

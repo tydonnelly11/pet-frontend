@@ -1,36 +1,38 @@
 <template>
-   <button :style="'width:150px;'" @click="setPrevWeek()">Previous Week</button>
-   <div class="dropdown-center">
-      <a
-         class="btn btn-primary dropdown-toggle"
-         href="#"
-         role="button"
-         data-bs-toggle="dropdown"
-         aria-expanded="false"
-      >
-         {{
-            storeWeek.selectedWeek
-               ? convertWeekFormat(storeWeek.selectedWeek)
-               : convertWeekFormat(storeWeek.currentWeek)
-         }}
-      </a>
-
-      <ul class="dropdown-menu" :style="'columns : 3;'">
-         <li
-            
-            v-for="week in storeWeek.weeksForSemester"
-            :value="week.id"
-            @click="storeWeek.updateSelectedWeek(week)"
+   <div class="week-dropdown-container" style="width: 100%;">
+      <div class="dropdown-center">
+         <a
+            class="btn btn-primary dropdown-toggle"
+            href="#"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
          >
-            <!--@Click Sends week to parent-->
+            {{
+               storeWeek.selectedWeek
+                  ? convertWeekFormat(storeWeek.selectedWeek)
+                  : convertWeekFormat(storeWeek.currentWeek)
+            }}
+         </a>
 
-            <a v-if=(!isCurrentWeek(week.id)) class="dropdown-item" href="#">{{ convertWeekFormat(week) }}</a>
-            <a v-else class="active">{{ convertWeekFormat(week) }}</a> 
-         </li>
-      </ul>
+         <ul class="dropdown-menu" :style="'columns : 3;'">
+            <li
+               v-for="week in storeWeek.weeksForSemester"
+               :value="week.id"
+               @click="storeWeek.updateSelectedWeek(week)"
+            >
+               <a v-if="!isCurrentWeek(week.id)" class="dropdown-item" href="#">{{ convertWeekFormat(week) }}</a>
+               <a v-else class="active">{{ convertWeekFormat(week) }}</a> 
+            </li>
+         </ul>
+      </div>
+      <div class="button-container">
+         <button class="prev-week-btn" @click="setPrevWeek()">Previous Week</button>
+         <button class="next-week-btn" @click="setNextWeek()">Next Week</button>
+      </div>
    </div>
-   <button :style="'width:150px;'" @click="setNextWeek()">Next Week</button>
 </template>
+
 
 <script>
 import { ref, toRaw } from 'vue'
@@ -83,12 +85,42 @@ export default {
    //should try to emit event to warList which I think will handle what week is
    //in the little row as well as adding rows
    //also look at bootstrap docs
+
 }
 </script>
 
 <style scoped>
-.active{
-   border-color: blue;
-   text-decoration: none;
+.week-dropdown-container {
+   margin-top: 10px;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+}
+
+.dropdown-center {
+   margin-bottom: 10px; 
+}
+
+.button-container {
+   display: flex;
+   justify-content: center;
+}
+
+.prev-week-btn {
+   width: 200px;
+   border-radius: 12px;
+   margin-right: 10px; 
+}
+
+.next-week-btn {
+   width: 200px;
+   border-radius: 12px;
+}
+
+@media screen and (max-width: 900px) {
+   .button-container {
+      flex-direction: column; 
+   }
 }
 </style>
+
