@@ -20,7 +20,7 @@
       />
       
       <AddWarTask v-else-if="(!isPastWeek && !isFutureWeek)"  @add-task="addTask" />
-      <button v-if="(!isEditTaskTrue) && (!isPastWeek && !isFutureWeek)" @click="submitWarEntry">Submit Task</button>
+      <button class="button" v-if="(!isEditTaskTrue) && (!isPastWeek && !isFutureWeek)" @click="submitWarEntry">Submit Task</button>
    <p v-if="hasSubmited" class="submit-msg">War Submitted for {{ storeWeek.selectedWeek.start }} to {{ storeWeek.selectedWeek.end }}</p>
       
    </div>
@@ -203,6 +203,7 @@ export default {
    display: flex;
    flex-direction: column;
    justify-content: space-evenly;
+   align-items: center;
    width: 100%;
    height: 100%;
    padding-top: 10%;
@@ -215,5 +216,20 @@ export default {
    left: 80%;
    width: 10%;
    border: 2px solid black;
+}
+.button {
+   margin-top: 150px;
+   border-radius: 12px;
+}
+
+/* Media query for smaller screens */
+@media (max-width: 768px) {
+   .container {
+      padding-top: 20px;
+   }
+   .profile {
+      top: -15px;
+   }
+   
 }
 </style>
