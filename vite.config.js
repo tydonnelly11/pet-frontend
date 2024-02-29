@@ -8,7 +8,7 @@ export default defineConfig({
    resolve: {
       alias: {
          '@': '/src',
-         'baseurl':'https://yellow-river-028915c10.4.azurestaticapps.net//'
+         'baseurl':'https://yellow-river-028915c10.4.azurestaticapps.net/'
          
       },
       test: {

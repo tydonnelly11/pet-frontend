@@ -116,7 +116,7 @@ export default {
          const auth = localStorage.getItem('auth')
 
          axios
-            .post('https://yellow-river-028915c10.4.azurestaticapps.net//api/v1/peerEvaluation/submitPeerEvaluation', targetPayload, {
+            .post('https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/peerEvaluation/submitPeerEvaluation', targetPayload, {
                headers: { 'Authorization': `Bearer ${auth}` },
             })
             .then((response) => {
@@ -128,7 +128,7 @@ export default {
             })
       },
       // getRubric() {
-      //    axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net//api/v1/section/getRubric/${storeUser.sectionId}`, {
+      //    axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getRubric/${storeUser.sectionId}`, {
       //       withCredentials: true,
       //    })
       //    .then((response) => {
@@ -149,18 +149,21 @@ export default {
 <style scoped>
 table {
    height: 70vh;
+   width: 100%;
 }
-/* tr{
-    border: black 1px solid;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-} */
-td {
-   align-content: center;
+
+th, td {
+   max-width: 200px; /* Set maximum width for cells */
+   overflow: hidden; /* Hide overflow content */
+   white-space: nowrap; /* Prevent line breaks */
+   text-overflow: ellipsis; /* Show ellipsis for overflow content */
 }
 
 form {
    margin-top: 2.5%;
+}
+
+button {
+   margin-top: 10px;
 }
 </style>
