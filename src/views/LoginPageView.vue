@@ -9,13 +9,13 @@
    <!-- Right Side (Login Form) -->
    <div class="right col-md-6">
      <div class="input-box">
-       <header>Login</header>
+       <header>Login</header> 
        <form @submit.prevent="loginStudent">
-         <div class="input-field">
+         <div class="input-line">
            <input type="email" id="email" class="input" v-model="email" required>
            <label for="email">Email</label>
          </div>
-         <div class="input-field">
+         <div class="input-line">
            <input type="password" id="password" class="input" v-model="password" required>
            <label for="password">Password</label>
          </div>
@@ -27,7 +27,7 @@
          <h1>Logging In...<img src="/img/loading-gif.gif"></h1>
       </div>
        <div class="signin">
-<!-- 
+ 
           <div>
 
          
@@ -37,7 +37,7 @@
           <a href="#" @click="pushInstructor2">Login bypass to get to students</a>
 
          </div>
-         --> 
+       
 
       </div>
      </div>
@@ -179,6 +179,14 @@ pushInstructor2()
 
 *{
 font-family: 'Poppins', sans-serif;
+}
+
+.input-line {
+   
+   width: 100%;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: none;
 }
 
 .full-page {

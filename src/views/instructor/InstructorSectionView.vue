@@ -259,7 +259,7 @@ export default {
 .input-field input {
   width: 100%;
   padding: 15px;
-  background: #E4E9F7;
+  background: #fff;
   border: 1px solid #000; 
   border-radius: 4px; 
   font-size: 14px; 

@@ -282,8 +282,8 @@ export default {
 .team-name-input {
     margin-left: auto;
     margin-right: auto;
-    width: 50%; 
-   height: 100px; 
+    width: 40%; 
+   height: 10px; 
    border-radius: 20px; 
    border: 1px solid #cccccc; 
    margin-bottom: 10px; 
