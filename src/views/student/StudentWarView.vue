@@ -90,7 +90,7 @@ export default {
          // }
          const auth = localStorage.getItem('auth')
          
-         axios.post('http://www.peerevaltool.xyz/api/v1/activity/submit', this.newTasks,
+         axios.post('https://www.peerevaltool.xyz/api/v1/activity/submit', this.newTasks,
          {
             headers: { 'Authorization': `Bearer ${auth}` }
          }).then(response => {
@@ -130,7 +130,7 @@ export default {
          this.studentTasks.tasks = []
          console.log("WEEK BEFORE REQ")
          console.log(storeWeek.selectedWeekId)
-         axios.get(`http://www.peerevaltool.xyz/api/v1/war/get`,
+         axios.get(`https://www.peerevaltool.xyz/api/v1/war/get`,
          {
             headers: { 'Authorization': `Bearer ${auth}` },
             params: {

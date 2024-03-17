@@ -47,7 +47,7 @@ export default {
             this.hasLoaded = false
          const auth = localStorage.getItem('auth')
 
-         axios.get(`http://www.peerevaltool.xyz/api/v1/section/getRubric/${storeSection.selectedSectionId}`, {
+         axios.get(`https://www.peerevaltool.xyz/api/v1/section/getRubric/${storeSection.selectedSectionId}`, {
             headers: { 'Authorization': `Bearer ${auth}` }
          })
          .then((response) => {

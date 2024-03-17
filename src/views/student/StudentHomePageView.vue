@@ -45,7 +45,7 @@ export default {
       getTeamMembers() {
          const auth = localStorage.getItem('auth')
 
-         axios.get(`http://www.peerevaltool.xyz/api/v1/team/getStudents/${storeUser.teamId}`,
+         axios.get(`https://www.peerevaltool.xyz/api/v1/team/getStudents/${storeUser.teamId}`,
          {
              headers: { 'Authorization': `Bearer ${auth}` },
          }

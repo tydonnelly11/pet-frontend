@@ -54,7 +54,7 @@ export default {
       getTeamMatesWar(){
          this.isLoading = true
          const auth = localStorage.getItem('auth')
-         axios.get(`http://www.peerevaltool.xyz/api/v1/war/get`,
+         axios.get(`https://www.peerevaltool.xyz/api/v1/war/get`,
          {
             params: {
                teamId: storeUser.teamId,

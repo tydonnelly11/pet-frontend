@@ -116,7 +116,7 @@ export default {
          const auth = localStorage.getItem('auth')
 
          axios
-            .post('http://www.peerevaltool.xyz/api/v1/peerEvaluation/submitPeerEvaluation', targetPayload, {
+            .post('https://www.peerevaltool.xyz/api/v1/peerEvaluation/submitPeerEvaluation', targetPayload, {
                headers: { 'Authorization': `Bearer ${auth}` },
             })
             .then((response) => {
@@ -128,7 +128,7 @@ export default {
             })
       },
       // getRubric() {
-      //    axios.get(`http://www.peerevaltool.xyz/api/v1/section/getRubric/${storeUser.sectionId}`, {
+      //    axios.get(`https://www.peerevaltool.xyz/api/v1/section/getRubric/${storeUser.sectionId}`, {
       //       withCredentials: true,
       //    })
       //    .then((response) => {

@@ -123,7 +123,7 @@ export default {
             headers: { 'Authorization': `Bearer ${auth}` }
          };
         
-        axios.get(`http://www.peerevaltool.xyz/api/v1/section/getAllStudents/${storeSection.selectedSectionId}`,
+        axios.get(`https://www.peerevaltool.xyz/api/v1/section/getAllStudents/${storeSection.selectedSectionId}`,
         {  headers: { 'Authorization': `Bearer ${auth}` }}
         )
         .then(response => {
@@ -161,7 +161,7 @@ export default {
          const config = {
             headers: { 'Authorization': `Bearer ${auth}` }
          };
-        axios.get(`http://www.peerevaltool.xyz/api/v1/section/getAllTeams/${storeSection.selectedSectionId}`,
+        axios.get(`https://www.peerevaltool.xyz/api/v1/section/getAllTeams/${storeSection.selectedSectionId}`,
         {  headers: { 'Authorization': `Bearer ${auth}` }}
         )
         .then(response => {
@@ -202,7 +202,7 @@ export default {
          const config = {
             headers: { 'Authorization': `Bearer ${auth}` }
          };
-    axios.post(`http://www.peerevaltool.xyz/api/v1/team/edit`,
+    axios.post(`https://www.peerevaltool.xyz/api/v1/team/edit`,
     {
         id: this.updatedTeam.id,
         name: this.updatedTeam.name,
@@ -234,7 +234,7 @@ export default {
             headers: { 'Authorization': `Bearer ${auth}` }
     };
 
-         axios.post(`http://www.peerevaltool.xyz/api/v1/team/save`, {
+         axios.post(`https://www.peerevaltool.xyz/api/v1/team/save`, {
             id : null,
             name: this.teamName,
             sectionId: storeSection.selectedSectionId,
