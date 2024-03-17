@@ -54,7 +54,7 @@ export default {
       getTeamMatesWar(){
          this.isLoading = true
          const auth = localStorage.getItem('auth')
-         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/war/get`,
+         axios.get(`http://www.peerevaltool.xyz/api/v1/war/get`,
          {
             params: {
                teamId: storeUser.teamId,

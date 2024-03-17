@@ -85,7 +85,7 @@ export default {
       async getPeerEvalEntriesForWeek() {
          this.isLoading = true
          const auth = localStorage.getItem('auth')
-         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/peerEvaluation/getPeerEvaluation/${storeUser.userID}/${storeWeek.selectedWeekId}`,
+         axios.get(`http://www.peerevaltool.xyz/api/v1/peerEvaluation/getPeerEvaluation/${storeUser.userID}/${storeWeek.selectedWeekId}`,
                {
                   headers: { 'Authorization': `Bearer ${auth}` }            
                }
@@ -229,7 +229,7 @@ export default {
       getRubric() {
          const auth = localStorage.getItem('auth')
 
-         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getRubric/${storeUser.sectionId}`, {
+         axios.get(`http://www.peerevaltool.xyz/api/v1/section/getRubric/${storeUser.sectionId}`, {
             headers: { 'Authorization': `Bearer ${auth}` }
          })
          .then((response) => {
@@ -245,7 +245,7 @@ export default {
       },
       getGradeAndCommentsForPastWeek(){      
          const auth = localStorage.getItem('auth')
-         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/peerEvaluation/getEvaluationReport`, {
+         axios.get(`http://www.peerevaltool.xyz/api/v1/peerEvaluation/getEvaluationReport`, {
             headers: { 'Authorization': `Bearer ${auth}` },
             params: {
                week: storeWeek.selectedWeekId,
