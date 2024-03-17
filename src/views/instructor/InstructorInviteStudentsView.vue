@@ -85,7 +85,7 @@ export default {
             const auth = localStorage.getItem('auth')
             
 
-            axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/register/student/inviteStudents`, 
+            axios.post(`http://www.peerevaltool.xyz/api/v1/auth/register/student/inviteStudents`, 
                 
                     this.listOfStudents
             ,{
