@@ -34,7 +34,7 @@ export default {
       
   // },
    created() {
-      storeWeek.calcCurrentWeek();
+      // storeWeek.calcCurrentWeek();
       console.log(storeWeek.currentWeek)
       console.log(storeWeek.currentWeekId)
       console.log(storeWeek.weeksForSemester)

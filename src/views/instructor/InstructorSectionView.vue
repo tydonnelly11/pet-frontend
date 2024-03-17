@@ -41,6 +41,10 @@
          <input type="text" id="sectionName" v-model="sectionName" required /> 
 
       </div>
+      <div class="input-field">
+         <label>Check to use default rubric</label>
+         <input type="checkbox" id="defaultRubric" v-model="isRubricDefault"  />
+      </div>
       <h4>Enter Rubric Critera for Year</h4>
          <div class="input-field">
             <label>Criteria Name</label>
@@ -65,6 +69,24 @@
                 
             </div>
         </div>
+
+        <div>
+         <label for="start-date">Start Date:</label>
+         <input type="date" id="start-date" v-model="startDate" />
+
+         <label for="end-date">End Date:</label>
+         <input type="date" id="end-date" v-model="endDate" />
+
+         <button @click="generateWeekList">Calculate Weeks</button>
+
+         <ul v-if="weeksForSemester.length > 0">
+            <li v-for="(week, index) in weeksForSemester" :key="index">
+            <input type="checkbox" :id="'week-' + index" v-model="week.execlude">
+            <label :for="'week-' + index">{{ week.start }} - {{ week.end }}</label>
+            </li>
+         </ul>
+      </div>
+
       <button type="submit" @click="submitSection">Create Section</button>
       <div v-if="isLoading" class="popup-overlay">
          <img src="/img/loading-gif.gif">
@@ -87,6 +109,7 @@
 <script>
 import { storeUser } from '@/stores/store.js'
 import { storeSection } from '../../stores/storeSection'
+import apiClient from  '@/axios-setup.js'
 import axios from 'axios'
 import ErrorPopUp from '@/components/utilities/ErrorPopUp.vue'
 export default {
@@ -105,6 +128,7 @@ export default {
          criteriaDesc: "",
          sectionId: "",
          isLoading: false,
+         isRubricDefault: false,
          hasCreatedSection: false,
          hasSubmittedInstructor: false,
          hasCreatedTeams: false,
@@ -116,6 +140,7 @@ export default {
          email: "",
          password: "",
          hasError: false,
+         weeksForSemester: [],
 
 
 
@@ -124,6 +149,45 @@ export default {
       }
    },
    methods: {
+
+      generateWeekList(){
+        const startDate = new Date(this.startDate) // Start date
+        const endDate = new Date(this.endDate) // End date
+        const weeks = []
+
+        let currentDate = new Date(startDate)
+
+        let weekId = 1
+
+        while (currentDate.getDay() !== 1) {
+            currentDate.setDate(currentDate.getDate() + 1);
+        }
+        while (currentDate <= endDate) {
+           const startOfWeek = new Date(currentDate)
+           const endOfWeek = new Date(currentDate)
+           
+           endOfWeek.setDate(endOfWeek.getDate() + 6)
+
+           weeks.push({
+              id: weekId,
+              start: this.formatDate(startOfWeek),
+              end: this.formatDate(endOfWeek),
+              execlude: false,
+           })
+
+           currentDate.setDate(currentDate.getDate() + 7) // Move to the next week
+           weekId++
+        }
+        this.weeksForSemester = weeks
+      },
+      formatDate(date) {
+        //Formats date for display on week dropdown
+        const day = String(date.getDate()).padStart(2, '0')
+        const month = String(date.getMonth() + 1).padStart(2, '0')
+        const year = date.getFullYear()
+
+        return `${year}-${month}-${day}`
+     },
       
       addRubric() {
          this.criteria.push({
@@ -138,7 +202,7 @@ export default {
          this.hasError = true
       },
       registerInstructor() {
-         axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/register/instructor`, {
+         axios.post(`http://localhost:80/api/v1/auth/register/instructor`, {
                firstName: this.firstName,
                middleName: this.middleName,
                lastName: this.lastName,
@@ -161,23 +225,48 @@ export default {
       },
       submitSection() {
          this.isLoading = true
-         const rubric = {
+         let rubric = {
             criteria : this.criteria
             
          }
+         if(this.isRubricDefault){
+            rubric = null;
+         }
+         
+         
          const dto ={
             id : null,
             name: this.sectionName,
             instructorId: storeUser.userID,
             rubric: this.criteria ,
          }
+         const weeksToExcludeVar = []
+         for(const week of this.weeksForSemester){
+            if(week.execlude){
+               weeksToExcludeVar.push({
+                  startDate : week.start,
+                  endDate : week.end
+               })  
+            }
+
+
+            
+         }
+         console.log(weeksToExcludeVar);
+         this.weeksForSemester = []
+
          const auth = localStorage.getItem('auth')
+
          
-         axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/save`, {
+         apiClient.post(`http://localhost:80/api/v1/section/save`, {
             id : null,
             name: this.sectionName,
             instructorId: storeUser.userID,
+            isRubricDefault: this.isRubricDefault,
             rubric: rubric,
+            startDate: this.startDate,
+            endDate: this.endDate,
+            weeksToExclude: weeksToExcludeVar,
          },
          {  headers: { 'Authorization': `Bearer ${auth}` }}
          )
@@ -204,7 +293,7 @@ export default {
          const config = {
             headers: { 'Authorization': `Bearer ${auth}` }
          };
-         axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/team/save`, {
+         apiClient.post(`http://localhost:80/api/v1/team/save`, {
             id : null,
             name: this.teamName,
             sectionId: this.sectionId,

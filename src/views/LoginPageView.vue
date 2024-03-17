@@ -27,7 +27,7 @@
          <h1>Logging In...<img src="/img/loading-gif.gif"></h1>
       </div>
        <div class="signin">
-<!-- 
+
           <div>
 
          
@@ -36,7 +36,7 @@
           <div>
           <a href="#" @click="pushInstructor2">Login bypass to get to students</a>
 
-         </div> -->
+         </div>
 
       </div>
      </div>
@@ -50,8 +50,9 @@
 
 <script>
 import { storeUser } from '../stores/store.js'
-import axios from 'axios'
+import apiClient from  '@/axios-setup.js'
 import { storeSection } from '../stores/storeSection';
+import { storeWeek } from '../stores/storeWeek.js';
 export default {
 name: 'LoginPageView',
 data() {
@@ -72,7 +73,7 @@ loginInstructor()
    
    this.isLoading = true
    let creds = this.encodeCredentials(this.email, this.password)
-   axios.post('https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/login/instructor', {},{
+   apiClient.post('http://localhost:80/api/v1/auth/login/instructor', {},{
       headers: {
          'Authorization': `Basic ${creds}`
       }
@@ -83,18 +84,28 @@ loginInstructor()
       storeUser.updateLoginStatus(response.data.data.userInfo.id, true)
       localStorage.setItem('auth', response.data.data.token);
       localStorage.setItem('logginstatus', true)
+      if(response.data.data.userInfo.sections.length == 0)
+      {
+         this.$router.push('/instructorhome/section')
+         storeWeek.setWeekList([])
 
+      }
+      else{
+         console.log(response.data.data.userInfo.sections[0].weeks)
+         storeWeek.setWeekList(response.data.data.userInfo.sections[0].weeks)
+         // storeUser.setSectionId(response.data.data.sections[0].id)
+         
+         // storeUser.setSectionId(response.data.data.sections[0].id)
+         storeSection.setSections(response.data.data.userInfo.sections)
 
-      // storeUser.setSectionId(response.data.data.sections[0].id)
-      
-      // storeUser.setSectionId(response.data.data.sections[0].id)
-      storeSection.setSections(response.data.data.userInfo.sections)
+      }
 
       
       storeUser.setName(response.data.data.userInfo.firstName, response.data.data.userInfo.lastName)
       console.log(response.data.data.userInfo.firstName)
       localStorage.setItem('storeUser', JSON.stringify(storeUser));
       localStorage.setItem('storeSection', JSON.stringify(storeSection));
+      localStorage.setItem('storeWeek', JSON.stringify(storeWeek));
       this.$router.push('/instructorhome')
    }, (error) => {
       console.log(error)
@@ -112,7 +123,7 @@ loginStudent()
 {
    this.isLoading = true
    let creds = this.encodeCredentials(this.email, this.password)
-   axios.post('https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/auth/login/student', {}, {
+   apiClient.post('http://localhost:80/api/v1/auth/login/student', {}, {
       headers: {
          Authorization: `Basic ${creds}`
       }

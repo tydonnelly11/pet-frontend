@@ -57,17 +57,24 @@ export default {
       },
       
       convertWeekFormat(week) {
-         var weekStart = week.start
-         var weekEnd = week.end
-         return weekStart + ' to ' + weekEnd
+         if(week == undefined){
+            return
+         }
+         else{
+            var weekStart = week.start
+            var weekEnd = week.end
+            return weekStart + ' to ' + weekEnd
+         }
       },
       isCurrentWeek(weekId) {
          return weekId == storeWeek.currentWeek.id
       },
       setPrevWeek(){
          var prevWeek = (storeWeek.weeksForSemester[storeWeek.weeksForSemester.indexOf((storeWeek.selectedWeek)) - 1])
-         console.log(prevWeek)
-         storeWeek.updateSelectedWeek(prevWeek)},
+         if(prevWeek != null){
+            storeWeek.updateSelectedWeek(prevWeek)
+         }
+      },
       setNextWeek(){
          var nextWeek = (storeWeek.weeksForSemester[storeWeek.weeksForSemester.indexOf((storeWeek.selectedWeek)) + 1])
          storeWeek.updateSelectedWeek(nextWeek)

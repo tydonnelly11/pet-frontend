@@ -37,6 +37,7 @@
        localStorage.removeItem('auth');
         this.$router.push('/');
         localStorage.removeItem('logginstatus')
+        localStorage.removeItem('storeWeek');
         localStorage.removeItem('storeUser');
         localStorage.removeItem('storeSection');
      },

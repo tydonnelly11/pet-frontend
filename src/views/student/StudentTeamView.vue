@@ -27,7 +27,7 @@ import WeekDropdown from '@/components/WeekDropdown.vue'
 import WarTeamTable from '@/components/WarTeamTable.vue'
 import ErrorPopUp from '@/components/utilities/ErrorPopUp.vue'
 import { ref } from 'vue'
-import axios from 'axios'
+import apiClient from  '@/axios-setup.js'
 import { storeUser } from '@/stores/store.js'
 import { storeWeek } from '@/stores/storeWeek.js'
 import { storeTeam } from '../../stores/storeTeam'
@@ -54,7 +54,7 @@ export default {
       getTeamMatesWar(){
          this.isLoading = true
          const auth = localStorage.getItem('auth')
-         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/war/get`,
+         apiClient.get(`http://localhost:80/api/v1/war/get`,
          {
             params: {
                teamId: storeUser.teamId,
@@ -109,6 +109,8 @@ export default {
                name: item.name,
                tasks: [],
                id: item.id,
+               weekStart: storeWeek.selectedWeek.start,
+               weekEnd: storeWeek.selectedWeek.end,
             }
            
             for(const activity of activities){

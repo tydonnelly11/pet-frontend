@@ -1,5 +1,7 @@
 <template>
     <SectionDropdown/>
+    <WeekDropdown/>
+    <InstructorInviteStudents/>
     <h2> Add Teams To:  {{ storeSection.selectedSectionName }}</h2>
     <div>
       <!-- Add Teams for Section: {{sectionName}} -->
@@ -49,6 +51,7 @@
                     <div class="student" v-for="student in team.students" :key="student.id">
                         <label>{{ student.firstName }} {{ student.lastName }}</label>
                         <p @click="toggleStudentOnTeam(student, team)">Remove</p>
+                        <p @click="openWARAndEval(student, team)">View War/PeerEval</p>
 
                     </div>
                 </div>
@@ -80,15 +83,20 @@
 </template>
 
 <script>
-import axios from 'axios'
+import apiClient from  '@/axios-setup.js'
 import { storeUser } from '@/stores/store.js'
+import { storeWeek } from '@/stores/storeWeek.js'
 import { storeSection } from '@/stores/storeSection.js'
 import SectionDropdown from '../../components/instructor/SectionDropdown.vue'
+import WeekDropdown from '@/components/WeekDropdown.vue'
+import InstructorInviteStudents from '@/components/instructor/InviteStudents.vue'
 
 export default {
    name: 'InstructorTeamEditView',
    components: {
-    SectionDropdown
+    SectionDropdown,
+    InstructorInviteStudents,
+    WeekDropdown,
 
    },
    data() {
@@ -110,7 +118,7 @@ export default {
         hasSavedTeam: false,
         hasLoaded: false,
         teamName: "",
-        storeSection,
+        storeSection,storeWeek
          
       }
    },
@@ -123,7 +131,7 @@ export default {
             headers: { 'Authorization': `Bearer ${auth}` }
          };
         
-        axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getAllStudents/${storeSection.selectedSectionId}`,
+        apiClient.get(`http://localhost:80/api/v1/section/getAllStudents/${storeSection.selectedSectionId}`,
         {  headers: { 'Authorization': `Bearer ${auth}` }}
         )
         .then(response => {
@@ -148,12 +156,15 @@ export default {
         const index = team.students.indexOf(student);
         team.students.splice(index, 1);
 
-        // if(index = this.students.indexOf(student)){
-        //     this.students.push(student);
-        // }
+        
         this.students.push(student);
         console.log(student);
         console.log(team);
+    },
+    openWARAndEval(studentVar){
+        console.log(studentVar);
+
+        this.$router.push({name: 'InstructorViewStudent', params: {teamid: studentVar.teamId, studentid: studentVar.id, sectionid: storeSection.selectedSectionId, studentname: studentVar.firstName + " " + studentVar.lastName, teamname: studentVar.teamName, sectionname: storeSection.selectedSectionName,}});
     },
     getTeams(){
         this.isLoading = true
@@ -161,7 +172,7 @@ export default {
          const config = {
             headers: { 'Authorization': `Bearer ${auth}` }
          };
-        axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getAllTeams/${storeSection.selectedSectionId}`,
+        apiClient.get(`http://localhost:80/api/v1/section/getAllTeams/${storeSection.selectedSectionId}`,
         {  headers: { 'Authorization': `Bearer ${auth}` }}
         )
         .then(response => {
@@ -202,7 +213,7 @@ export default {
          const config = {
             headers: { 'Authorization': `Bearer ${auth}` }
          };
-    axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/team/edit`,
+    apiClient.post(`http://localhost:80/api/v1/team/edit`,
     {
         id: this.updatedTeam.id,
         name: this.updatedTeam.name,
@@ -234,7 +245,7 @@ export default {
             headers: { 'Authorization': `Bearer ${auth}` }
     };
 
-         axios.post(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/team/save`, {
+         apiClient.post(`http://localhost:80/api/v1/team/save`, {
             id : null,
             name: this.teamName,
             sectionId: storeSection.selectedSectionId,

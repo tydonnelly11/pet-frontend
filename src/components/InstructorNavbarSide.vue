@@ -30,13 +30,14 @@
          </router-link>
        </li>
        <li class="nav-item">
-         <router-link class="nav-link" to="/instructorhome/invite">
-           <span class="link-text">Invite Students</span>
+         <router-link class="nav-link" to="/instructorhome/showsection">
+           <span class="link-text">View All Sections</span>
          </router-link>
        </li>
+       
        <li class="nav-item">
          <router-link class="nav-link" to="/instructorhome/editteams">
-           <span class="link-text">Add/Edit Teams</span>
+           <span class="link-text">Section Information</span>
          </router-link>
        </li>
        <li class="nav-item">
@@ -70,6 +71,7 @@ import { storeSection } from '../stores/storeSection';
         localStorage.removeItem('logginstatus');
         localStorage.removeItem('storeUser');
         localStorage.removeItem('storeSection');
+        localStorage.removeItem('storeWeek');
         this.$router.push('/');
      },
    },

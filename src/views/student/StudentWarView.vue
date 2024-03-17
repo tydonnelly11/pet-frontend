@@ -39,7 +39,7 @@ import WeekDropdown from '@/components/WeekDropdown.vue'
 import AddWarTask from '@/components/student/AddWarTask.vue'
 import ErrorPopUp from '@/components/utilities/ErrorPopUp.vue'
 import EditWarTask from '@/components/student/EditWarTask.vue'
-import axios from 'axios'
+import apiClient from  '@/axios-setup.js'
 import { ref } from 'vue'
 import { storeWeek } from '@/stores/storeWeek.js'
 import { storeUser } from '@/stores/store.js'
@@ -90,7 +90,7 @@ export default {
          // }
          const auth = localStorage.getItem('auth')
          
-         axios.post('https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/activity/submit', this.newTasks,
+         apiClient.post('http://localhost:80/api/v1/activity/submit', this.newTasks,
          {
             headers: { 'Authorization': `Bearer ${auth}` }
          }).then(response => {
@@ -130,7 +130,7 @@ export default {
          this.studentTasks.tasks = []
          console.log("WEEK BEFORE REQ")
          console.log(storeWeek.selectedWeekId)
-         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/war/get`,
+         apiClient.get(`http://localhost:80/api/v1/war/get`,
          {
             headers: { 'Authorization': `Bearer ${auth}` },
             params: {

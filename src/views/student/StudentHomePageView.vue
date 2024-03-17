@@ -23,7 +23,7 @@ import WeekDropdown from '@/components/WeekDropdown.vue';
 import { storeWeek } from '@/stores/storeWeek.js';
 import { storeTeam } from '@/stores/storeTeam.js';
 import { storeUser } from '@/stores/store.js';
-import axios from 'axios';
+import apiClient from  '@/axios-setup.js';
 export default {
    name: 'StudentHomePageView',
    components: {
@@ -45,7 +45,7 @@ export default {
       getTeamMembers() {
          const auth = localStorage.getItem('auth')
 
-         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/team/getStudents/${storeUser.teamId}`,
+         apiClient.get(`http://localhost:80/api/v1/team/getStudents/${storeUser.teamId}`,
          {
              headers: { 'Authorization': `Bearer ${auth}` },
          }

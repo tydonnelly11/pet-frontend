@@ -40,8 +40,10 @@
             </tr>
          </tbody>
       </table>
-      <button v-if="!(this.isPastWeek)" type="submit">Submit</button>
+      <button v-if="!(this.isPastWeek )" type="submit">Submit</button>
    </form>
+
+
    
    <div v-if="this.submissionStatus == 200" class="popup-overlay">
       <div class="success">
@@ -52,7 +54,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import apiClient from  '@/axios-setup.js'
 import { storeUser } from '@/stores/store.js'
 import { storeWeek } from '@/stores/storeWeek.js'
 import { storeTeam } from '@/stores/storeTeam.js'
@@ -115,8 +117,7 @@ export default {
          // console.log(targetPayload)
          const auth = localStorage.getItem('auth')
 
-         axios
-            .post('https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/peerEvaluation/submitPeerEvaluation', targetPayload, {
+         apiClient.post('http://localhost:80/api/v1/peerEvaluation/submitPeerEvaluation', targetPayload, {
                headers: { 'Authorization': `Bearer ${auth}` },
             })
             .then((response) => {
@@ -128,7 +129,7 @@ export default {
             })
       },
       // getRubric() {
-      //    axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getRubric/${storeUser.sectionId}`, {
+      //    apiClient.get(`http://localhost:80/api/v1/section/getRubric/${storeUser.sectionId}`, {
       //       withCredentials: true,
       //    })
       //    .then((response) => {

@@ -26,7 +26,7 @@
 <script>
 import { storeSection } from '../../stores/storeSection'
 import SectionDropdown from '@/components/instructor/SectionDropdown.vue'
-import axios from 'axios'
+import apiClient from  '@/axios-setup.js'
 
 export default {
     name: 'InstructorRubricView',
@@ -47,7 +47,7 @@ export default {
             this.hasLoaded = false
          const auth = localStorage.getItem('auth')
 
-         axios.get(`https://yellow-river-028915c10.4.azurestaticapps.net/api/v1/section/getRubric/${storeSection.selectedSectionId}`, {
+         apiClient.get(`http://localhost:80/api/v1/section/getRubric/${storeSection.selectedSectionId}`, {
             headers: { 'Authorization': `Bearer ${auth}` }
          })
          .then((response) => {

@@ -38,7 +38,7 @@
          </tbody>
       </table>
       <div v-else>
-               <p>No Tasks for {{ studentTasks.name }} for {{ storeWeek.selectedWeek.start}} to {{ storeWeek.selectedWeek.end }}</p>
+               <p>No Tasks for {{ studentTasks.name }} for {{ studentTasks.weekStart}} to {{ studentTasks.weekEnd }}</p>
             </div>
    </div>
 </template>

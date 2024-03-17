@@ -10,12 +10,13 @@ import InstructorPeerEvalView from '../views/instructor/InstructorPeerEvalView.v
 // import InstructorTeamView from '../views/instructor/InstructorTeamView.vue';
 import RegisterPageView from '../views/RegisterPageView.vue'
 import InstructorSectionView from '../views/instructor/InstructorSectionView.vue'
-import InstructorInviteStudentsView from '../views/instructor/InstructorInviteStudentsView.vue'
 import InstructorTeamEditView from '../views/instructor/InstructorTeamEditView.vue'
 import { storeUser } from '../stores/store.js'
 import WaitingForTeam from '@/components/student/WaitingForTeam.vue'
 import InstructorRubricView from '../views/instructor/InstructorRubricView.vue'
 import InstructorWARView from '../views/instructor/InstructorWARView.vue'
+import StudentWarAndEval from '@/components/instructor/StudentWarAndEval.vue'
+import InstructorShowSectionView from '@/views/instructor/InstructorShowSectionView.vue'
 
 
 const routes = [
@@ -94,14 +95,23 @@ const routes = [
 
          },
          {
-            path: 'invite',
-            name: 'InstructorInvite',
-            component: InstructorInviteStudentsView,
+            path: 'showsection',
+            name: 'InstructorShowSection',
+            component: InstructorShowSectionView,
          },
+         
          {
             path: 'editteams',
             name: 'InstructorEditTeams',
             component: InstructorTeamEditView,
+            props: true,
+
+         },
+         {
+            path: ':teamid/:studentid',
+            name: 'InstructorViewStudent',
+            component: StudentWarAndEval,
+            props: true,
          }
          // The Instructor WAR is going to be added later
       ],
