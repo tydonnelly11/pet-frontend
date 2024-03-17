@@ -151,11 +151,11 @@ export default {
    methods: {
 
       generateWeekList(){
-        const startDate = new Date(this.startDate) // Start date
+        const startDate1 = new Date(this.startDate) // Start date
         const endDate = new Date(this.endDate) // End date
         const weeks = []
 
-        let currentDate = new Date(startDate)
+        let currentDate = new Date(startDate1)
 
         let weekId = 1
 
