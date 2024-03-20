@@ -39,7 +39,7 @@
   
 
 <script>
-import axios from 'axios'
+import apiClient from  '@/axios-setup.js'
 export default {
    name: 'RegisterPageView',
    props: {
@@ -68,11 +68,11 @@ export default {
         getRegistrationInfo(){
 
             
-            axios.get(`https://www.peerevaltool.xyz/api/v1/auth/register/student/getStudentRegistrationTokenInfo/${this.token}`, {
+            apiClient.get(`https://www.peerevaltool.xyz/api/v1/auth/register/student/getStudentRegistrationTokenInfo/${this.token}`, {
                 
             }).then(response => {
                 console.log(response)
-                this.studentInfo.email = response.data.data.studentEmail
+                this.studentInfo.email = response.data.data.email
                 
                 this.studentInfo.sectionId = response.data.data.studentSectionId
                 
@@ -90,7 +90,7 @@ export default {
             }
             this.isLoading = true
             this.hasRegistered = false
-            axios.post(`https://www.peerevaltool.xyz/api/v1/auth/register/student`, {
+            apiClient.post(`https://www.peerevaltool.xyz/api/v1/auth/register/student`, {
                 
                 firstName: this.studentInfo.firstName,
                 middleName: this.studentInfo.middleName,

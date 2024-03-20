@@ -1,5 +1,20 @@
 <template>
-    <SectionDropdown/>
+    <h1>Information for: {{ storeSection.selectedSectionName }}</h1>
+    <div :style="'display: flex; flex-direction:row'">
+        <button @click="inviteStudentPressed = true">Invite Students</button>
+        <button @click="inviteInstructorPressed = true">Invite Instructors</button>
+
+    </div>
+    
+    <div v-if="inviteStudentPressed">
+        <InstructorInviteStudents />
+        <button @click="inviteStudentPressed = false">Cancel</button>
+    </div>
+    <div v-if="inviteInstructorPressed">
+        <InviteAssitInstructor />
+        <button @click="inviteInstructorPressed = false">Cancel</button>
+    </div>
+    
     <h2> Add Teams To:  {{ storeSection.selectedSectionName }}</h2>
     <div>
       <!-- Add Teams for Section: {{sectionName}} -->
@@ -44,11 +59,17 @@
             <h2>Teams</h2>
             <div class="team" v-for="team in teams" :key="team.id">
                 {{ team.name }}
-                <input type="radio" :value="team.id" v-model="updatedTeam.id" @change="selectTeam(team)">
+                <input type="checkbox" 
+                    :value="team.id" 
+                    :checked="team.id === selectedTeamId" 
+                    @change="selectTeam(team)"
+                >
+                <p @click="openTeam(team.name, team.id, team.students)">View Team</p>
                 <div class="team-students">
                     <div class="student" v-for="student in team.students" :key="student.id">
                         <label>{{ student.firstName }} {{ student.lastName }}</label>
-                        <p @click="toggleStudentOnTeam(student, team)">Remove</p>
+                        <p v-if="(student.teamId)" @click="toggleStudentOnTeam(student, team)">Remove</p>
+                        <p v-if="(student.teamId)" @click="openWARAndEval(student, team)">View Student</p>
 
                     </div>
                 </div>
@@ -80,15 +101,23 @@
 </template>
 
 <script>
-import axios from 'axios'
+import apiClient from  '@/axios-setup.js'
 import { storeUser } from '@/stores/store.js'
+import { storeWeek } from '@/stores/storeWeek.js'
 import { storeSection } from '@/stores/storeSection.js'
+import { storeTeam } from '@/stores/storeTeam'
 import SectionDropdown from '../../components/instructor/SectionDropdown.vue'
+import WeekDropdown from '@/components/WeekDropdown.vue'
+import InstructorInviteStudents from '@/components/instructor/InviteStudents.vue'
+import InviteAssitInstructor from '../../components/instructor/InviteAssitInstructor.vue'
 
 export default {
    name: 'InstructorTeamEditView',
    components: {
-    SectionDropdown
+    SectionDropdown,
+    InstructorInviteStudents,
+    WeekDropdown,
+    InviteAssitInstructor
 
    },
    data() {
@@ -102,6 +131,7 @@ export default {
             students: [],
 
         },
+        selectedTeamId: null,
         isLoading: false,
         isSuccess: false,
         isProcessingTeamCreation: false,
@@ -110,11 +140,22 @@ export default {
         hasSavedTeam: false,
         hasLoaded: false,
         teamName: "",
-        storeSection,
+        storeSection,storeWeek,
+        inviteStudentPressed: false,
+        inviteInstructorPressed: false,
          
       }
    },
    methods: {
+
+    clearSelection(){
+        this.selectedTeamId = null
+        this.updatedTeam.students = []
+        this.updatedTeam.id = ""
+        this.updatedTeam.name = ""
+        this.getStudents()
+        this.getTeams()
+    },
     getStudents(){
         
         this.isLoading = true
@@ -123,7 +164,7 @@ export default {
             headers: { 'Authorization': `Bearer ${auth}` }
          };
         
-        axios.get(`https://www.peerevaltool.xyz/api/v1/section/getAllStudents/${storeSection.selectedSectionId}`,
+        apiClient.get(`https://www.peerevaltool.xyz/api/v1/section/getAllStudents/${storeSection.selectedSectionId}`,
         {  headers: { 'Authorization': `Bearer ${auth}` }}
         )
         .then(response => {
@@ -148,20 +189,31 @@ export default {
         const index = team.students.indexOf(student);
         team.students.splice(index, 1);
 
-        // if(index = this.students.indexOf(student)){
-        //     this.students.push(student);
-        // }
+        
         this.students.push(student);
         console.log(student);
         console.log(team);
     },
+    openWARAndEval(studentVar){
+        console.log(studentVar);
+        const name = studentVar.firstName + " "  + studentVar.lastName;
+
+        this.$router.push({name: 'InstructorViewStudent', params: {teamid: studentVar.teamId, studentid: studentVar.id, studentName: name}});
+    },
+    openTeam(name, id, members){
+        storeTeam.setTeamMembers(members)
+        localStorage.setItem('storeTeam', JSON.stringify(storeTeam));
+        console.log(storeTeam.teamMembers)
+        this.$router.push({name: 'InstructorViewTeam', params: {teamid: id, teamname: name, sectionId : storeSection.selectedSectionId}});
+    },
+
     getTeams(){
         this.isLoading = true
         const auth = localStorage.getItem('auth')
          const config = {
             headers: { 'Authorization': `Bearer ${auth}` }
          };
-        axios.get(`https://www.peerevaltool.xyz/api/v1/section/getAllTeams/${storeSection.selectedSectionId}`,
+        apiClient.get(`https://www.peerevaltool.xyz/api/v1/section/getAllTeams/${storeSection.selectedSectionId}`,
         {  headers: { 'Authorization': `Bearer ${auth}` }}
         )
         .then(response => {
@@ -174,10 +226,18 @@ export default {
         })
     },
     selectTeam(team) {
-          this.updatedTeam.id = team.id;
-          this.updatedTeam.name = team.name;
-          // Clear the students array when a new team is selected
-          this.updatedTeam.students = team.students;
+        if (this.selectedTeamId === team.id) {
+        // If the team is already selected, deselect it
+            this.selectedTeamId = null;
+        } else {
+        // Otherwise, select the new team and deselect others
+            this.selectedTeamId = team.id;
+            this.updatedTeam.id = team.id;
+            this.updatedTeam.name = team.name;
+            this.updatedTeam.students = team.students;
+
+        }
+          
       },
 
       // Method to add/remove a student from the updatedTeam.students array
@@ -189,8 +249,8 @@ export default {
               // Student is already in the array, remove them
               this.updatedTeam.students.splice(index, 1);
           } else {
-              // Add the student to the array
-              this.updatedTeam.students.push(student);
+            student.weeks = null;
+            this.updatedTeam.students.push(student);
           }
       },
    
@@ -198,23 +258,27 @@ export default {
     
     this.hasSavedTeam = false
     this.isProcessingTeamSave = true
-    const auth = localStorage.getItem('auth')
-         const config = {
-            headers: { 'Authorization': `Bearer ${auth}` }
-         };
-    axios.post(`https://www.peerevaltool.xyz/api/v1/team/edit`,
+    for(const student of this.updatedTeam.students){
+        console.log(student.weeks)
+        console.log(student)
+        if(student.weeks != null){
+            student.weeks = null
+        }
+    }
+   
+    apiClient.post(`https://www.peerevaltool.xyz/api/v1/team/edit`,
     {
         id: this.updatedTeam.id,
         name: this.updatedTeam.name,
         sectionId: this.updatedTeam.sectionId,
         students: this.updatedTeam.students,
     },
-    {  headers: { 'Authorization': `Bearer ${auth}` }}
     ).then(response => {
         this.hasSavedTeam = true
         this.isProcessingTeamSave = false
         console.log(response)
         this.getStudents()
+        this.getTeams()
 
         
     }).catch(error => {
@@ -234,7 +298,7 @@ export default {
             headers: { 'Authorization': `Bearer ${auth}` }
     };
 
-         axios.post(`https://www.peerevaltool.xyz/api/v1/team/save`, {
+         apiClient.post(`https://www.peerevaltool.xyz/api/v1/team/save`, {
             id : null,
             name: this.teamName,
             sectionId: storeSection.selectedSectionId,
@@ -311,7 +375,6 @@ export default {
 
 .team{
     flex : 0 0 10%;
-    height: 150px;
     text-align: center;
     border: 1px solid black;
 }
@@ -334,7 +397,6 @@ export default {
     text-align: left;
     align-items: flex-start;
     justify-content: space-between;
-    width: 50%;
 
 }
 

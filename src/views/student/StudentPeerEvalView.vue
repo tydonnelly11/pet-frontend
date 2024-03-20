@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import apiClient from  '@/axios-setup.js'
 import _ from 'lodash'
 import { storeUser } from '@/stores/store.js'
 import { storeWeek } from '@/stores/storeWeek.js'
@@ -85,7 +85,7 @@ export default {
       async getPeerEvalEntriesForWeek() {
          this.isLoading = true
          const auth = localStorage.getItem('auth')
-         axios.get(`https://www.peerevaltool.xyz/api/v1/peerEvaluation/getPeerEvaluation/${storeUser.userID}/${storeWeek.selectedWeekId}`,
+         apiClient.get(`https://www.peerevaltool.xyz/api/v1/peerEvaluation/getPeerEvaluation/${storeUser.userID}/${storeWeek.selectedWeekId}`,
                {
                   headers: { 'Authorization': `Bearer ${auth}` }            
                }
@@ -94,7 +94,6 @@ export default {
               
                if (response.data.code == 200) {
                   this.errorFlag = false
-                  this.hasEntry = true
                   const peerEvalEntriesForWeek = response.data.data
                   
                   console.log(peerEvalEntriesForWeek)
@@ -104,13 +103,16 @@ export default {
                      }
                   }
 
+
                   this.peerEvalEntriesForSelectedWeek = peerEvalEntriesForWeek
                   this.setPeerEvalVisibility(
                      storeWeek.currentWeekId,
                      storeWeek.selectedWeekId
                   )
-                  this.getGradeAndCommentsForPastWeek()
+                  // this.getGradeAndCommentsForPastWeek()
                   this.isLoading = false
+                  this.hasEntry = true
+
                } else if (response.data.code == 409) {
                   //Will be changed to new code
                   //409 is no entry for week
@@ -229,7 +231,7 @@ export default {
       getRubric() {
          const auth = localStorage.getItem('auth')
 
-         axios.get(`https://www.peerevaltool.xyz/api/v1/section/getRubric/${storeUser.sectionId}`, {
+         apiClient.get(`https://www.peerevaltool.xyz/api/v1/section/getRubric/${storeUser.sectionId}`, {
             headers: { 'Authorization': `Bearer ${auth}` }
          })
          .then((response) => {
@@ -245,7 +247,7 @@ export default {
       },
       getGradeAndCommentsForPastWeek(){      
          const auth = localStorage.getItem('auth')
-         axios.get(`https://www.peerevaltool.xyz/api/v1/peerEvaluation/getEvaluationReport`, {
+         apiClient.get(`https://www.peerevaltool.xyz/api/v1/peerEvaluation/getEvaluationReport`, {
             headers: { 'Authorization': `Bearer ${auth}` },
             params: {
                week: storeWeek.selectedWeekId,

@@ -8,7 +8,8 @@
                   <p>Name:{{ item.criterionName }}</p>
                   <p>Desc:{{ item.criterionDesc }}</p>
                </th>
-               <th scope="col">Comments</th>
+               <th scope="col">Private Comments</th>
+               <th scope="col">Public Comments</th>
                <!-- <th>Total</th> -->
             </tr>
          </thead>
@@ -34,14 +35,20 @@
                   <input type="number" v-model="item.score" min="0" :max='item.criterion.maxScore' />
                </td>
                <td scope="col">
-                  <input type="text" v-model="student.comment" />
+                  <input type="text" v-model="student.privateComment" />
+                  <!-- <input type="checkbox" v-model="student.isCommentPublic"/> -->
+               </td>
+               <td scope="col">
+                  <input type="text" v-model="student.publicComment" />
                   <!-- <input type="checkbox" v-model="student.isCommentPublic"/> -->
                </td>
             </tr>
          </tbody>
       </table>
-      <button v-if="!(this.isPastWeek)" type="submit">Submit</button>
+      <button v-if="!(this.isPastWeek )" type="submit">Submit</button>
    </form>
+
+
    
    <div v-if="this.submissionStatus == 200" class="popup-overlay">
       <div class="success">
@@ -52,7 +59,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import apiClient from  '@/axios-setup.js'
 import { storeUser } from '@/stores/store.js'
 import { storeWeek } from '@/stores/storeWeek.js'
 import { storeTeam } from '@/stores/storeTeam.js'
@@ -88,8 +95,11 @@ export default {
          for (const item of this.peerEval) {
             console.log(item)
             console.log(storeUser.userId)
-            if(item.comment == ""){
-               item.comment = "None"
+            if(item.publicComment == ""){
+               item.publicComment = "None"
+            }
+            if(item.privateComment == ""){
+               item.privateComment = "None"
             }
             targetPayload.push({
                evaluatorId: item.evaluatorId,
@@ -98,6 +108,8 @@ export default {
                week: item.week,
                ratings: item.ratings,
                comment: item.comment,
+               publicComment : item.publicComment,
+               privateComment : item.privateComment,
                // isCommentPublic: item.isCommentPublic,
                
             })
@@ -115,8 +127,7 @@ export default {
          // console.log(targetPayload)
          const auth = localStorage.getItem('auth')
 
-         axios
-            .post('https://www.peerevaltool.xyz/api/v1/peerEvaluation/submitPeerEvaluation', targetPayload, {
+         apiClient.post('https://www.peerevaltool.xyz/api/v1/peerEvaluation/submitPeerEvaluation', targetPayload, {
                headers: { 'Authorization': `Bearer ${auth}` },
             })
             .then((response) => {
@@ -128,7 +139,7 @@ export default {
             })
       },
       // getRubric() {
-      //    axios.get(`https://www.peerevaltool.xyz/api/v1/section/getRubric/${storeUser.sectionId}`, {
+      //    apiClient.get(`https://www.peerevaltool.xyz/api/v1/section/getRubric/${storeUser.sectionId}`, {
       //       withCredentials: true,
       //    })
       //    .then((response) => {
@@ -161,6 +172,7 @@ th, td {
 
 form {
    margin-top: 2.5%;
+   margin-left: 12.5%;
 }
 
 button {

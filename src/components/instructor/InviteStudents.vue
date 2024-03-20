@@ -1,5 +1,5 @@
 <template>
-    <SectionDropdown/>
+    <!-- <SectionDropdown/> -->
     <div class="invite-students-container">
         <div class="invite-students-header">
             <h1>Invite Students to {{ storeSection.selectedSectionName }}</h1>
@@ -35,14 +35,14 @@
 </template>
 
 <script>
-import axios from 'axios'
+import apiClient from  '@/axios-setup.js'
 import { storeUser } from '@/stores/store.js'
 import { storeSection } from '../../stores/storeSection'
 import SectionDropdown from '@/components/instructor/SectionDropdown.vue'
 
 
 export default {
-   name: 'InstructorInviteStudentsView',
+   name: 'InstructorInviteStudents',
    components: { SectionDropdown },
    data() {
       return {
@@ -85,7 +85,7 @@ export default {
             const auth = localStorage.getItem('auth')
             
 
-            axios.post(`https://www.peerevaltool.xyz/api/v1/auth/register/student/inviteStudents`, 
+            apiClient.post(`https://www.peerevaltool.xyz/api/v1/auth/register/student/inviteStudents`, 
                 
                     this.listOfStudents
             ,{

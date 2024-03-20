@@ -26,7 +26,7 @@
 <script>
 import { storeSection } from '../../stores/storeSection'
 import SectionDropdown from '@/components/instructor/SectionDropdown.vue'
-import axios from 'axios'
+import apiClient from  '@/axios-setup.js'
 
 export default {
     name: 'InstructorRubricView',
@@ -47,7 +47,7 @@ export default {
             this.hasLoaded = false
          const auth = localStorage.getItem('auth')
 
-         axios.get(`https://www.peerevaltool.xyz/api/v1/section/getRubric/${storeSection.selectedSectionId}`, {
+         apiClient.get(`https://www.peerevaltool.xyz/api/v1/section/getRubric/${storeSection.selectedSectionId}`, {
             headers: { 'Authorization': `Bearer ${auth}` }
          })
          .then((response) => {

@@ -8,14 +8,14 @@
 
     <div class="container">
         <div class="grid-container">
-            <div 
-            v-for="team in teams" 
+         <button 
+            v-for="team in this.teams" 
             :class="{'selected-item': selectedTeam && team.id === selectedTeam.id}"
             :key="team.id"
-            @click="getTeamWar(team)">
+            @click="getTeamWar(team)"
+            >
             <p>{{ team.name }}</p>
-            
-            </div>
+        </button>
         </div>
         
     </div>
@@ -25,13 +25,13 @@
 </template>
 
 <script>
-import SectionDropdown from '@/components/instructor/SectionDropdown.vue';
+import SectionDropdown from '../../components/instructor/SectionDropdown.vue';
 import { storeSection } from '../../stores/storeSection'
 import { storeUser } from '../../stores/store.js'
 import WeekDropdown from '../../components/WeekDropdown.vue';
 import WarTeamTable from '@/components/WarTeamTable.vue'
 import { storeWeek } from '../../stores/storeWeek'
-import axios from 'axios'
+import apiClient from  '@/axios-setup.js'
 export default {
    name: 'InstructorWARView',
    components: {
@@ -54,7 +54,7 @@ export default {
         this.hasSelectedTeam = false;
         const auth = localStorage.getItem('auth')
 
-        axios.get(`https://www.peerevaltool.xyz/api/v1/war/get`,
+        apiClient.get(`https://www.peerevaltool.xyz/api/v1/war/get`,
          {
             params: {
                teamId: team.id,
@@ -109,7 +109,7 @@ export default {
          const config = {
             headers: { 'Authorization': `Bearer ${auth}` }
          };
-        axios.get(`https://www.peerevaltool.xyz/api/v1/section/getAllTeams/${storeSection.selectedSectionId}`,
+        apiClient.get(`https://www.peerevaltool.xyz/api/v1/section/getAllTeams/${storeSection.selectedSectionId}`,
         {  headers: { 'Authorization': `Bearer ${auth}` }}
         )
         .then(response => {
@@ -143,8 +143,12 @@ export default {
         },
         watchedWeekId(newVal, oldVal) {
             console.log(`weekID changed from ${oldVal} to ${newVal}`);
-            this.getTeamWar(this.selectedTeam);
-            this.hasSelectedTeam = false
+            if(this.hasSelectedTeam){
+               this.getTeamWar(this.selectedTeam);
+               // this.hasSelectedTeam = false
+            }
+            // this.getTeamWar(this.selectedTeam);
+            // this.hasSelectedTeam = false
         }
     },
    created() {
@@ -175,6 +179,6 @@ export default {
   cursor: pointer;
 }
 .selected-item {
-  border: 4px solid blue; /* Adjust the color and border size as needed */
+  border: 4px solid red; /* Adjust the color and border size as needed */
 }
 </style>
