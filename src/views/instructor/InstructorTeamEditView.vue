@@ -164,7 +164,7 @@ export default {
             headers: { 'Authorization': `Bearer ${auth}` }
          };
         
-        apiClient.get(`http://localhost:80/api/v1/section/getAllStudents/${storeSection.selectedSectionId}`,
+        apiClient.get(`https://www.peerevaltool.xyz/api/v1/section/getAllStudents/${storeSection.selectedSectionId}`,
         {  headers: { 'Authorization': `Bearer ${auth}` }}
         )
         .then(response => {
@@ -213,7 +213,7 @@ export default {
          const config = {
             headers: { 'Authorization': `Bearer ${auth}` }
          };
-        apiClient.get(`http://localhost:80/api/v1/section/getAllTeams/${storeSection.selectedSectionId}`,
+        apiClient.get(`https://www.peerevaltool.xyz/api/v1/section/getAllTeams/${storeSection.selectedSectionId}`,
         {  headers: { 'Authorization': `Bearer ${auth}` }}
         )
         .then(response => {
@@ -266,7 +266,7 @@ export default {
         }
     }
    
-    apiClient.post(`http://localhost:80/api/v1/team/edit`,
+    apiClient.post(`https://www.peerevaltool.xyz/api/v1/team/edit`,
     {
         id: this.updatedTeam.id,
         name: this.updatedTeam.name,
@@ -298,7 +298,7 @@ export default {
             headers: { 'Authorization': `Bearer ${auth}` }
     };
 
-         apiClient.post(`http://localhost:80/api/v1/team/save`, {
+         apiClient.post(`https://www.peerevaltool.xyz/api/v1/team/save`, {
             id : null,
             name: this.teamName,
             sectionId: storeSection.selectedSectionId,

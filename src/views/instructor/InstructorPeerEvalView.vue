@@ -60,7 +60,7 @@ export default {
     getRubric() {
         const auth = localStorage.getItem('auth')
          
-         apiClient.get(`http://localhost:80/api/v1/section/getRubric/${storeSection.selectedSectionId}`, 
+         apiClient.get(`https://www.peerevaltool.xyz/api/v1/section/getRubric/${storeSection.selectedSectionId}`, 
          {headers: { 'Authorization': `Bearer ${auth}` }}
          )
          .then((response) => {
@@ -78,7 +78,7 @@ export default {
       const auth = localStorage.getItem('auth')
       // Fetch reports for each student
         try {
-          const response = await apiClient.get(`http://localhost:80/api/v1/peerEvaluation/getEvaluationReport`, {
+          const response = await apiClient.get(`https://www.peerevaltool.xyz/api/v1/peerEvaluation/getEvaluationReport`, {
             params: {
               
               week: storeWeek.selectedWeekId,
