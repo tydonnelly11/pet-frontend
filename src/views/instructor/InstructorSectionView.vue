@@ -45,6 +45,7 @@
          <label>Check to use default rubric</label>
          <input type="checkbox" id="defaultRubric" v-model="isRubricDefault"  />
       </div>
+      
       <h4>Enter Rubric Critera for Year</h4>
          <div class="input-field">
             <label>Criteria Name</label>
@@ -78,13 +79,16 @@
          <input type="date" id="end-date" v-model="endDate" />
 
          <button @click="generateWeekList">Calculate Weeks</button>
-
-         <ul v-if="weeksForSemester.length > 0">
-            <li v-for="(week, index) in weeksForSemester" :key="index">
-            <input type="checkbox" :id="'week-' + index" v-model="week.execlude">
-            <label :for="'week-' + index">{{ week.start }} - {{ week.end }}</label>
-            </li>
-         </ul>
+         <div v-if="weeksCalculated">
+            <h4>Check the boxes for weeks you want to exclude from a section</h4>
+            <ul v-if="weeksForSemester.length > 0">
+               <li v-for="(week, index) in weeksForSemester" :key="index">
+               <input type="checkbox" :id="'week-' + index" v-model="week.execlude">
+               <label :for="'week-' + index">{{ week.start }} - {{ week.end }}</label>
+               </li>
+            </ul>
+         </div>
+         
       </div>
 
       <button type="submit" @click="submitSection">Create Section</button>
@@ -141,6 +145,7 @@ export default {
          password: "",
          hasError: false,
          weeksForSemester: [],
+         weeksCalculated: false,
 
 
 
@@ -179,6 +184,7 @@ export default {
            weekId++
         }
         this.weeksForSemester = weeks
+        this.weeksCalculated = true;
       },
       formatDate(date) {
         //Formats date for display on week dropdown
@@ -264,8 +270,8 @@ export default {
             instructorId: storeUser.userID,
             isRubricDefault: this.isRubricDefault,
             rubric: rubric,
-            startDate: this.startDate,
-            endDate: this.endDate,
+            startDate: {date :this.startDate} ,
+            endDate: {date : this.endDate},
             weeksToExclude: weeksToExcludeVar,
          },
          {  headers: { 'Authorization': `Bearer ${auth}` }}

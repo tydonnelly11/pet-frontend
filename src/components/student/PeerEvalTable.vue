@@ -8,7 +8,8 @@
                   <p>Name:{{ item.criterionName }}</p>
                   <p>Desc:{{ item.criterionDesc }}</p>
                </th>
-               <th scope="col">Comments</th>
+               <th scope="col">Private Comments</th>
+               <th scope="col">Public Comments</th>
                <!-- <th>Total</th> -->
             </tr>
          </thead>
@@ -34,7 +35,11 @@
                   <input type="number" v-model="item.score" min="0" :max='item.criterion.maxScore' />
                </td>
                <td scope="col">
-                  <input type="text" v-model="student.comment" />
+                  <input type="text" v-model="student.privateComment" />
+                  <!-- <input type="checkbox" v-model="student.isCommentPublic"/> -->
+               </td>
+               <td scope="col">
+                  <input type="text" v-model="student.publicComment" />
                   <!-- <input type="checkbox" v-model="student.isCommentPublic"/> -->
                </td>
             </tr>
@@ -90,8 +95,11 @@ export default {
          for (const item of this.peerEval) {
             console.log(item)
             console.log(storeUser.userId)
-            if(item.comment == ""){
-               item.comment = "None"
+            if(item.publicComment == ""){
+               item.publicComment = "None"
+            }
+            if(item.privateComment == ""){
+               item.privateComment = "None"
             }
             targetPayload.push({
                evaluatorId: item.evaluatorId,
@@ -100,6 +108,8 @@ export default {
                week: item.week,
                ratings: item.ratings,
                comment: item.comment,
+               publicComment : item.publicComment,
+               privateComment : item.privateComment,
                // isCommentPublic: item.isCommentPublic,
                
             })
@@ -162,6 +172,7 @@ th, td {
 
 form {
    margin-top: 2.5%;
+   margin-left: 12.5%;
 }
 
 button {

@@ -72,6 +72,7 @@ import { storeSection } from '../stores/storeSection';
         localStorage.removeItem('storeUser');
         localStorage.removeItem('storeSection');
         localStorage.removeItem('storeWeek');
+        localStorage.removeItem('storeTeam');
         this.$router.push('/');
      },
    },

@@ -8,6 +8,9 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { storeUser } from './stores/store.js';
 import { storeSection } from './stores/storeSection.js';
 import { storeWeek } from './stores/storeWeek.js';
+import { setAuthHeader } from './axios-setup.js';
+import { storeTeam } from './stores/storeTeam.js';
+
 
 
 const savedState = localStorage.getItem('storeUser');
@@ -28,8 +31,24 @@ if (savedState3) {
     Object.assign(storeWeek, parsedState);
   }
 
+const savedState4 = localStorage.getItem('storeTeam');
+
+if (savedState4) {
+  const parsedState = JSON.parse(savedState4);
+  Object.assign(storeTeam, parsedState);
+}
+
+const savedState5 = localStorage.getItem('auth');
+
+if(savedState5){
+  setAuthHeader(savedState5);
+}
+
+
+
 
 
 
 import './scss/styles.scss'
+// import { c } from 'vitest/dist/reporters-5f784f42.js';
 createApp(App).use(router).mount('#app')

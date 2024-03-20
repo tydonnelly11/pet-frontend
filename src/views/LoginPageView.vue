@@ -53,6 +53,7 @@ import { storeUser } from '../stores/store.js'
 import apiClient from  '@/axios-setup.js'
 import { storeSection } from '../stores/storeSection';
 import { storeWeek } from '../stores/storeWeek.js';
+import { setAuthHeader } from '@/axios-setup.js';
 export default {
 name: 'LoginPageView',
 data() {
@@ -83,7 +84,9 @@ loginInstructor()
       this.isLoading = false
       storeUser.updateLoginStatus(response.data.data.userInfo.id, true)
       localStorage.setItem('auth', response.data.data.token);
+      let authToken = response.data.data.token
       localStorage.setItem('logginstatus', true)
+      setAuthHeader(authToken)
       if(response.data.data.userInfo.sections.length == 0)
       {
          this.$router.push('/instructorhome/section')
@@ -136,9 +139,12 @@ loginStudent()
       storeUser.setTeamId(response.data.data.userInfo.teamId)
       storeUser.setName(response.data.data.userInfo.firstName,response.data.data.userInfo.lastName)
       storeUser.setSectionId(response.data.data.userInfo.sectionId)
+      storeWeek.setWeekList(response.data.data.userInfo.weeks)
       localStorage.setItem('auth', response.data.data.token);
       localStorage.setItem('logginstatus', true)
       localStorage.setItem('storeUser', JSON.stringify(storeUser));
+      localStorage.setItem('storeSection', JSON.stringify(storeSection));
+      localStorage.setItem('storeWeek', JSON.stringify(storeWeek));
 
       if(storeUser.teamId == null)
       {
@@ -179,7 +185,22 @@ pushInstructor2()
    this.$router.push('/studenthome')
 },
 
+getWeeksForSection(sectionId)
+{
+   apiClient.get(`http://localhost:80/api/v1/section/getWeeks/${sectionId}`, {
+
+   })
+   .then(response => {
+      console.log(response)
+      storeWeek.setWeekList(response.data.data)
+      localStorage.setItem('storeWeek', JSON.stringify(storeWeek));
+   })
+   .catch(error => {
+      console.log(error)
+   })
 },
+
+}
 }
 </script>
 

@@ -51,20 +51,21 @@ export const storeWeek = reactive({
 
     setWeekList(weekList) {
       this.weeksForSemester = [];
-      if(weekList.length == 0){
+      if(weekList == null || weekList.length == 0){
+
       }
       else{
-         var index = 1;
          for(const week of weekList){
             this.weeksForSemester.push({
-               id: index,
-               start: this.formatDate(week.startDate.formattedDate),
-               end: this.formatDate(week.endDate.formattedDate)
+               id: week.id,
+               start: this.formatDate(week.week.startDate.formattedDate),
+               end: this.formatDate(week.week.endDate.formattedDate)
             
             })
-            index++
          
          }
+         this.weeksForSemester.sort((a, b) => a.id - b.id);
+         console.log(this.weeksForSemester)
          this.calcCurrentWeek()
       }
       

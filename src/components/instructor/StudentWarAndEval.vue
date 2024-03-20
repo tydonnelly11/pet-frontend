@@ -1,17 +1,57 @@
 <template>
-    <p>Select dates to get WAR/Peer Evaluation for {{ student.studentId }}</p>
+    
+    <p>Select dates to get WAR/Peer Evaluation for {{ student.studentName }}</p>
     <label for="start-date">Start Date:</label>
     <input type="date" id="start-date" v-model="startDate" />
 
     <label for="end-date">End Date:</label>
     <input type="date" id="end-date" v-model="endDate" />
 
-    <button @click="getWarAndEval">Get WAR and Evals</button>
+    <button @click="getWarAndEval">Get WAR</button>
+    <button @click="getPeerEvaluationReport">Get Peer Evaluation</button>
 
     <div v-if="this.hasEntry" v-for="student in studentList">
         <p>War for {{ student.weekStart }} - {{ student.weekEnd }}</p>
         <WarList :isTeamWar="false" :studentTasks="student"/>
 
+    </div>
+
+    <div v-if="this.hasPeerEntry" v-for="student in studentListPeer">
+        <h4>Peer Evaluation for {{ student.weekStart }} - {{ student.weekEnd }}</h4>
+        <div >
+            <div v-if="student.averageScore == 'N/A'">
+                <p>No Peer Eval submited</p>
+            </div>
+            <div class="table" v-else>
+                <p>Student: {{ student.firstName }} {{ student.lastName}}</p>
+                <p>Grade: {{ student.averageScore }} / {{ this.totalScore }}</p>
+                <div class="comments-box">
+                    <p>Private Comments</p>
+                    <CommentTable :comments="student.privateComments"/>
+                </div>
+                <div class="comments-box">
+                    <p>Public Comments</p>
+                    <CommentTable :comments="student.publicComments"/>
+                </div>
+            
+
+            </div>
+            
+            
+        </div>
+
+
+    </div>
+    <div v-if="isLoading" class="popup-overlay">
+            <img src="/img/loading-gif.gif">
+    </div>
+
+    <button @click="removeStudent">Delete Student</button>
+    <div v-if="hasDeletedStudent" class="popup-overlay">
+        <div class="success">
+            <p>Student Succesfully Deleted!</p>
+            <button @click="hasDeletedStudent = false;this.$router.push('/instructorhome/editteams')">Close</button>
+        </div>
     </div>
 
 
@@ -27,6 +67,8 @@ import apiClient from '@/axios-setup.js'
 import WarList from '@/components/WarList.vue'
 import WarTeamTable from '@/components/WarTeamTable.vue'
 import { storeWeek } from '@/stores/storeWeek.js'
+import { storeSection } from '@/stores/storeSection'
+import CommentTable from './CommentTable.vue'
 
 
 export default{
@@ -34,26 +76,32 @@ export default{
     data(){
         return{
             studentList: [],
+            studentListPeer: [],
             student : {
                 teamId: this.$route.params.teamid,
                 studentId: this.$route.params.studentid,
+                studentName: this.$route.params.studentName,
                 weekEnd: "",
                 weekStart: "",
                 tasks: []
             },
             weeksSelected: [],
-            storeWeek,
+            storeWeek, storeSection,
             hasEntry: false,
+            hasDeletedStudent: false,
+            hasPeerEntry: false,
         }
             
     },
     components: {
         WarList,
-        WarTeamTable
+        WarTeamTable,
+        CommentTable
     },
     props: {
         teamid: String,
         studentid: String,
+        studentName: String
 
     },
     computed: {
@@ -94,7 +142,6 @@ export default{
                         teamId: this.$route.params.teamid,
                         weekId: week.id
                     },
-                    headers: { 'Authorization': `Bearer ${auth}` }
                 });
 
                 console.log(response.data);
@@ -133,13 +180,94 @@ export default{
             }
         }
         this.hasEntry = true;
-        }
+        },
+        async getPeerEvaluationReport(){
+            this.hasPeerEntry = false;
+            this.isLoading = true
+            this.getWeeks()
+            this.studentListPeer = []
+            for (const week of this.weeksSelected) {
+                console.log("HERE")
+                try {
+                    const response = await apiClient.get(`http://localhost:80/api/v1/peerEvaluation/getEvaluationReportWithPrivateComments`, {
+                        params: {
+                            week: week.id,
+                            studentId: this.student.studentId,
+                        },
+                    });
+                    if(response.data.data[0] != null){
+                        response.data.data[0].weekStart = week.start
+                        response.data.data[0].weekEnd = week.end
+                        this.studentListPeer.push(response.data.data[0]);
+                    }
+                    else{
+                        this.studentListPeer.push({
+                            weekStart: week.start,
+                            weekEnd: week.end,
+                            firstName: this.$route.params.studentName,
+                            lastName: "",
+                            averageScore: "N/A",
+                            privateComments: [],
+                            publicComments: []
+                        })
+                    }
+                    
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+            this.hasPeerEntry = true;
+            this.isLoading = false
+            console.log(this.studentList)
+
+        },
+
+        removeStudent(){
+            this.hasDeletedStudent = true;
+            apiClient.post(`http://localhost:80/api/v1/section/deleteStudent`, {
+                id: this.$route.params.studentid 
+            }).then(response => {
+                console.log(response)
+                console.log("Student Deleted")
+            }).catch(error => {
+                console.log(error)
+            })
+
+        
+        },
+        getRubric() {
+         let rubric = null;
+         
+         apiClient.get(`http://localhost:80/api/v1/section/getRubric/${storeSection.selectedSectionId}`, 
+         
+         )
+         .then((response) => {
+            
+            let total = 0
+            for(const criteria of response.data.data.criteria){
+                total = total + criteria.maxScore
+                console.log(criteria)
+            }
+            this.totalScore = total
+            console.log(this.totalScore)
+         })
+         
+            let total = 0
+            for(const criteria in rubric){
+                total = total + criteria.maxScore
+                console.log(criteria)
+            }
+            this.totalScore = total
+            console.log(this.totalScore)
+        },
 
     },
     mounted(){
         console.log(this.$route.params)
         this.student.teamId = this.$route.params.teamid
         this.student.studentId = this.$route.params.studentid
+        this.getRubric()
+        
 
     }
 
@@ -147,6 +275,13 @@ export default{
 
 </script>
 
-<style>
+<style scoped>
+.table{
+    display: flex;
+    flex-direction: row;
+}
 
+.comments-box{
+    border: solid 1px blueviolet;
+}
 </style>

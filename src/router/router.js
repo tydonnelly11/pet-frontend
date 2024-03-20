@@ -17,6 +17,7 @@ import InstructorRubricView from '../views/instructor/InstructorRubricView.vue'
 import InstructorWARView from '../views/instructor/InstructorWARView.vue'
 import StudentWarAndEval from '@/components/instructor/StudentWarAndEval.vue'
 import InstructorShowSectionView from '@/views/instructor/InstructorShowSectionView.vue'
+import TeamWarAndEdit from '../components/instructor/TeamWarAndEdit.vue'
 
 
 const routes = [
@@ -33,6 +34,12 @@ const routes = [
       component: RegisterPageView,
       //http://localhost:5173/auth/register/student?token=1
    
+   },
+   {
+      path: '/auth/register/assistantInstructor/token=:token',
+      name: 'RegisterIns',
+      component: RegisterPageView,
+
    },
    {
       path: '/waitingroom',
@@ -108,9 +115,15 @@ const routes = [
 
          },
          {
-            path: ':teamid/:studentid',
+            path: ':teamid/:studentid/:studentName',
             name: 'InstructorViewStudent',
             component: StudentWarAndEval,
+            props: true,
+         },
+         {
+            path: ':teamid:/:teamname/:sectionId',
+            name: 'InstructorViewTeam',
+            component: TeamWarAndEdit,
             props: true,
          }
          // The Instructor WAR is going to be added later
@@ -138,7 +151,7 @@ const router = createRouter({
       }
 
       // Allow access to the registration page (adjust the condition to match your register route pattern)
-      if (to.path.startsWith('/auth/register/student/token=')) {
+      if (to.path.startsWith('/auth/register/student/token=') || to.path.startsWith('/auth/register/assistantInstructor/token=')) {
           return true;
       }
 

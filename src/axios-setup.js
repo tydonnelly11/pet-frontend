@@ -1,7 +1,11 @@
 import axios from 'axios';
-import router from '@/router/router.js'; // Import your router instance
-
-// Create an Axios instance or use the default global instance
+import router from '@/router/router.js'; 
+let auth = localStorage.getItem('auth')
+/*
+This is a axios instance thats used to send users 
+back to login if there token exires as well as being able to refresh page and
+stay logged in
+*/
 const apiClient = axios.create({
   baseURL: 'http://localhost:80/',
   headers: {
@@ -9,6 +13,17 @@ const apiClient = axios.create({
     'Content-Type': 'application/json',
   },
 });
+
+const savedState5 = localStorage.getItem('auth');
+
+if (savedState5) {
+  auth = savedState5;
+}
+
+
+export function setAuthHeader(token) {
+  apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+}
 
 apiClient.interceptors.response.use(response => {
   return response;
@@ -19,6 +34,8 @@ apiClient.interceptors.response.use(response => {
     localStorage.removeItem('auth');
     localStorage.removeItem('storeUser');
     localStorage.removeItem('storeSection');
+    localStorage.removeItem('storeWeek');
+    localStorage.removeItem('storeTeam');
     
   }
   return Promise.reject(error);

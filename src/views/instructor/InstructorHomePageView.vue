@@ -11,6 +11,7 @@
 import InstructorNavbarSide from '../../components/InstructorNavbarSide.vue'
 import WeekDropdown from '../../components/WeekDropdown.vue';
 import {storeWeek} from '@/stores/storeWeek.js';
+import { storeSection } from '../../stores/storeSection';
 </script>
 
 <script>
@@ -23,6 +24,7 @@ export default {
    data() {
       return {
          isSidebarOpen: false,
+         storeSection,
       };
    },
    methods: {

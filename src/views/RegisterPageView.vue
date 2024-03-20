@@ -72,7 +72,7 @@ export default {
                 
             }).then(response => {
                 console.log(response)
-                this.studentInfo.email = response.data.data.studentEmail
+                this.studentInfo.email = response.data.data.email
                 
                 this.studentInfo.sectionId = response.data.data.studentSectionId
                 
