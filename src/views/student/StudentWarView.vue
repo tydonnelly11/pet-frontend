@@ -57,7 +57,10 @@ export default {
          selectedWeek: ref(null),
          studentTasks : {
             name : storeUser.userFullName,
-            tasks : []
+            tasks : [],
+            weekStart : storeWeek.selectedWeek.start,
+            weekEnd : storeWeek.selectedWeek.end
+
          },
          tasksToBeSubmitted : [],
 

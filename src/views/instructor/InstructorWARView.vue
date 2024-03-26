@@ -85,6 +85,8 @@ export default {
                name: item.firstName + item.lastName,
                tasks: [],
                id: item.id,
+               weekStart: storeWeek.selectedWeek.start,
+               weekEnd: storeWeek.selectedWeek.end
             }
            
             for(const activity of activities){

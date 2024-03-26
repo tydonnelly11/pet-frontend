@@ -1,4 +1,5 @@
 <template>
+    <button @click="this.$router.back()">Previous page</button>
     <p>Select dates to get WAR for {{ teamname }}</p>
     <label for="start-date">Start Date:</label>
     <input type="date" id="start-date" v-model="startDate" />
@@ -20,8 +21,16 @@
         <label>Enter New Team name: </label>
         <input type="text" v-model="newTeamName"/>
         <button @click="editTeamName = false;">Cancel</button>
-        <button @click="editTeamName = false; editTeam();">Save</button>
+        <button @click="editTeam();">Save</button>
     </div>
+
+    <div v-if="hasChangedName" class="popup-overlay">
+        <div class="success">
+            <p>Team Name changed!</p>
+            <button @click="hasChangedName = false; editTeamName = false">Close</button>
+        </div>
+    </div>
+
     <div v-if="hasDeletedTeam" class="popup-overlay">
         <div class="success">
             <p>Team Succesfully Deleted!</p>
@@ -57,6 +66,7 @@ export default{
                 sectionId: this.sectionId
             },
             hasEntry: false,
+            hasChangedName: false,
 
         }
     },
@@ -124,7 +134,7 @@ export default{
             }
             const auth = localStorage.getItem('auth')
             
-        
+            this.isLoading = true;
             apiClient.post(`http://localhost:80/api/v1/team/edit`,
             {
                 id: this.teamOBJ.id,
@@ -135,7 +145,8 @@ export default{
             },
             {  headers: { 'Authorization': `Bearer ${auth}` }}
             ).then(response => {
-                
+                this.isLoading = false;
+                this.hasChangedName = true;
                 console.log(response)
 
                 

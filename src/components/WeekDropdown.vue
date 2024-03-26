@@ -17,7 +17,7 @@
 
          <ul class="dropdown-menu" :style="'columns : 3;'">
             <li
-               v-for="week in storeWeek.weeksForSemester"
+               v-for="week in filteredWeeks"
                :value="week.id"
                @click="storeWeek.updateSelectedWeek(week)"
             >
@@ -82,6 +82,13 @@ export default {
       }
    },
    computed: {
+
+      filteredWeeks() {
+         const currentWeekIndex = storeWeek.weeksForSemester.findIndex(week => week.id === storeWeek.currentWeek.id);
+         const start = Math.max(currentWeekIndex - 5, 0);
+         const end = Math.min(currentWeekIndex + 6, storeWeek.weeksForSemester.length); // +6 because slice is non-inclusive at the end
+         return storeWeek.weeksForSemester.slice(start, end);
+      }
       
    },
    mounted() {

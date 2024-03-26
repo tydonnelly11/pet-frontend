@@ -1,6 +1,6 @@
 <template>
    <div class="InstructorSectionView">
-     <h1>Instructor Section View</h1>
+     <!-- <h1>Instructor Section View</h1>
      <div class="register-instructor">
        <div class="input-field">
          <label for="firstName">First Name</label>
@@ -23,7 +23,7 @@
          <input type="password" id="password" class="input" v-model="password" required />
        </div>
        <button type="submit" @click="registerInstructor">Register Instructor</button>
-     </div>
+     </div> -->
 
       <div v-if="hasSubmittedInstructor" class="popup-overlay">
          <div class="success">
@@ -91,6 +91,12 @@
          
       </div>
 
+      <!-- <div>
+         <label for="teamName">Set Section to active Section</label>
+         <input type="checkbox" id="teamName" v-model="teamName" required />
+         <button @click="setCurrentSection">Save</button>
+      </div> -->
+
       <button type="submit" @click="submitSection">Create Section</button>
       <div v-if="isLoading" class="popup-overlay">
          <img src="/img/loading-gif.gif">
@@ -154,6 +160,17 @@ export default {
       }
    },
    methods: {
+
+      setCurrentSection(){
+         apiClient.post(`http://localhost:80/api/v1/section/setIsCurrentSection`, {
+            id : storeSection.selectedSectionId
+         })
+         .then(res => {
+            console.log(res)
+            this.isLoading = false
+            this.hasSetCurrentSection = true
+         });
+      },
 
       generateWeekList(){
         const startDate1 = new Date(this.startDate) // Start date

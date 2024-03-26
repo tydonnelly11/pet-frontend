@@ -3,8 +3,23 @@
     <div :style="'display: flex; flex-direction:row'">
         <button @click="inviteStudentPressed = true">Invite Students</button>
         <button @click="inviteInstructorPressed = true">Invite Instructors</button>
+        <button @click="editSection = true">Edit Section</button>
+        <button @click="setCurrentSection">Click to set Section as Active</button>
+
 
     </div>
+    
+
+    <div v-if="editSection">
+        <label>Enter New Name</label>
+        <input v-model="newSectionName" type="text" />
+
+        <label></label>
+
+        <button @click="editSectionInfo()">Update Section</button>
+        <button @click="editSection = false">Cancel</button>
+    </div>
+
     
     <div v-if="inviteStudentPressed">
         <InstructorInviteStudents />
@@ -86,18 +101,44 @@
         </div>
 
     </div>
+
+    
+
+    <div v-if="hasSetActiveSection" class="popup-overlay">
+      <div class="success">
+         <p>Section Set as Active!</p>
+         <button @click="hasSetActiveSection = false">Close</button>
+      </div>
+      </div>
+    
+      <div v-if="hasUpdatedSection" class="popup-overlay">
+      <div class="success">
+         <p>Section Updated</p>
+         <button @click="hasUpdatedSection = false">Close</button>
+      </div>
+      </div>
+
+
     <button type="submit" class="small-button" @click="saveTeam()">Save Team</button>
     <div v-if="hasSavedTeam" class="popup-overlay">
       <div class="success">
          <p>Team Successfully Saved!</p>
-         <!-- Add a button or a way to close the overlay -->
          <button @click="hasSavedTeam = false">Close</button>
       </div>
-      </div>
+    </div>
     <div v-if="isProcessingTeamSave" class="popup-overlay">
          <img src="/img/loading-gif.gif">
       </div>
       <button type="submit" class="small-button" @click="clearSelection()">Clear Selection</button>
+
+      <div>
+        <h3>Assistant Instructors</h3>
+        <div v-for="instructor in activeInstructors">
+            <label>{{ instructor.firstName }} {{ instructor.lastName }}</label>
+            <button v-for="team in teams" @click="addInstructorToTeam(team)">{{ team.name }}</button>
+        </div>
+
+    </div>
 </template>
 
 <script>
@@ -143,6 +184,13 @@ export default {
         storeSection,storeWeek,
         inviteStudentPressed: false,
         inviteInstructorPressed: false,
+        hasSetActiveSection: false,
+        assistInstructors: [],
+        editSection: false,
+        hasUpdatedSection: false,
+        activeInstructors: [],
+        storeUser,
+        selectedSectionInfo : storeSection.selectedSection,
          
       }
    },
@@ -156,6 +204,39 @@ export default {
         this.getStudents()
         this.getTeams()
     },
+    editSectionInfo(){
+        if(this.newSectionName == "" || this.newSectionName == " "){
+            alert("Please enter a section name")
+            return
+        }
+        this.isLoading = true;
+        apiClient.post(`http://localhost:80/api/v1/section/save`, {
+            id: storeSection.selectedSectionId,
+            name: this.newSectionName,
+            instructorId: storeUser.userID,
+
+        })
+        .then(response => {
+            console.log(response)
+            this.isLoading = false;
+            this.hasUpdatedSection = true;
+
+        });
+    },
+
+    setCurrentSection(){
+        this.isLoading = true;
+        this.hasSetActiveSection = false;
+         apiClient.post(`http://localhost:80/api/v1/section/setCurrentSection`, {
+            id : storeSection.selectedSectionId
+         })
+         .then(res => {
+            console.log(res)
+            this.isLoading = false;
+            this.hasSetActiveSection = true;
+
+         });
+      },
     getStudents(){
         
         this.isLoading = true
@@ -185,6 +266,35 @@ export default {
             console.log(error)
         })
     },
+    getActiveAssistantInstructors(){
+        this.activeInstructors = []
+            this.isLoading = true
+            apiClient.get(`http://localhost:80/api/v1/assistantInstructor/getAllInstructors`, {
+
+            })
+            .then(response => {
+                console.log(response)
+                if(response.data.data == null){
+                    this.isLoading = false
+                    return
+                }
+                else{
+                    for(const instructor of response.data.data){
+                    if(instructor.isActive){
+                        this.activeInstructors.push(instructor)
+                    }
+                }
+                }
+                
+                this.isLoading = false
+            })
+            .catch(error => {
+                console.log(error)
+                this.isLoading = false
+            })
+    },
+
+
     toggleStudentOnTeam(student, team){
         if(this.selectedTeamId === null){
             alert("Please select a team to remove a student from")
@@ -198,6 +308,7 @@ export default {
         console.log(student);
         console.log(team);
     },
+
     openWARAndEval(studentVar){
         console.log(studentVar);
         const name = studentVar.firstName + " "  + studentVar.lastName;
@@ -341,6 +452,8 @@ export default {
    created() {
     this.getStudents()
     this.getTeams()
+    this.getActiveAssistantInstructors()
+    console.log(storeSection.selectedSection)
    },
 }
 

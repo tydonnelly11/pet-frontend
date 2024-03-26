@@ -1,5 +1,5 @@
 <template>
-    
+    <button @click="this.$router.back()">Previous page</button>
     <p>Select dates to get WAR/Peer Evaluation for {{ student.studentName }}</p>
     <label for="start-date">Start Date:</label>
     <input type="date" id="start-date" v-model="startDate" />

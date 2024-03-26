@@ -96,12 +96,21 @@ loginInstructor()
 
       }
       else{
-         console.log(response.data.data.userInfo.sections[0].weeks)
-         storeWeek.setWeekList(response.data.data.userInfo.sections[0].weeks)
-         // storeUser.setSectionId(response.data.data.sections[0].id)
-         
-         // storeUser.setSectionId(response.data.data.sections[0].id)
+         for(const section of response.data.data.userInfo.sections)
+         {
+            console.log(section);
+            if(section.isCurrent == true){
+               // storeWeek.setWeekList(section.weeks)
+               console.log("HERE")
+               console.log(section);
+               storeSection.setSelectedSection(section)
+            }
+         }
          storeSection.setSections(response.data.data.userInfo.sections)
+         // console.log(response.data.data.userInfo.sections[0].weeks)
+         // storeWeek.setWeekList(response.data.data.userInfo.sections[0].weeks)
+         
+         // storeSection.setSections(response.data.data.userInfo.sections)
 
       }
 

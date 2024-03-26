@@ -12,6 +12,7 @@ import InstructorNavbarSide from '../../components/InstructorNavbarSide.vue'
 import WeekDropdown from '../../components/WeekDropdown.vue';
 import {storeWeek} from '@/stores/storeWeek.js';
 import { storeSection } from '../../stores/storeSection';
+import apiClient from '../../axios-setup.js';
 </script>
 
 <script>
@@ -31,11 +32,26 @@ export default {
       toggleSidebar(isOpen) {
       this.isSidebarOpen = isOpen;
    },
+   getWeeksForSection(sectionId)
+        {
+        apiClient.get(`http://localhost:80/api/v1/section/getWeeks/${sectionId}`, {
+
+        })
+        .then(response => {
+            console.log(response)
+            storeWeek.setWeekList(response.data.data)
+            localStorage.setItem('storeWeek', JSON.stringify(storeWeek));
+        })
+        .catch(error => {
+            console.log(error)
+        })
+        }
 },
    //computed: {
       
   // },
    created() {
+      this.getWeeksForSection(storeSection.selectedSectionId);
       // storeWeek.calcCurrentWeek();
       console.log(storeWeek.currentWeek)
       console.log(storeWeek.currentWeekId)

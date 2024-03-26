@@ -68,7 +68,7 @@ export default {
         getRegistrationInfo(){
 
             
-            apiClient.get(`http://localhost:80/api/v1/auth/register/student/getStudentRegistrationTokenInfo/${this.token}`, {
+            apiClient.get(`http://localhost:80/api/v1/auth/register/user/getRegistrationTokenInfo/${this.token}`, {
                 
             }).then(response => {
                 console.log(response)

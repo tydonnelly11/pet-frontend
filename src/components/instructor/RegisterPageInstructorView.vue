@@ -40,6 +40,7 @@
 
 <script>
 import apiClient from  '@/axios-setup.js'
+import axios from 'axios'
 export default {
    name: 'RegisterPageInstructorView',
    props: {
@@ -68,7 +69,7 @@ export default {
         getRegistrationInfo(){
 
             
-            apiClient.get(`http://localhost:80/api/v1/auth/register/student/getStudentRegistrationTokenInfo/${this.token}`, {
+            axios.get(`http://localhost:80/api/v1/auth/register/user/getRegistrationTokenInfo/${this.token}`, {
                 
             }).then(response => {
                 console.log(response)
