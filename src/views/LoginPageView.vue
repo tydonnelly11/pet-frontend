@@ -22,6 +22,7 @@
        <!-- <button type="button" class="submit" @click="loginInstructor">Login Instructor</button> -->
        </form>
        <button @click="loginStudent" type="submit" class="submit">Login Student</button>
+       <button @click="loginAssistInstructor" type="submit" class="submit">Login Assistant Instructor</button>
        <button @click="loginInstructor" type="submit" class="submit">Login Instructor</button>
        <div v-if="this.isLoading" class="loading">
          <h1>Logging In...<img src="/img/loading-gif.gif"></h1>
@@ -54,6 +55,7 @@ import apiClient from  '@/axios-setup.js'
 import { storeSection } from '../stores/storeSection';
 import { storeWeek } from '../stores/storeWeek.js';
 import { setAuthHeader } from '@/axios-setup.js';
+import axios from 'axios'
 export default {
 name: 'LoginPageView',
 data() {
@@ -74,7 +76,7 @@ loginInstructor()
    
    this.isLoading = true
    let creds = this.encodeCredentials(this.email, this.password)
-   apiClient.post('https://www.peerevaltool.xyz/api/v1/auth/login/instructor', {},{
+   apiClient.post('http://localhost:80/api/v1/auth/login/instructor', {},{
       headers: {
          'Authorization': `Basic ${creds}`
       }
@@ -126,7 +128,7 @@ loginStudent()
 {
    this.isLoading = true
    let creds = this.encodeCredentials(this.email, this.password)
-   apiClient.post('https://www.peerevaltool.xyz/api/v1/auth/login/student', {}, {
+   apiClient.post('http://localhost:80/api/v1/auth/login/student', {}, {
       headers: {
          Authorization: `Basic ${creds}`
       }
@@ -164,6 +166,51 @@ loginStudent()
       }
    })
 },
+
+loginAssistInstructor(){
+   this.isLoading = true
+   let creds = this.encodeCredentials(this.email, this.password)
+   axios.post('http://localhost:80/api/v1/auth/login/assistantInstructor', {}, {
+      headers: {
+         Authorization: `Basic ${creds}`
+      }
+   })
+   .then((response =>
+   {      
+      console.log(response)
+
+      this.isLoading = false
+      localStorage.setItem('auth', response.data.data.token);
+      let authToken = response.data.data.token
+      localStorage.setItem('logginstatus', true)
+      setAuthHeader(authToken)
+      storeUser.updateLoginStatus(response.data.data.userInfo.id, true)
+      
+      storeUser.setTeamId(response.data.data.userInfo.teamId)
+      storeUser.setName(response.data.data.userInfo.firstName,response.data.data.userInfo.lastName)
+      storeUser.setSectionId(response.data.data.userInfo.sectionId)
+      storeWeek.setWeekList(response.data.data.userInfo.weeks)
+      if(storeUser.teamId == null)
+      {
+         this.$router.push('/waitingroom')
+      }
+      else
+      {
+         this.$router.push('/studenthome')
+      }
+
+
+
+      localStorage.setItem('storeUser', JSON.stringify(storeUser));
+      localStorage.setItem('storeSection', JSON.stringify(storeSection));
+      localStorage.setItem('storeWeek', JSON.stringify(storeWeek));
+
+   }
+   
+   ))
+
+},
+
 pushInstructor()
 {
    storeUser.updateLoginStatus("1", true)
@@ -187,7 +234,7 @@ pushInstructor2()
 
 getWeeksForSection(sectionId)
 {
-   apiClient.get(`https://www.peerevaltool.xyz/api/v1/section/getWeeks/${sectionId}`, {
+   apiClient.get(`http://localhost:80/api/v1/section/getWeeks/${sectionId}`, {
 
    })
    .then(response => {

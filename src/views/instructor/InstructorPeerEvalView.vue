@@ -16,7 +16,8 @@
         <tr>
           <th>Student Name</th>
           <th>Grade</th>
-          <th>Comments</th>
+          <th>Private Comments</th>
+          <th>Public Comments</th>
         </tr>
       </thead>
       <tbody>
@@ -24,8 +25,14 @@
           <td>{{ report.name }}</td>
           <td>{{ report.score }}</td>
           <td>
-            <CommentTable :comments="report.comments" />
+            <CommentTable :comments="report.publicComments" />
+            
           </td>
+          <td>
+            <CommentTable :comments="report.privateComments" />
+            
+          </td>
+
         </tr>
       </tbody>
     </table>
@@ -60,7 +67,7 @@ export default {
     getRubric() {
         const auth = localStorage.getItem('auth')
          
-         apiClient.get(`https://www.peerevaltool.xyz/api/v1/section/getRubric/${storeSection.selectedSectionId}`, 
+         apiClient.get(`http://localhost:80/api/v1/section/getRubric/${storeSection.selectedSectionId}`, 
          {headers: { 'Authorization': `Bearer ${auth}` }}
          )
          .then((response) => {
@@ -78,7 +85,7 @@ export default {
       const auth = localStorage.getItem('auth')
       // Fetch reports for each student
         try {
-          const response = await apiClient.get(`https://www.peerevaltool.xyz/api/v1/peerEvaluation/getEvaluationReport`, {
+          const response = await apiClient.get(`http://localhost:80/api/v1/peerEvaluation/getEvaluationReportWithPrivateComments`, {
             params: {
               
               week: storeWeek.selectedWeekId,
@@ -92,14 +99,36 @@ export default {
           console.log(response)
           if (response.data.flag && response.data.code === 200 && response.data.data.length > 0) {
             const studentReport = response.data.data;
-           
+
             
               for(const student of studentReport){
+              const name = `${student.firstName} ${student.middleName} ${student.lastName}`;
+              if(!(name in student.privateComments)){
+                
               tempReports.push({
               name: `${student.firstName} ${student.lastName}`,
               score: `${student.averageScore}/${this.totalScore}`, 
-              comments: student.comments
-            });
+              privateComments: student.privateComments,
+              publicComments: student.publicComments
+              
+
+              });
+                
+              }
+              else{
+                tempReports.push({
+                  name: `${student.firstName} ${student.lastName}`,
+                  score: `NO PEER EVALUATION SUBMITTED`, 
+                  privateComments: student.privateComments,
+                  publicComments: student.publicComments
+              
+
+              });
+
+              }
+             
+
+
             }
             
            

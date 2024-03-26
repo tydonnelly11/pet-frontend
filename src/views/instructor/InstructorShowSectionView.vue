@@ -37,7 +37,7 @@ export default {
         },
         getWeeksForSection(sectionId)
         {
-        apiClient.get(`https://www.peerevaltool.xyz/api/v1/section/getWeeks/${sectionId}`, {
+        apiClient.get(`http://localhost:80/api/v1/section/getWeeks/${sectionId}`, {
 
         })
         .then(response => {

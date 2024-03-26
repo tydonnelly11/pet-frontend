@@ -90,7 +90,7 @@ export default {
          // }
          const auth = localStorage.getItem('auth')
          
-         apiClient.post('https://www.peerevaltool.xyz/api/v1/activity/submit', this.newTasks,
+         apiClient.post('http://localhost:80/api/v1/activity/submit', this.newTasks,
          {
             headers: { 'Authorization': `Bearer ${auth}` }
          }).then(response => {
@@ -130,7 +130,7 @@ export default {
          this.studentTasks.tasks = []
          console.log("WEEK BEFORE REQ")
          console.log(storeWeek.selectedWeekId)
-         apiClient.get(`https://www.peerevaltool.xyz/api/v1/war/get`,
+         apiClient.get(`http://localhost:80/api/v1/war/get`,
          {
             headers: { 'Authorization': `Bearer ${auth}` },
             params: {

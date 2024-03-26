@@ -24,7 +24,7 @@
         <div class="input-box">
             <input type="password" id="confirmPassword" v-model="password1" placeholder="Re-Enter your Password"/>
         </div>
-          <button @click="registerStudent">Register</button>
+          <button @click="registerInstructor">Register</button>
           <div class="loading" v-if="this.isLoading">
             <p>Request being processed...DO NOT REFRESH <img src="/img/loading-gif.gif"></p>
           </div>
@@ -41,7 +41,7 @@
 <script>
 import apiClient from  '@/axios-setup.js'
 export default {
-   name: 'RegisterPageView',
+   name: 'RegisterPageInstructorView',
    props: {
       
    },
@@ -83,14 +83,14 @@ export default {
             
         },
         
-        registerStudent(){
+        registerInstructor(){
             if(this.password1 != this.password2){
                 alert("Passwords do not match")
                 return
             }
             this.isLoading = true
             this.hasRegistered = false
-            apiClient.post(`http://localhost:80/api/v1/auth/register/student`, {
+            apiClient.post(`http://localhost:80/api/v1/auth/register/assistantInstructor`, {
                 
                 firstName: this.studentInfo.firstName,
                 middleName: this.studentInfo.middleName,

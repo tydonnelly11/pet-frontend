@@ -164,7 +164,7 @@ export default {
             headers: { 'Authorization': `Bearer ${auth}` }
          };
         
-        apiClient.get(`https://www.peerevaltool.xyz/api/v1/section/getAllStudents/${storeSection.selectedSectionId}`,
+        apiClient.get(`http://localhost:80/api/v1/section/getAllStudents/${storeSection.selectedSectionId}`,
         {  headers: { 'Authorization': `Bearer ${auth}` }}
         )
         .then(response => {
@@ -186,6 +186,10 @@ export default {
         })
     },
     toggleStudentOnTeam(student, team){
+        if(this.selectedTeamId === null){
+            alert("Please select a team to remove a student from")
+            return
+        }
         const index = team.students.indexOf(student);
         team.students.splice(index, 1);
 
@@ -213,7 +217,7 @@ export default {
          const config = {
             headers: { 'Authorization': `Bearer ${auth}` }
          };
-        apiClient.get(`https://www.peerevaltool.xyz/api/v1/section/getAllTeams/${storeSection.selectedSectionId}`,
+        apiClient.get(`http://localhost:80/api/v1/section/getAllTeams/${storeSection.selectedSectionId}`,
         {  headers: { 'Authorization': `Bearer ${auth}` }}
         )
         .then(response => {
@@ -266,7 +270,7 @@ export default {
         }
     }
    
-    apiClient.post(`https://www.peerevaltool.xyz/api/v1/team/edit`,
+    apiClient.post(`http://localhost:80/api/v1/team/edit`,
     {
         id: this.updatedTeam.id,
         name: this.updatedTeam.name,
@@ -298,7 +302,7 @@ export default {
             headers: { 'Authorization': `Bearer ${auth}` }
     };
 
-         apiClient.post(`https://www.peerevaltool.xyz/api/v1/team/save`, {
+         apiClient.post(`http://localhost:80/api/v1/team/save`, {
             id : null,
             name: this.teamName,
             sectionId: storeSection.selectedSectionId,

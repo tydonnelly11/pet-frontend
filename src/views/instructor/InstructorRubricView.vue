@@ -47,7 +47,7 @@ export default {
             this.hasLoaded = false
          const auth = localStorage.getItem('auth')
 
-         apiClient.get(`https://www.peerevaltool.xyz/api/v1/section/getRubric/${storeSection.selectedSectionId}`, {
+         apiClient.get(`http://localhost:80/api/v1/section/getRubric/${storeSection.selectedSectionId}`, {
             headers: { 'Authorization': `Bearer ${auth}` }
          })
          .then((response) => {

@@ -18,6 +18,7 @@ import InstructorWARView from '../views/instructor/InstructorWARView.vue'
 import StudentWarAndEval from '@/components/instructor/StudentWarAndEval.vue'
 import InstructorShowSectionView from '@/views/instructor/InstructorShowSectionView.vue'
 import TeamWarAndEdit from '../components/instructor/TeamWarAndEdit.vue'
+import RegisterPageInstructorView from '../components/instructor/RegisterPageInstructorView.vue'
 
 
 const routes = [
@@ -38,7 +39,7 @@ const routes = [
    {
       path: '/auth/register/assistantInstructor/token=:token',
       name: 'RegisterIns',
-      component: RegisterPageView,
+      component: RegisterPageInstructorView,
 
    },
    {

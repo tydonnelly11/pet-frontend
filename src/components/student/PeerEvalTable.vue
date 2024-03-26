@@ -127,7 +127,7 @@ export default {
          // console.log(targetPayload)
          const auth = localStorage.getItem('auth')
 
-         apiClient.post('https://www.peerevaltool.xyz/api/v1/peerEvaluation/submitPeerEvaluation', targetPayload, {
+         apiClient.post('http://localhost:80/api/v1/peerEvaluation/submitPeerEvaluation', targetPayload, {
                headers: { 'Authorization': `Bearer ${auth}` },
             })
             .then((response) => {
@@ -139,7 +139,7 @@ export default {
             })
       },
       // getRubric() {
-      //    apiClient.get(`https://www.peerevaltool.xyz/api/v1/section/getRubric/${storeUser.sectionId}`, {
+      //    apiClient.get(`http://localhost:80/api/v1/section/getRubric/${storeUser.sectionId}`, {
       //       withCredentials: true,
       //    })
       //    .then((response) => {
