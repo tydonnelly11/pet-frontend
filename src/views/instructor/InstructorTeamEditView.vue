@@ -88,6 +88,13 @@
 
                     </div>
                 </div>
+                <div v-if="team.assistantInstructorDTO == null">
+                    No Assistant Instructor assigned
+                </div>
+                <div v-else>
+                    <label>{{ team.assistantInstructorDTO.firstName }} {{ team.assistantInstructorDTO.lastName }}</label>
+                    <p @click="removeInstructorFromTeam(team, team.assistantInstructorDTO)">Remove Instructor</p>
+                </div>
             </div>
         </div>
 
@@ -135,10 +142,27 @@
         <h3>Assistant Instructors</h3>
         <div v-for="instructor in activeInstructors">
             <label>{{ instructor.firstName }} {{ instructor.lastName }}</label>
-            <button v-for="team in teams" @click="addInstructorToTeam(team)">{{ team.name }}</button>
+            <div v-for="team in teams">
+                <button v-if="team.assistantInstructorDTO == null || instructor.id != team.assistantInstructorDTO.id " @click="showConfirmationPopup(team, instructor)">{{ team.name }}</button>
+                
+            </div>
+            
+            <!-- <button v-if="instructor.id != team.assistantInstructorDTO.id" @click="addInstructorToTeam(team, instructor)">{{ team.name }}</button> -->
+            <button @click="addInstructorToSection(instructor)">Assign to {{this.selectedSectionInfo.name}}</button>
         </div>
 
+
     </div>
+    <div v-if="teamConformation" class="popup-overlay">
+        <div class="conformation-popup">
+        <p>Do you want to add {{ this.currentInstructor.firstName }} {{ this.currentInstructor.lastName }} to {{ this.currentTeam.name }}?</p>
+        <div class="button-group">
+            <button :style="'border: 1px solid black;'" @click="confirmAddInstructor">Yes</button>
+            <button :style="'border: 1px solid black;'" @click="cancelAddInstructor">No</button>
+        </div>
+        </div>
+    </div>
+
 </template>
 
 <script>
@@ -191,6 +215,9 @@ export default {
         activeInstructors: [],
         storeUser,
         selectedSectionInfo : storeSection.selectedSection,
+        currentTeam: null,
+        currentInstructor: null,
+        teamConformation: false,
          
       }
    },
@@ -203,6 +230,22 @@ export default {
         this.updatedTeam.name = ""
         this.getStudents()
         this.getTeams()
+    },
+    showConfirmationPopup(team, instructor) {
+        // Assuming you have data properties for the current selection and visibility of the confirmation
+        this.currentTeam = team;
+        this.currentInstructor = instructor;
+        this.teamConformation = true; // Show the confirmation popup
+    },
+    confirmAddInstructor() {
+        if (this.currentTeam && this.currentInstructor) {
+            this.addInstructorToTeam(this.currentTeam, this.currentInstructor);
+        }
+        this.teamConformation = false; // Hide the popup after confirmation
+    },
+    cancelAddInstructor() {
+        // Logic if the user cancels the action
+        this.teamConformation = false; // Hide the popup
     },
     editSectionInfo(){
         if(this.newSectionName == "" || this.newSectionName == " "){
@@ -224,6 +267,61 @@ export default {
         });
     },
 
+    
+    addInstructorToTeam(team, instructor){
+        team.assistantInstructorDTO = instructor
+        var newTeam = [team]
+
+        apiClient.post(`http://localhost:80/api/v1/team/assignInstructors`, newTeam
+        ).then(response => {
+            console.log(response)
+        }).catch(error => {
+            console.log(error)
+        })
+
+    },
+
+    addInstructorToSection(instructorVar){
+        if(this.selectedSectionInfo.assistantInstructorDTOs == null){
+            this.selectedSectionInfo.assistantInstructorDTOs = []
+        }
+        else{
+            for(var instructor of this.selectedSectionInfo.assistantInstructorDTOs){
+            if(instructor.id == instructorVar.id){
+                alert("Instructor already assigned to section")
+                return
+            }
+        }
+        }
+        
+        
+        this.selectedSectionInfo.assistantInstructorDTOs.push(instructorVar)
+
+
+        apiClient.post(`http://localhost:80/api/v1/section/editInstructors`, 
+            this.selectedSectionInfo
+        ).then(response => {
+            console.log(response)
+        }).catch(error => {
+            console.log(error)
+        })
+        
+    },
+
+    removeInstructorFromTeam(team, instructor){
+        team.assistantInstructorDTO = instructor
+        
+
+        apiClient.post(`http://localhost:80/api/v1/team/removeInstructor`, team
+        ).then(response => {
+            console.log(response)
+        }).catch(error => {
+            console.log(error)
+        })
+        team.assistantInstructorDTO = null;
+
+    },
+
     setCurrentSection(){
         this.isLoading = true;
         this.hasSetActiveSection = false;
@@ -234,6 +332,7 @@ export default {
             console.log(res)
             this.isLoading = false;
             this.hasSetActiveSection = true;
+            localStorage.setItem('storeSection', JSON.stringify(storeSection))
 
          });
       },
@@ -266,6 +365,7 @@ export default {
             console.log(error)
         })
     },
+    
     getActiveAssistantInstructors(){
         this.activeInstructors = []
             this.isLoading = true
@@ -380,6 +480,7 @@ export default {
             student.weeks = null
         }
     }
+    
    
     apiClient.post(`http://localhost:80/api/v1/team/edit`,
     {
@@ -473,6 +574,16 @@ export default {
    background-color: #fff; 
 }
 
+.conformation-popup{
+    
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+    color: white;
+    background-color: #743ae1;
+    padding: 50px;
+}
+
 
 .team-name-input:focus {
    outline: none; 
@@ -494,6 +605,12 @@ export default {
     flex : 0 0 10%;
     text-align: center;
     border: 1px solid black;
+}
+.button-group {
+    display: flex;
+    flex-direction: row;
+    /* justify-content: space-between;
+    width: 100%; */
 }
 .small-button {
     width: 250px; 
