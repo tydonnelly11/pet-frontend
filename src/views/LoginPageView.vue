@@ -99,6 +99,7 @@ loginInstructor()
          for(const section of response.data.data.userInfo.sections)
          {
             if(section.isCurrent == true){
+               this.getWeeksForSection(section.id)
               
                storeSection.setSelectedSection(section)
             }
@@ -233,20 +234,20 @@ pushInstructor2()
    this.$router.push('/studenthome')
 },
 
-// getWeeksForSection(sectionId)
-// {
-//    apiClient.get(`https://www.peerevaltool.xyz/api/v1/section/getWeeks/${sectionId}`, {
+getWeeksForSection(sectionId)
+{
+   apiClient.get(`https://www.peerevaltool.xyz/api/v1/section/getWeeks/${sectionId}`, {
 
-//    })
-//    .then(response => {
-//       console.log(response)
-//       storeWeek.setWeekList(response.data.data)
-//       localStorage.setItem('storeWeek', JSON.stringify(storeWeek));
-//    })
-//    .catch(error => {
-//       console.log(error)
-//    })
-// },
+   })
+   .then(response => {
+      console.log(response)
+      storeWeek.setWeekList(response.data.data)
+      localStorage.setItem('storeWeek', JSON.stringify(storeWeek));
+   })
+   .catch(error => {
+      console.log(error)
+   })
+},
 
 }
 }
