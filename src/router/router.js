@@ -19,7 +19,9 @@ import StudentWarAndEval from '@/components/instructor/StudentWarAndEval.vue'
 import InstructorShowSectionView from '@/views/instructor/InstructorShowSectionView.vue'
 import TeamWarAndEdit from '../components/instructor/TeamWarAndEdit.vue'
 import RegisterPageInstructorView from '../components/instructor/RegisterPageInstructorView.vue'
-
+import AssistantInstructorHomePage from '../views/assistant_instructor/AssistantIntructorHomePageView.vue'
+import AssistantInstructorRubricView from '../views/assistant_instructor/AssistantInstructorRubricView.vue'
+import AssistantInstructorWARView from '../views/assistant_instructor/AssistantInstructorWARView.vue'
 
 const routes = [
    {
@@ -135,6 +137,24 @@ const routes = [
       path: '/:catchAll(.*)',
       name: 'not-found',
       component: LoginPageView,
+   },
+
+   {
+      path: '/assistantinstructorhome',
+      component: AssistantInstructorHomePage,
+      children: [
+         {
+            path: 'rubric',
+            name: 'AssistantInstructorRubric',
+            component: AssistantInstructorRubricView,
+
+         },
+         {
+            path: 'war',
+            name: 'AssistantInstructorWar',
+            component: AssistantInstructorWARView,
+         },
+      ]
    },
 ]
 
