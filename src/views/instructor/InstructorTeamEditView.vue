@@ -1,9 +1,8 @@
 <template>
-    <h1>Information for: {{ storeSection.selectedSectionName }}</h1>
-    <div :style="'display: flex; flex-direction:row'">
-        <button @click="inviteStudentPressed = true">Invite Students</button>
-        <button @click="inviteInstructorPressed = true">Invite Instructors</button>
-
+    <h1>Information For:  {{ storeSection.selectedSectionName }}</h1>
+    <div :style="'display: flex; justify-content: center; flex-direction: row; margin-bottom: 20px;'">
+        <button class="small-button" @click="inviteStudentPressed = true">Invite Students</button>
+        <button class="small-button" @click="inviteInstructorPressed = true" style="margin-left: 10px;">Invite Instructors</button>
     </div>
     
     <div v-if="inviteStudentPressed">
@@ -22,6 +21,7 @@
          <label>Team Name</label>
          <input type="text" id="sectionName" v-model="this.teamName" required class="team-name-input"/>
       </div>
+
 
       
 
@@ -98,6 +98,8 @@
          <img src="/img/loading-gif.gif">
       </div>
       <button type="submit" class="small-button" @click="clearSelection()">Clear Selection</button>
+
+      
 </template>
 
 <script>
@@ -347,7 +349,7 @@ export default {
     margin-left: auto;
     margin-right: auto;
     width: 50%; 
-   height: 100px; 
+   height: 20px; 
    border-radius: 20px; 
    border: 1px solid #cccccc; 
    margin-bottom: 10px; 
@@ -379,12 +381,14 @@ export default {
     border: 1px solid black;
 }
 .small-button {
-    width: 250px; 
+   width: 250px; 
    height: 50px;
    font-size: 1rem; 
    margin: 1px; 
-   border-radius: 4px; 
+   border-radius: 4px;
+   margin: 0 10px; /* Adjust the margin as needed */
 }
+
 
 .students{
     display: flex;
