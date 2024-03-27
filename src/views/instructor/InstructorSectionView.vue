@@ -121,7 +121,7 @@
       <div class="success">
          <p>Section Successfully Created!</p>
          <!-- Add a button or a way to close the overlay -->
-         <button @click="hasCreatedSection = false">Close</button>
+         <button @click="hasCreatedSection = false; sectionConfirmation = false;">Close</button>
       </div>
       </div>
    </div>
