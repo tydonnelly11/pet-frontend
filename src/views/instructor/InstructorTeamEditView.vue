@@ -253,7 +253,7 @@ export default {
             return
         }
         this.isLoading = true;
-        apiClient.post(`https://www.peerevaltool.xyz/api/v1/section/save`, {
+        apiClient.post(`http://localhost:80/api/v1/section/save`, {
             id: storeSection.selectedSectionId,
             name: this.newSectionName,
             instructorId: storeUser.userID,
@@ -269,15 +269,20 @@ export default {
 
     
     addInstructorToTeam(team, instructor){
-        team.assistantInstructorDTO = instructor.id
+        const dto = {
+            id : instructor.id
+        }
+        team.assistantInstructorDTO = dto
         var newTeam = [team]
 
-        apiClient.post(`https://www.peerevaltool.xyz/api/v1/team/assignInstructors`, newTeam
+        apiClient.post(`http://localhost:80/api/v1/team/assignInstructors`, newTeam
         ).then(response => {
             console.log(response)
+            this.getTeams()
         }).catch(error => {
             console.log(error)
         })
+        // this.getTeams()
 
     },
 
@@ -298,7 +303,7 @@ export default {
         this.selectedSectionInfo.assistantInstructorDTOs.push(instructorVar)
 
 
-        apiClient.post(`https://www.peerevaltool.xyz/api/v1/section/editInstructors`, 
+        apiClient.post(`http://localhost:80/api/v1/section/editInstructors`, 
             this.selectedSectionInfo
         ).then(response => {
             console.log(response)
@@ -309,10 +314,13 @@ export default {
     },
 
     removeInstructorFromTeam(team, instructor){
-        team.assistantInstructorDTO = instructor.id;
+        const dto = {
+            id : instructor.id
+        }
+        team.assistantInstructorDTO = dto
         
 
-        apiClient.post(`https://www.peerevaltool.xyz/api/v1/team/removeInstructor`, team
+        apiClient.post(`http://localhost:80/api/v1/team/removeInstructor`, team
         ).then(response => {
             console.log(response)
         }).catch(error => {
@@ -325,7 +333,7 @@ export default {
     setCurrentSection(){
         this.isLoading = true;
         this.hasSetActiveSection = false;
-         apiClient.post(`https://www.peerevaltool.xyz/api/v1/section/setCurrentSection`, {
+         apiClient.post(`http://localhost:80/api/v1/section/setCurrentSection`, {
             id : storeSection.selectedSectionId
          })
          .then(res => {
@@ -344,7 +352,7 @@ export default {
             headers: { 'Authorization': `Bearer ${auth}` }
          };
         
-        apiClient.get(`https://www.peerevaltool.xyz/api/v1/section/getAllStudents/${storeSection.selectedSectionId}`,
+        apiClient.get(`http://localhost:80/api/v1/section/getAllStudents/${storeSection.selectedSectionId}`,
         {  headers: { 'Authorization': `Bearer ${auth}` }}
         )
         .then(response => {
@@ -369,7 +377,7 @@ export default {
     getActiveAssistantInstructors(){
         this.activeInstructors = []
             this.isLoading = true
-            apiClient.get(`https://www.peerevaltool.xyz/api/v1/assistantInstructor/getAllInstructors`, {
+            apiClient.get(`http://localhost:80/api/v1/assistantInstructor/getAllInstructors`, {
 
             })
             .then(response => {
@@ -425,7 +433,7 @@ export default {
          const config = {
             headers: { 'Authorization': `Bearer ${auth}` }
          };
-        apiClient.get(`https://www.peerevaltool.xyz/api/v1/section/getAllTeams/${storeSection.selectedSectionId}`,
+        apiClient.get(`http://localhost:80/api/v1/section/getAllTeams/${storeSection.selectedSectionId}`,
         {  headers: { 'Authorization': `Bearer ${auth}` }}
         )
         .then(response => {
@@ -478,7 +486,7 @@ export default {
     }
     
    
-    apiClient.post(`https://www.peerevaltool.xyz/api/v1/team/edit`,
+    apiClient.post(`http://localhost:80/api/v1/team/edit`,
     {
         id: this.updatedTeam.id,
         name: this.updatedTeam.name,
@@ -510,7 +518,7 @@ export default {
             headers: { 'Authorization': `Bearer ${auth}` }
     };
 
-         apiClient.post(`https://www.peerevaltool.xyz/api/v1/team/save`, {
+         apiClient.post(`http://localhost:80/api/v1/team/save`, {
             id : null,
             name: this.teamName,
             sectionId: storeSection.selectedSectionId,
