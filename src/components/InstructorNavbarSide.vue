@@ -10,39 +10,39 @@
      </div>
      <ul class="nav-links">
        <li class="nav-item">
-         <router-link class="nav-link" to="/instructorhome/">
+         <router-link @click="toggleSidebar" class="nav-link" to="/instructorhome/">
            <span class="link-text">Instructor Peer Evaluation</span>
          </router-link>
        </li>
        <li class="nav-item">
-         <router-link class="nav-link" to="/instructorhome/war">
+         <router-link @click="toggleSidebar" class="nav-link" to="/instructorhome/war">
            <span class="link-text">Instructor War</span>
          </router-link>
        </li>
        <li class="nav-item">
-         <router-link class="nav-link" to="/instructorhome/rubric">
+         <router-link @click="toggleSidebar" class="nav-link" to="/instructorhome/rubric">
            <span class="link-text">Rubric</span>
          </router-link>
        </li>
        <li class="nav-item">
-         <router-link class="nav-link" to="/instructorhome/section">
+         <router-link @click="toggleSidebar" class="nav-link" to="/instructorhome/section">
            <span class="link-text">Section</span>
          </router-link>
        </li>
        <li class="nav-item">
-         <router-link class="nav-link" to="/instructorhome/showsection">
+         <router-link @click="toggleSidebar" class="nav-link" to="/instructorhome/showsection">
            <span class="link-text">View All Sections</span>
          </router-link>
        </li>
 
        <li class="nav-item">
-         <router-link class="nav-link" to="/instructorhome/manageassistant">
+         <router-link @click="toggleSidebar" class="nav-link" to="/instructorhome/manageassistant">
            <span class="link-text">View All Assistant Instructors</span>
          </router-link>
        </li>
        
        <li class="nav-item">
-         <router-link class="nav-link" to="/instructorhome/editteams">
+         <router-link @click="toggleSidebar" class="nav-link" to="/instructorhome/editteams">
            <span class="link-text">Section Information</span>
          </router-link>
        </li>
