@@ -78,14 +78,13 @@ export default {
              })
             }
              
-             console.log(this.listOfStudents)
         },
         submitStudents() {
             this.isLoading = true
             const auth = localStorage.getItem('auth')
             
 
-            apiClient.post(`http://localhost:80/api/v1/auth/register/student/inviteStudents`, 
+            apiClient.post(`https://www.peerevaltool.xyz/api/v1/auth/register/student/inviteStudents`, 
                 
                     this.listOfStudents
             ,{
