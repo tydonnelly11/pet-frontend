@@ -378,6 +378,27 @@ export default {
   margin-bottom: 15px; 
   box-sizing: border-box; 
 }
+.uniform-button {
+  width: 250px; 
+  height: 50px; 
+  margin-top: 20px; 
+  border-radius: 4px; 
+  font-size: 16px;
+  background: #743ae1; 
+  color: white; 
+  border: none; 
+  padding: 10px; 
+  cursor: pointer; 
+  text-transform: uppercase; 
+  font-weight: bold; 
+  transition: background-color 0.3s;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2); 
+}
+
+.uniform-button:hover {
+  background: #5d5076; 
+}
+
 
 .overlay {
   position: fixed; /* or absolute */
