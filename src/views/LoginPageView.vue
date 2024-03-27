@@ -98,19 +98,13 @@ loginInstructor()
       else{
          for(const section of response.data.data.userInfo.sections)
          {
-            console.log(section);
             if(section.isCurrent == true){
-               // storeWeek.setWeekList(section.weeks)
-               console.log("HERE")
-               console.log(section);
+              
                storeSection.setSelectedSection(section)
             }
          }
          storeSection.setSections(response.data.data.userInfo.sections)
-         // console.log(response.data.data.userInfo.sections[0].weeks)
-         // storeWeek.setWeekList(response.data.data.userInfo.sections[0].weeks)
          
-         // storeSection.setSections(response.data.data.userInfo.sections)
 
       }
 
@@ -223,8 +217,7 @@ loginAssistInstructor(){
 pushInstructor()
 {
    storeUser.updateLoginStatus("1", true)
-   console.log(storeUser.isLoggedIn)
-   console.log(storeUser.userID)
+  
    localStorage.setItem('auth', this.encodeCredentials(this.email, this.password));
    this.$router.push('/instructorhome/section')
    localStorage.setItem('logginstatus', true)
@@ -236,8 +229,7 @@ pushInstructor()
 pushInstructor2()
 {
    storeUser.updateLoginStatus("1", true)
-   console.log(storeUser.isLoggedIn)
-   console.log(storeUser.userID)
+  
    this.$router.push('/studenthome')
 },
 

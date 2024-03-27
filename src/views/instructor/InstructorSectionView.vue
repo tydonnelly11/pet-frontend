@@ -45,7 +45,13 @@
          <label>Check to use default rubric</label>
          <input type="checkbox" id="defaultRubric" v-model="isRubricDefault"  />
       </div>
+
+      <div class="input-field">
+         <button @click="makeOwnRubric = true">Click to make own rubric</button>
+      </div>
+
       
+      <div v-if="makeOwnRubric">
       <h4>Enter Rubric Critera for Year</h4>
          <div class="input-field">
             <label>Criteria Name</label>
@@ -70,6 +76,8 @@
                 
             </div>
         </div>
+      <button @click="resetRubric()">Cancel rubric creation</button>
+      </div>
 
         <div>
          <label for="start-date">Start Date:</label>
@@ -91,17 +99,24 @@
          
       </div>
 
-      <!-- <div>
-         <label for="teamName">Set Section to active Section</label>
-         <input type="checkbox" id="teamName" v-model="teamName" required />
-         <button @click="setCurrentSection">Save</button>
-      </div> -->
+      
 
-      <button type="submit" @click="submitSection">Create Section</button>
+      <button type="submit" @click="this.sectionConfirmation = true">Create Section</button>
       <div v-if="isLoading" class="popup-overlay">
          <img src="/img/loading-gif.gif">
       </div>
-      
+      <div v-if="sectionConfirmation" class="popup-overlay">
+        <div class="conformation-popup">
+        <p>Do you want to create {{ this.sectionName }}</p>
+        <div class="button-group">
+            <button :style="'border: 1px solid black;'" @click="submitSection()">Yes</button>
+            <button :style="'border: 1px solid black;'" @click="this.sectionConfirmation = false">No</button>
+        </div>
+        </div>
+      </div>
+
+
+
       <div v-if="hasCreatedSection" class="popup-overlay">
       <div class="success">
          <p>Section Successfully Created!</p>
@@ -152,6 +167,7 @@ export default {
          hasError: false,
          weeksForSemester: [],
          weeksCalculated: false,
+         makeOwnRubric: false,
 
 
 
@@ -169,10 +185,21 @@ export default {
             console.log(res)
             this.isLoading = false
             this.hasSetCurrentSection = true
+            storeSection.selectedSection()
          });
       },
 
+      resetRubric(){
+         this.criteria = []
+         this.makeOwnRubric = false
+      },
+      
+
       generateWeekList(){
+         if(this.startDate === "" || this.endDate === ""){
+            alert("Please enter a start and end date")
+            return
+         }
         const startDate1 = new Date(this.startDate) // Start date
         const endDate = new Date(this.endDate) // End date
         const weeks = []
@@ -218,7 +245,6 @@ export default {
             criterionDesc: this.criteriaDesc,
             maxScore: this.maxScore,
          })
-         console.log(this.criteria)
          this.maxScore = 0
          this.criteriaName = ""
          this.criteriaDesc = ""
@@ -236,9 +262,7 @@ export default {
                sections : null,
             })
             .then(res => {
-               console.log(res.data)
                storeUser.updateLoginStatus(res.data.data, true)
-               console.log(storeUser.userID)
                this.hasSubmittedInstructor = true
                
             })
@@ -275,7 +299,6 @@ export default {
 
             
          }
-         console.log(weeksToExcludeVar);
          this.weeksForSemester = []
 
          const auth = localStorage.getItem('auth')
@@ -311,32 +334,7 @@ export default {
                console.log(err)
             })
       },
-      createTeams() {
-         const auth = localStorage.getItem('auth')
-         const config = {
-            headers: { 'Authorization': `Bearer ${auth}` }
-         };
-         apiClient.post(`http://localhost:80/api/v1/team/save`, {
-            id : null,
-            name: this.teamName,
-            sectionId: this.sectionId,
-            students: null,
-         },
-         {  headers: { 'Authorization': `Bearer ${auth}` }}
-         )
-            .then(res => {
-               console.log(res)
-               console.log(res.data.data)
-
-               this.hasCreatedTeams = true
-
-               
-               
-            })
-            .catch(err => {
-               console.log(err)
-            })
-      },
+      
    },
    computed: {},
    watch: {

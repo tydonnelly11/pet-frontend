@@ -25,7 +25,25 @@
     align-items: center;
     background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
     z-index: 1000; /* Ensure it's above other content */
-  }
+}
+
+.conformation-popup{
+    
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+    color: white;
+    background-color: #743ae1;
+    padding: 50px;
+}
+
+.button-group {
+    display: flex;
+    flex-direction: row;
+    /* justify-content: space-between;
+    width: 100%; */
+}
+
 
 a {
     font-weight: 500;

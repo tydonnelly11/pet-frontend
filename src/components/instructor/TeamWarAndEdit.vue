@@ -90,7 +90,6 @@ export default{
         },
         getWeeks(){
             this.weeksSelected = []
-            console.log(storeWeek.weeksForSemester)
             let end = this.formatDate(this.endDate)
             let start = this.formatDate(this.startDate)
             for(const week of storeWeek.weeksForSemester){
@@ -99,7 +98,6 @@ export default{
                     this.weeksSelected.push(week)
                 }
             }
-            console.log(this.weeksSelected)
 
         },
         formatActivities(activities){
@@ -157,7 +155,6 @@ export default{
       async getWar(){
         this.getWeeks()
         this.isLoading = true
-        console.log(this.weeksSelected)
         this.teamList = []
 
         for(const week of this.weeksSelected){
@@ -188,7 +185,6 @@ export default{
             // }
         }
         this.teamList.push(this.team)
-        console.log(this.teamList)
         this.team = []
 
         
@@ -197,7 +193,6 @@ export default{
       },
       removeTeam(){
             this.isLoading = true
-            console.log(this.teamid);
             apiClient.post(`http://localhost:80/api/v1/team/delete`,
             
             {

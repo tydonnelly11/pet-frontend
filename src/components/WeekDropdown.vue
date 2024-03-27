@@ -52,7 +52,6 @@ export default {
    },
    methods: {
       userSelectsWeek() {
-         console.log(this.displayedWeeks)
          this.hasSelectedWeek = true
       },
       

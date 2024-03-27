@@ -131,8 +131,6 @@ export default {
          this.hasSubmited = false
          const auth = localStorage.getItem('auth')
          this.studentTasks.tasks = []
-         console.log("WEEK BEFORE REQ")
-         console.log(storeWeek.selectedWeekId)
          apiClient.get(`http://localhost:80/api/v1/war/get`,
          {
             headers: { 'Authorization': `Bearer ${auth}` },
@@ -185,7 +183,6 @@ export default {
    },
    watch: {
       'storeWeek.selectedWeekId': function(newVal, oldVal) {
-         console.log(`SelectedWeekId changed from ${oldVal} to ${newVal}`);
          this.tasks = []
          this.getStudentWar();
          this.setWARVisibility(storeWeek.currentWeekId, storeWeek.selectedWeekId)

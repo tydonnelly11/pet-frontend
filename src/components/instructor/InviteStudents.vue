@@ -100,6 +100,7 @@ export default {
                 this.isLoading = false
                 this.hasError = true
             })
+            this.listOfStudents = [];
             
         },
      },

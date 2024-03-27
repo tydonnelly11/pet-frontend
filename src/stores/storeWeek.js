@@ -65,7 +65,6 @@ export const storeWeek = reactive({
          
          }
          this.weeksForSemester.sort((a, b) => a.id - b.id);
-         console.log(this.weeksForSemester)
          this.calcCurrentWeek()
       }
       

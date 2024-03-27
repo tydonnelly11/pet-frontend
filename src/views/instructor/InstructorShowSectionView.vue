@@ -27,14 +27,13 @@ export default {
     methods: {
         viewSection(section){
             
-            console.log(section)
             storeSection.setSelectedSection(section)
             this.getWeeksForSection(section.id)
-            console.log(storeWeek.weeksForSemester)
             
             localStorage.setItem('storeWeek', JSON.stringify(storeWeek))
             this.$router.push('/instructorhome/editteams')
         },
+        
         getWeeksForSection(sectionId)
         {
         apiClient.get(`http://localhost:80/api/v1/section/getWeeks/${sectionId}`, {

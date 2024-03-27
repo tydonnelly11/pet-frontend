@@ -111,7 +111,6 @@ export default {
                 console.log(response)
                 this.isLoading = false
                 this.hasRegistered = true
-                console.log(this.isLoading)
             }).catch((error) => {
                 console.log(error)
                 this.isLoading = false

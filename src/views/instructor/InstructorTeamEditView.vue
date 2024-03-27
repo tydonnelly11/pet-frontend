@@ -405,12 +405,10 @@ export default {
 
         
         this.students.push(student);
-        console.log(student);
-        console.log(team);
+        
     },
 
     openWARAndEval(studentVar){
-        console.log(studentVar);
         const name = studentVar.firstName + " "  + studentVar.lastName;
 
         this.$router.push({name: 'InstructorViewStudent', params: {teamid: studentVar.teamId, studentid: studentVar.id, studentName: name}});
@@ -418,7 +416,6 @@ export default {
     openTeam(name, id, members){
         storeTeam.setTeamMembers(members)
         localStorage.setItem('storeTeam', JSON.stringify(storeTeam));
-        console.log(storeTeam.teamMembers)
         this.$router.push({name: 'InstructorViewTeam', params: {teamid: id, teamname: name, sectionId : storeSection.selectedSectionId}});
     },
 
@@ -474,8 +471,7 @@ export default {
     this.hasSavedTeam = false
     this.isProcessingTeamSave = true
     for(const student of this.updatedTeam.students){
-        console.log(student.weeks)
-        console.log(student)
+        
         if(student.weeks != null){
             student.weeks = null
         }
@@ -554,7 +550,6 @@ export default {
     this.getStudents()
     this.getTeams()
     this.getActiveAssistantInstructors()
-    console.log(storeSection.selectedSection)
    },
 }
 

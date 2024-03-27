@@ -80,8 +80,7 @@ export default {
       this.error = null;
       // Temporary container for the reports
       let tempReports = [];
-      console.log(storeWeek.currentWeekId)
-      console.log(storeUser.sectionId)
+     
       const auth = localStorage.getItem('auth')
       // Fetch reports for each student
         try {
@@ -95,26 +94,26 @@ export default {
             
           },
           );
-          console.log("INS-PEER-EVAL-VIEW")
-          console.log(response)
+          
           if (response.data.flag && response.data.code === 200 && response.data.data.length > 0) {
             const studentReport = response.data.data;
 
             
               for(const student of studentReport){
-              const name = `${student.firstName} ${student.middleName} ${student.lastName}`;
-              if(!(name in student.privateComments)){
+                const name = `${student.firstName} ${student.middleName} ${student.lastName}`;
                 
-              tempReports.push({
-              name: `${student.firstName} ${student.lastName}`,
-              score: `${student.averageScore}/${this.totalScore}`, 
-              privateComments: student.privateComments,
-              publicComments: student.publicComments
-              
+                if((name in student.privateComments)){
+                  
+                tempReports.push({
+                name: `${student.firstName} ${student.lastName}`,
+                score: `${student.averageScore}/${this.totalScore}`, 
+                privateComments: student.privateComments,
+                publicComments: student.publicComments
+                
 
-              });
-                
-              }
+                });
+                  
+                }
               else{
                 tempReports.push({
                   name: `${student.firstName} ${student.lastName}`,
@@ -161,7 +160,6 @@ export default {
   },
   watch: {
       'storeWeek.selectedWeekId': function(newVal, oldVal) {
-         console.log(`currentWeekId changed from ${oldVal} to ${newVal}`);
          // Call your function here
          this.fetchEvaluationReports();
     }

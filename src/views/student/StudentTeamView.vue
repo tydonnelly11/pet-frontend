@@ -125,7 +125,6 @@ export default {
             team.push(student)
          }
          this.team = team
-         console.log(this.team)
       }
 
       

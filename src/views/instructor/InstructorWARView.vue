@@ -101,7 +101,6 @@ export default {
             team.push(student)
          }
          this.teamFormated = team
-         console.log(this.team)
       },
 
     getTeams(){
@@ -117,7 +116,6 @@ export default {
         .then(response => {
             this.teams = response.data.data
             this.hasLoaded = true
-            console.log(this.teams)
 
         })
         .catch(error => {
@@ -139,12 +137,10 @@ export default {
     },
     watch: {
         watchedSectionId(newVal, oldVal) {
-            console.log(`sectionID changed from ${oldVal} to ${newVal}`);
             this.getTeams();
             this.hasSelectedTeam = false
         },
         watchedWeekId(newVal, oldVal) {
-            console.log(`weekID changed from ${oldVal} to ${newVal}`);
             if(this.hasSelectedTeam){
                this.getTeamWar(this.selectedTeam);
                // this.hasSelectedTeam = false
