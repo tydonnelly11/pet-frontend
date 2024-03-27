@@ -241,6 +241,9 @@ export default {
             }
             this.getPeerEvalEntriesForWeek()
          })
+         .catch((error) => {
+            console.log(error)
+         })
       },
       getGradeAndCommentsForPastWeek(){      
          const auth = localStorage.getItem('auth')
@@ -263,6 +266,9 @@ export default {
             }
            
          })
+         .catch((error) => {
+            console.log(error)
+         })
       },
       
       
@@ -280,7 +286,9 @@ export default {
    },
    created() {
      this.getRubric()
-     this.getGradeAndCommentsForPastWeek()
+   },
+   mounted() {
+      this.getGradeAndCommentsForPastWeek()
    },
 }
 </script>
