@@ -87,9 +87,9 @@ export default {
          this.isLoading = true
          const auth = localStorage.getItem('auth')
          apiClient.get(`https://www.peerevaltool.xyz/api/v1/peerEvaluation/getPeerEvaluation/${storeUser.userID}/${storeWeek.selectedWeekId}`,
-               {
-                  headers: { 'Authorization': `Bearer ${auth}` }            
-               }
+               // {
+               //    headers: { 'Authorization': `Bearer ${auth}` }            
+               // }
             )
             .then((response) => {
               
@@ -231,7 +231,7 @@ export default {
          const auth = localStorage.getItem('auth')
 
          apiClient.get(`https://www.peerevaltool.xyz/api/v1/section/getRubric/${storeUser.sectionId}`, {
-            headers: { 'Authorization': `Bearer ${auth}` }
+            // headers: { 'Authorization': `Bearer ${auth}` }
          })
          .then((response) => {
             
@@ -246,7 +246,7 @@ export default {
          })
       },
       getGradeAndCommentsForPastWeek(){      
-         const auth = localStorage.getItem('auth')
+         // const auth = localStorage.getItem('auth')
          apiClient.get(`https://www.peerevaltool.xyz/api/v1/peerEvaluation/getEvaluationReportWithoutPrivateComments`, {
             params: {
                week: storeWeek.selectedWeekId,
@@ -288,7 +288,7 @@ export default {
      this.getRubric()
    },
    mounted() {
-      this.getGradeAndCommentsForPastWeek()
+      // this.getGradeAndCommentsForPastWeek()
    },
 }
 </script>
@@ -319,4 +319,11 @@ export default {
   background-color: rgba(0, 0, 0, 0.5); 
   z-index: 1000; 
 } */
+
+.display-grade {
+   text-align: center;
+   font-size: 1.5em;
+   display: flex;
+   flex-direction: row;
+}
 </style>
