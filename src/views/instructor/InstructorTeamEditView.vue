@@ -269,7 +269,7 @@ export default {
 
     
     addInstructorToTeam(team, instructor){
-        team.assistantInstructorDTO.id = instructor.id
+        team.assistantInstructorDTO = instructor.id
         var newTeam = [team]
 
         apiClient.post(`https://www.peerevaltool.xyz/api/v1/team/assignInstructors`, newTeam
@@ -309,7 +309,7 @@ export default {
     },
 
     removeInstructorFromTeam(team, instructor){
-        team.assistantInstructorDTO = instructor
+        team.assistantInstructorDTO = instructor.id;
         
 
         apiClient.post(`https://www.peerevaltool.xyz/api/v1/team/removeInstructor`, team
