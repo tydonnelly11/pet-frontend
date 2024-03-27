@@ -27,7 +27,7 @@
        <div v-if="this.isLoading" class="loading">
          <h1>Logging In...<img src="/img/loading-gif.gif"></h1>
       </div>
-       <div class="signin">
+       <!-- <div class="signin">
 
           <div>
 
@@ -39,7 +39,7 @@
 
          </div>
 
-      </div>
+      </div> -->
      </div>
    </div>
 </div>
@@ -146,6 +146,8 @@ loginStudent()
       storeUser.setName(response.data.data.userInfo.firstName,response.data.data.userInfo.lastName)
       storeUser.setSectionId(response.data.data.userInfo.sectionId)
       storeWeek.setWeekList(response.data.data.userInfo.weeks)
+      let authToken = response.data.data.token
+      setAuthHeader(authToken)
       localStorage.setItem('auth', response.data.data.token);
       localStorage.setItem('logginstatus', true)
       localStorage.setItem('storeUser', JSON.stringify(storeUser));
@@ -219,7 +221,7 @@ pushInstructor()
 {
    storeUser.updateLoginStatus("1", true)
   
-   localStorage.setItem('auth', this.encodeCredentials(this.email, this.password));
+   // localStorage.setItem('auth', this.encodeCredentials(this.email, this.password));
    this.$router.push('/instructorhome/section')
    localStorage.setItem('logginstatus', true)
 
@@ -230,6 +232,8 @@ pushInstructor()
 pushInstructor2()
 {
    storeUser.updateLoginStatus("1", true)
+   localStorage.setItem('logginstatus', true)
+
   
    this.$router.push('/studenthome')
 },

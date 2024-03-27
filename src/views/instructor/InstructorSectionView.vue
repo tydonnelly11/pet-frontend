@@ -1,5 +1,5 @@
 <template>
-   <div class="InstructorSectionView">
+   <!-- <div class="InstructorSectionView">
      <h1>Instructor Section View</h1>
      <div class="register-instructor">
        <div class="input-field">
@@ -31,7 +31,7 @@
          <button @click="hasSubmittedInstructor = false">Close</button>
          </div>
       </div>
-   </div>
+   </div> -->
 
 
    <div class="create-section">

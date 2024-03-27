@@ -5,13 +5,13 @@
      </div>
      <ul class="nav nav-pills flex-column justify-content" v-if="isSidebarOpen">
        <li class="nav-item">
-         <router-link to="/studenthome/team">Team</router-link>
+         <router-link @click="toggleSidebar" to="/studenthome/team">Team</router-link>
        </li>
        <li class="nav-item">
-         <router-link to="/studenthome/studentpeereval">PeerEval</router-link>
+         <router-link @click="toggleSidebar" to="/studenthome/studentpeereval">PeerEval</router-link>
        </li>
        <li class="nav-item">
-         <router-link to="/studenthome/studentwar">War</router-link>
+         <router-link @click="toggleSidebar" to="/studenthome/studentwar">War</router-link>
        </li>
        <li class="nav-item">
          <router-link @click=logout to="/">Logout</router-link>
