@@ -1,6 +1,6 @@
 <template>
    <div class="InstructorSectionView">
-     <!-- <h1>Instructor Section View</h1>
+     <h1>Instructor Section View</h1>
      <div class="register-instructor">
        <div class="input-field">
          <label for="firstName">First Name</label>
@@ -23,7 +23,7 @@
          <input type="password" id="password" class="input" v-model="password" required />
        </div>
        <button type="submit" @click="registerInstructor">Register Instructor</button>
-     </div> -->
+     </div>
 
       <div v-if="hasSubmittedInstructor" class="popup-overlay">
          <div class="success">
@@ -178,7 +178,7 @@ export default {
    methods: {
 
       setCurrentSection(){
-         apiClient.post(`https://www.peerevaltool.xyz/api/v1/section/setIsCurrentSection`, {
+         apiClient.post(`http://localhost:80/api/v1/section/setIsCurrentSection`, {
             id : storeSection.selectedSectionId
          })
          .then(res => {
@@ -251,7 +251,7 @@ export default {
          this.hasError = true
       },
       registerInstructor() {
-         axios.post(`https://www.peerevaltool.xyz/api/v1/auth/register/instructor`, {
+         axios.post(`http://localhost:80/api/v1/auth/register/instructor`, {
                firstName: this.firstName,
                middleName: this.middleName,
                lastName: this.lastName,
@@ -304,7 +304,7 @@ export default {
          const auth = localStorage.getItem('auth')
 
          
-         apiClient.post(`https://www.peerevaltool.xyz/api/v1/section/save`, {
+         apiClient.post(`http://localhost:80/api/v1/section/save`, {
             id : null,
             name: this.sectionName,
             instructorId: storeUser.userID,
