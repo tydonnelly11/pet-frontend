@@ -31,6 +31,7 @@ export default {
             this.getWeeksForSection(section.id)
             
             localStorage.setItem('storeWeek', JSON.stringify(storeWeek))
+            localStorage.setItem('storeSection', JSON.stringify(storeSection))
             this.$router.push('/instructorhome/editteams')
         },
         
