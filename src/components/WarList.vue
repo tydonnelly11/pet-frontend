@@ -75,7 +75,6 @@ export default {
    methods: {
       toggleFormVisibility() {
          const tasks = this.studentTasks.tasks
-         console.log(tasks)
          if(tasks.length == 0){
             this.hasTasksForWeek = false
          }
@@ -93,9 +92,7 @@ export default {
    },
    created() {
 
-      console.log(this.studentTasks)
-      // this.toggleFormVisibility()
-      // console.log(this.studentTasks.tasks)
+    
    },
 }
 </script>

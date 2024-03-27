@@ -30,8 +30,7 @@ export default {
    },
    computed: {},
    created() {
-      console.log("teamProp")
-      console.log(this.teamProp)   
+      
    },
 }
 </script>

@@ -23,7 +23,6 @@ export const storeTeam = reactive({
             else{
                 team.push(student);
             }
-            console.log(team)
             
         }
         this.teamMembers = team;

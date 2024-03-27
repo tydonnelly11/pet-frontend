@@ -38,7 +38,7 @@ export default {
       
   // },
    created() {
-      this.getWeeksForSection(storeSection.selectedSectionId);
+      // this.getWeeksForSection(storeSection.selectedSectionId);
       // storeWeek.calcCurrentWeek();
       console.log(storeWeek.currentWeek)
       console.log(storeWeek.currentWeekId)
