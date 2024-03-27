@@ -45,7 +45,7 @@
             </tr>
          </tbody>
       </table>
-      <button v-if="!(this.isPastWeek) || !(this.isLoading)" type="submit">Submit</button>
+      <button v-if="(!(this.isPastWeek) && !(this.isLoading))" type="submit">Submit</button>
    </form>
 
 
