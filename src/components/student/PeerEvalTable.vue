@@ -45,7 +45,7 @@
             </tr>
          </tbody>
       </table>
-      <button v-if="!(this.isPastWeek )" type="submit">Submit</button>
+      <button v-if="!(this.isPastWeek) || !(this.isLoading)" type="submit">Submit</button>
    </form>
 
 
@@ -78,6 +78,7 @@ export default {
          peerEval: this.peerEvalProp,
          submissionStatus: 0,
          storeUser,
+         isLoading: false,
          
       }
    },
@@ -91,6 +92,7 @@ export default {
    },
    methods: {
       async submitEvaluation() {
+         this.isLoading = true
          const targetPayload = []
          for (const item of this.peerEval) {
             
@@ -122,6 +124,7 @@ export default {
             .then((response) => {
                console.log(response)
                this.submissionStatus = response.data.code
+               this.isLoading = false
             })
             .catch((error) => {
                console.log(error)
