@@ -319,4 +319,11 @@ export default {
   background-color: rgba(0, 0, 0, 0.5); 
   z-index: 1000; 
 } */
+
+.display-grade {
+   text-align: center;
+   font-size: 1.5em;
+   display: flex;
+   flex-direction: row;
+}
 </style>
