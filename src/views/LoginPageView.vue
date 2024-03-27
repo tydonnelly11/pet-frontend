@@ -22,23 +22,12 @@
        <!-- <button type="button" class="submit" @click="loginInstructor">Login Instructor</button> -->
        </form>
        <button @click="loginStudent" type="submit" class="submit">Login Student</button>
+       <button @click="loginAssistInstructor" type="submit" class="submit">Login Assistant Instructor</button>
        <button @click="loginInstructor" type="submit" class="submit">Login Instructor</button>
        <div v-if="this.isLoading" class="loading">
          <h1>Logging In...<img src="/img/loading-gif.gif"></h1>
       </div>
-       <div class="signin">
-
-          <div>
-
-         
-          <a href="#" @click="pushInstructor">Login bypass to make first Instructor</a>
-         </div>
-          <div>
-          <a href="#" @click="pushInstructor2">Login bypass to get to students</a>
-
-         </div>
-
-      </div>
+       
      </div>
    </div>
 </div>
@@ -54,6 +43,7 @@ import apiClient from  '@/axios-setup.js'
 import { storeSection } from '../stores/storeSection';
 import { storeWeek } from '../stores/storeWeek.js';
 import { setAuthHeader } from '@/axios-setup.js';
+import axios from 'axios'
 export default {
 name: 'LoginPageView',
 data() {
@@ -94,12 +84,15 @@ loginInstructor()
 
       }
       else{
-         console.log(response.data.data.userInfo.sections[0].weeks)
-         storeWeek.setWeekList(response.data.data.userInfo.sections[0].weeks)
-         // storeUser.setSectionId(response.data.data.sections[0].id)
-         
-         // storeUser.setSectionId(response.data.data.sections[0].id)
+         for(const section of response.data.data.userInfo.sections)
+         {
+            if(section.isCurrent == true){
+              
+               storeSection.setSelectedSection(section)
+            }
+         }
          storeSection.setSections(response.data.data.userInfo.sections)
+         
 
       }
 
@@ -164,26 +157,52 @@ loginStudent()
       }
    })
 },
-pushInstructor()
-{
-   storeUser.updateLoginStatus("1", true)
-   console.log(storeUser.isLoggedIn)
-   console.log(storeUser.userID)
-   localStorage.setItem('auth', this.encodeCredentials(this.email, this.password));
-   this.$router.push('/instructorhome/section')
-   localStorage.setItem('logginstatus', true)
 
-   localStorage.setItem('storeUser', JSON.stringify(storeUser));
+loginAssistInstructor(){
+   this.isLoading = true
+   let creds = this.encodeCredentials(this.email, this.password)
+   axios.post('https://www.peerevaltool.xyz/api/v1/auth/login/assistantInstructor', {}, {
+      headers: {
+         Authorization: `Basic ${creds}`
+      }
+   })
+   .then((response =>
+   {      
+      console.log(response)
 
+      this.isLoading = false
+      localStorage.setItem('auth', response.data.data.token);
+      let authToken = response.data.data.token
+      localStorage.setItem('logginstatus', true)
+      setAuthHeader(authToken)
+      storeUser.updateLoginStatus(response.data.data.userInfo.id, true)
+      
+      storeUser.setTeamId(response.data.data.userInfo.teamId)
+      storeUser.setName(response.data.data.userInfo.firstName,response.data.data.userInfo.lastName)
+      storeUser.setSectionId(response.data.data.userInfo.sectionId)
+      storeWeek.setWeekList(response.data.data.userInfo.weeks)
+      if(storeUser.teamId == null)
+      {
+         this.$router.push('/waitingroom')
+      }
+      else
+      {
+         this.$router.push('/studenthome')
+      }
+
+
+
+      localStorage.setItem('storeUser', JSON.stringify(storeUser));
+      localStorage.setItem('storeSection', JSON.stringify(storeSection));
+      localStorage.setItem('storeWeek', JSON.stringify(storeWeek));
+
+   }
+   
+   ))
 
 },
-pushInstructor2()
-{
-   storeUser.updateLoginStatus("1", true)
-   console.log(storeUser.isLoggedIn)
-   console.log(storeUser.userID)
-   this.$router.push('/studenthome')
-},
+
+
 
 getWeeksForSection(sectionId)
 {

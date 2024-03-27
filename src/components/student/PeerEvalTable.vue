@@ -93,12 +93,11 @@ export default {
       async submitEvaluation() {
          const targetPayload = []
          for (const item of this.peerEval) {
-            console.log(item)
-            console.log(storeUser.userId)
-            if(item.publicComment == ""){
+            
+            if(item.publicComment == " " || item.publicComment == null){
                item.publicComment = "None"
             }
-            if(item.privateComment == ""){
+            if(item.privateComment == " " || item.privateComment == null){
                item.privateComment = "None"
             }
             targetPayload.push({
@@ -113,18 +112,8 @@ export default {
                // isCommentPublic: item.isCommentPublic,
                
             })
-            console.log(targetPayload)
          }
-         // const testPayload = {
-         //    evaluatorId: this.userID,
-         //       evaluateeId: this.peerEval[0].evaluateeId,
-         //       week: item..peerEval[0].week,
-         //       ratings: item.ratings,
-         //       comment: item.comment,
-         //       oldScore: item.oldScore,
-         // }
-         // testPayload.evaluatorId = '1'
-         // console.log(targetPayload)
+         
          const auth = localStorage.getItem('auth')
 
          apiClient.post('https://www.peerevaltool.xyz/api/v1/peerEvaluation/submitPeerEvaluation', targetPayload, {
@@ -138,20 +127,11 @@ export default {
                console.log(error)
             })
       },
-      // getRubric() {
-      //    apiClient.get(`https://www.peerevaltool.xyz/api/v1/section/getRubric/${storeUser.sectionId}`, {
-      //       withCredentials: true,
-      //    })
-      //    .then((response) => {
-      //       console.log('RUBRIC' + response.data.data.criteria)
-      //       this.rubric = response.data.data.criteria
-      //    })
-      // },
+      
       
    },
    
    created() {
-      // this.rubric = this.getRubric()
       
    },
 }

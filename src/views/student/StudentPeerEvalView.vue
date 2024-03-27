@@ -4,11 +4,9 @@
       <!--@select-week is the emit from child component with week as first arg of the func-->
       <div v-if="this.isPastWeek" class="display-grade">
          <h1>Grade for {{ storeWeek.selectedWeek.start }} to {{ storeWeek.selectedWeek.end }} : {{ this.gradeForWeek }} / {{ this.totalScore }}</h1>
-         <div v-for="(commentValue, commentKey) in comments">
-            <h2>Comment from {{ commentKey }}</h2>
-            <p>{{ commentValue }}</p>
-         </div>
+         <CommentTable :comments="this.publicComments"/>
       </div>
+   
 
       <div v-if="isLoading" class="popup-overlay">
          <img src="/img/loading-gif.gif">
@@ -48,6 +46,7 @@ import { storeTeam } from '@/stores/storeTeam.js'
 import ErrorPopUp from '@/components/utilities/ErrorPopUp.vue'
 import PeerEvalTable from '@/components/student/PeerEvalTable.vue'
 import WeekDropdown from '@/components/WeekDropdown.vue'
+import CommentTable from '../../components/instructor/CommentTable.vue'
 import { ref } from 'vue'
 export default {
    name: 'StudentPeerEvalView',
@@ -65,6 +64,7 @@ export default {
          isFutureWeek: false,
          isLoading: false,
          rubric: null,
+         publicComments: null,
          totalScore: 0,
       }
    },
@@ -80,6 +80,7 @@ export default {
       PeerEvalTable,
       WeekDropdown,
       ErrorPopUp,
+      CommentTable,
    },
    methods: {
       async getPeerEvalEntriesForWeek() {
@@ -96,7 +97,6 @@ export default {
                   this.errorFlag = false
                   const peerEvalEntriesForWeek = response.data.data
                   
-                  console.log(peerEvalEntriesForWeek)
                   for(const entry of peerEvalEntriesForWeek){
                      for(const rating of entry.ratings){
                         rating.criterion = this.rubric.find((criteria) => criteria.id == rating.criteriaId)
@@ -171,7 +171,6 @@ export default {
          var ratingList = []
          for (const criteria of this.rubric) {
             const criterion = _.cloneDeep(criteria)
-            console.log(criterion)
             const rating = {
                score : criterion.maxScore,
                criterion,
@@ -207,7 +206,6 @@ export default {
          this.peerEvalEntriesForSelectedWeek.push(ownStudent)
 
          this.setPeerEvalVisibility(storeWeek.currentWeekId, storeWeek.selectedWeekId)
-         console.log(this.peerEvalEntriesForSelectedWeek)
       },
       setPeerEvalVisibility(currentWeekId, selectedWeekId) {
          //Sets the visibility of the peer eval table and is used in
@@ -226,6 +224,7 @@ export default {
             this.hasEntry = true
             this.isPastWeek = true
             this.isFutureWeek = false
+            this.getGradeAndCommentsForPastWeek()
          }
       },
       getRubric() {
@@ -235,10 +234,8 @@ export default {
             headers: { 'Authorization': `Bearer ${auth}` }
          })
          .then((response) => {
-            console.log('RUBRIC')
             
             this.rubric = response.data.data.criteria
-            console.log(this.rubric)
             for(const criteria of this.rubric){
                this.totalScore += criteria.maxScore
             }
@@ -247,21 +244,24 @@ export default {
       },
       getGradeAndCommentsForPastWeek(){      
          const auth = localStorage.getItem('auth')
-         apiClient.get(`https://www.peerevaltool.xyz/api/v1/peerEvaluation/getEvaluationReport`, {
-            headers: { 'Authorization': `Bearer ${auth}` },
+         apiClient.get(`https://www.peerevaltool.xyz/api/v1/peerEvaluation/getEvaluationReportWithoutPrivateComments`, {
             params: {
                week: storeWeek.selectedWeekId,
                studentId: storeUser.userID,
             }
          })
          .then((response) => {
-            console.log(response)
-            this.gradeForWeek = response.data.data[0].averageScore
-            console.log("GRADE")
-            console.log(response.data.data)
-            console.log(response.data.data[0].averageScore)
-            console.log(this.gradeForWeek)
-            // this.publicComments = response.data.data[0].publicComments
+            if(response.data.data.length == 0){
+               this.gradeForWeek = 0
+               this.didNotSubmit = true
+               this.publicComments = "No Comments"
+               return
+            }
+            else{
+               this.gradeForWeek = response.data.data[0].averageScore
+               this.publicComments = response.data.data[0].publicComments
+            }
+           
          })
       },
       
@@ -269,7 +269,6 @@ export default {
    },
    watch: {
       'storeWeek.selectedWeekId': function(newVal, oldVal) {
-         console.log(`currentWeekId changed from ${oldVal} to ${newVal}`);
          // Call your function here
          this.getPeerEvalEntriesForWeek();
     }
@@ -281,7 +280,7 @@ export default {
    },
    created() {
      this.getRubric()
-     
+     this.getGradeAndCommentsForPastWeek()
    },
 }
 </script>

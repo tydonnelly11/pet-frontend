@@ -24,7 +24,7 @@
         <div class="input-box">
             <input type="password" id="confirmPassword" v-model="password1" placeholder="Re-Enter your Password"/>
         </div>
-          <button @click="registerStudent">Register</button>
+          <button @click="registerInstructor">Register</button>
           <div class="loading" v-if="this.isLoading">
             <p>Request being processed...DO NOT REFRESH <img src="/img/loading-gif.gif"></p>
           </div>
@@ -40,8 +40,9 @@
 
 <script>
 import apiClient from  '@/axios-setup.js'
+import axios from 'axios'
 export default {
-   name: 'RegisterPageView',
+   name: 'RegisterPageInstructorView',
    props: {
       
    },
@@ -68,7 +69,7 @@ export default {
         getRegistrationInfo(){
 
             
-            apiClient.get(`https://www.peerevaltool.xyz/api/v1/auth/register/user/getRegistrationTokenInfo/${this.token}`, {
+            axios.get(`https://www.peerevaltool.xyz/api/v1/auth/register/user/getRegistrationTokenInfo/${this.token}`, {
                 
             }).then(response => {
                 console.log(response)
@@ -83,14 +84,14 @@ export default {
             
         },
         
-        registerStudent(){
+        registerInstructor(){
             if(this.password1 != this.password2){
                 alert("Passwords do not match")
                 return
             }
             this.isLoading = true
             this.hasRegistered = false
-            apiClient.post(`https://www.peerevaltool.xyz/api/v1/auth/register/student`, {
+            apiClient.post(`https://www.peerevaltool.xyz/api/v1/auth/register/assistantInstructor`, {
                 
                 firstName: this.studentInfo.firstName,
                 middleName: this.studentInfo.middleName,
@@ -110,7 +111,6 @@ export default {
                 console.log(response)
                 this.isLoading = false
                 this.hasRegistered = true
-                console.log(this.isLoading)
             }).catch((error) => {
                 console.log(error)
                 this.isLoading = false

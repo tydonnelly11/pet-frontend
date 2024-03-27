@@ -18,6 +18,8 @@ import InstructorWARView from '../views/instructor/InstructorWARView.vue'
 import StudentWarAndEval from '@/components/instructor/StudentWarAndEval.vue'
 import InstructorShowSectionView from '@/views/instructor/InstructorShowSectionView.vue'
 import TeamWarAndEdit from '../components/instructor/TeamWarAndEdit.vue'
+import RegisterPageInstructorView from '../components/instructor/RegisterPageInstructorView.vue'
+import ManageAssistantInstructorView from '@/views/instructor/ManageAssistantInstructorView.vue'
 
 
 const routes = [
@@ -38,7 +40,7 @@ const routes = [
    {
       path: '/auth/register/assistantInstructor/token=:token',
       name: 'RegisterIns',
-      component: RegisterPageView,
+      component: RegisterPageInstructorView,
 
    },
    {
@@ -95,6 +97,11 @@ const routes = [
          //    component: InstructorTeamView,
          //    props: true // This allows you to pass the teamId as a prop to the component
          // },
+         {
+            path: 'manageassistant',
+            name: 'ManageAssistantInstructor',
+            component: ManageAssistantInstructorView,
+         },
          {
             path: 'section',
             name: 'InstructorSection',

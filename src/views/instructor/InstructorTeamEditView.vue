@@ -3,8 +3,23 @@
     <div :style="'display: flex; flex-direction:row'">
         <button @click="inviteStudentPressed = true">Invite Students</button>
         <button @click="inviteInstructorPressed = true">Invite Instructors</button>
+        <button @click="editSection = true">Edit Section</button>
+        <button @click="setCurrentSection">Click to set Section as Active</button>
+
 
     </div>
+    
+
+    <div v-if="editSection">
+        <label>Enter New Name</label>
+        <input v-model="newSectionName" type="text" />
+
+        <label></label>
+
+        <button @click="editSectionInfo()">Update Section</button>
+        <button @click="editSection = false">Cancel</button>
+    </div>
+
     
     <div v-if="inviteStudentPressed">
         <InstructorInviteStudents />
@@ -73,6 +88,13 @@
 
                     </div>
                 </div>
+                <div v-if="team.assistantInstructorDTO == null">
+                    No Assistant Instructor assigned
+                </div>
+                <div v-else>
+                    <label>{{ team.assistantInstructorDTO.firstName }} {{ team.assistantInstructorDTO.lastName }}</label>
+                    <p @click="removeInstructorFromTeam(team, team.assistantInstructorDTO)">Remove Instructor</p>
+                </div>
             </div>
         </div>
 
@@ -86,18 +108,61 @@
         </div>
 
     </div>
+
+    
+
+    <div v-if="hasSetActiveSection" class="popup-overlay">
+      <div class="success">
+         <p>Section Set as Active!</p>
+         <button @click="hasSetActiveSection = false">Close</button>
+      </div>
+      </div>
+    
+      <div v-if="hasUpdatedSection" class="popup-overlay">
+      <div class="success">
+         <p>Section Updated</p>
+         <button @click="hasUpdatedSection = false">Close</button>
+      </div>
+      </div>
+
+
     <button type="submit" class="small-button" @click="saveTeam()">Save Team</button>
     <div v-if="hasSavedTeam" class="popup-overlay">
       <div class="success">
          <p>Team Successfully Saved!</p>
-         <!-- Add a button or a way to close the overlay -->
          <button @click="hasSavedTeam = false">Close</button>
       </div>
-      </div>
+    </div>
     <div v-if="isProcessingTeamSave" class="popup-overlay">
          <img src="/img/loading-gif.gif">
       </div>
       <button type="submit" class="small-button" @click="clearSelection()">Clear Selection</button>
+
+      <div>
+        <h3>Assistant Instructors</h3>
+        <div v-for="instructor in activeInstructors">
+            <label>{{ instructor.firstName }} {{ instructor.lastName }}</label>
+            <div v-for="team in teams">
+                <button v-if="team.assistantInstructorDTO == null || instructor.id != team.assistantInstructorDTO.id " @click="showConfirmationPopup(team, instructor)">{{ team.name }}</button>
+                
+            </div>
+            
+            <!-- <button v-if="instructor.id != team.assistantInstructorDTO.id" @click="addInstructorToTeam(team, instructor)">{{ team.name }}</button> -->
+            <button @click="addInstructorToSection(instructor)">Assign to {{this.selectedSectionInfo.name}}</button>
+        </div>
+
+
+    </div>
+    <div v-if="teamConformation" class="popup-overlay">
+        <div class="conformation-popup">
+        <p>Do you want to add {{ this.currentInstructor.firstName }} {{ this.currentInstructor.lastName }} to {{ this.currentTeam.name }}?</p>
+        <div class="button-group">
+            <button :style="'border: 1px solid black;'" @click="confirmAddInstructor">Yes</button>
+            <button :style="'border: 1px solid black;'" @click="cancelAddInstructor">No</button>
+        </div>
+        </div>
+    </div>
+
 </template>
 
 <script>
@@ -143,6 +208,16 @@ export default {
         storeSection,storeWeek,
         inviteStudentPressed: false,
         inviteInstructorPressed: false,
+        hasSetActiveSection: false,
+        assistInstructors: [],
+        editSection: false,
+        hasUpdatedSection: false,
+        activeInstructors: [],
+        storeUser,
+        selectedSectionInfo : storeSection.selectedSection,
+        currentTeam: null,
+        currentInstructor: null,
+        teamConformation: false,
          
       }
    },
@@ -156,6 +231,111 @@ export default {
         this.getStudents()
         this.getTeams()
     },
+    showConfirmationPopup(team, instructor) {
+        // Assuming you have data properties for the current selection and visibility of the confirmation
+        this.currentTeam = team;
+        this.currentInstructor = instructor;
+        this.teamConformation = true; // Show the confirmation popup
+    },
+    confirmAddInstructor() {
+        if (this.currentTeam && this.currentInstructor) {
+            this.addInstructorToTeam(this.currentTeam, this.currentInstructor);
+        }
+        this.teamConformation = false; // Hide the popup after confirmation
+    },
+    cancelAddInstructor() {
+        // Logic if the user cancels the action
+        this.teamConformation = false; // Hide the popup
+    },
+    editSectionInfo(){
+        if(this.newSectionName == "" || this.newSectionName == " "){
+            alert("Please enter a section name")
+            return
+        }
+        this.isLoading = true;
+        apiClient.post(`https://www.peerevaltool.xyz/api/v1/section/save`, {
+            id: storeSection.selectedSectionId,
+            name: this.newSectionName,
+            instructorId: storeUser.userID,
+
+        })
+        .then(response => {
+            console.log(response)
+            this.isLoading = false;
+            this.hasUpdatedSection = true;
+
+        });
+    },
+
+    
+    addInstructorToTeam(team, instructor){
+        team.assistantInstructorDTO = instructor
+        var newTeam = [team]
+
+        apiClient.post(`https://www.peerevaltool.xyz/api/v1/team/assignInstructors`, newTeam
+        ).then(response => {
+            console.log(response)
+        }).catch(error => {
+            console.log(error)
+        })
+
+    },
+
+    addInstructorToSection(instructorVar){
+        if(this.selectedSectionInfo.assistantInstructorDTOs == null){
+            this.selectedSectionInfo.assistantInstructorDTOs = []
+        }
+        else{
+            for(var instructor of this.selectedSectionInfo.assistantInstructorDTOs){
+            if(instructor.id == instructorVar.id){
+                alert("Instructor already assigned to section")
+                return
+            }
+        }
+        }
+        
+        
+        this.selectedSectionInfo.assistantInstructorDTOs.push(instructorVar)
+
+
+        apiClient.post(`https://www.peerevaltool.xyz/api/v1/section/editInstructors`, 
+            this.selectedSectionInfo
+        ).then(response => {
+            console.log(response)
+        }).catch(error => {
+            console.log(error)
+        })
+        
+    },
+
+    removeInstructorFromTeam(team, instructor){
+        team.assistantInstructorDTO = instructor
+        
+
+        apiClient.post(`https://www.peerevaltool.xyz/api/v1/team/removeInstructor`, team
+        ).then(response => {
+            console.log(response)
+        }).catch(error => {
+            console.log(error)
+        })
+        team.assistantInstructorDTO = null;
+
+    },
+
+    setCurrentSection(){
+        this.isLoading = true;
+        this.hasSetActiveSection = false;
+         apiClient.post(`https://www.peerevaltool.xyz/api/v1/section/setCurrentSection`, {
+            id : storeSection.selectedSectionId
+         })
+         .then(res => {
+            console.log(res)
+            this.isLoading = false;
+            this.hasSetActiveSection = true;
+            localStorage.setItem('storeSection', JSON.stringify(storeSection))
+
+         });
+      },
     getStudents(){
         
         this.isLoading = true
@@ -185,17 +365,50 @@ export default {
             console.log(error)
         })
     },
+    
+    getActiveAssistantInstructors(){
+        this.activeInstructors = []
+            this.isLoading = true
+            apiClient.get(`https://www.peerevaltool.xyz/api/v1/assistantInstructor/getAllInstructors`, {
+
+            })
+            .then(response => {
+                console.log(response)
+                if(response.data.data == null){
+                    this.isLoading = false
+                    return
+                }
+                else{
+                    for(const instructor of response.data.data){
+                    if(instructor.isActive){
+                        this.activeInstructors.push(instructor)
+                    }
+                }
+                }
+                
+                this.isLoading = false
+            })
+            .catch(error => {
+                console.log(error)
+                this.isLoading = false
+            })
+    },
+
+
     toggleStudentOnTeam(student, team){
+        if(this.selectedTeamId === null){
+            alert("Please select a team to remove a student from")
+            return
+        }
         const index = team.students.indexOf(student);
         team.students.splice(index, 1);
 
         
         this.students.push(student);
-        console.log(student);
-        console.log(team);
+        
     },
+
     openWARAndEval(studentVar){
-        console.log(studentVar);
         const name = studentVar.firstName + " "  + studentVar.lastName;
 
         this.$router.push({name: 'InstructorViewStudent', params: {teamid: studentVar.teamId, studentid: studentVar.id, studentName: name}});
@@ -203,7 +416,6 @@ export default {
     openTeam(name, id, members){
         storeTeam.setTeamMembers(members)
         localStorage.setItem('storeTeam', JSON.stringify(storeTeam));
-        console.log(storeTeam.teamMembers)
         this.$router.push({name: 'InstructorViewTeam', params: {teamid: id, teamname: name, sectionId : storeSection.selectedSectionId}});
     },
 
@@ -259,12 +471,12 @@ export default {
     this.hasSavedTeam = false
     this.isProcessingTeamSave = true
     for(const student of this.updatedTeam.students){
-        console.log(student.weeks)
-        console.log(student)
+        
         if(student.weeks != null){
             student.weeks = null
         }
     }
+    
    
     apiClient.post(`https://www.peerevaltool.xyz/api/v1/team/edit`,
     {
@@ -337,6 +549,7 @@ export default {
    created() {
     this.getStudents()
     this.getTeams()
+    this.getActiveAssistantInstructors()
    },
 }
 
@@ -354,6 +567,16 @@ export default {
    font-size: 1rem; 
    color: #333; 
    background-color: #fff; 
+}
+
+.conformation-popup{
+    
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+    color: white;
+    background-color: #743ae1;
+    padding: 50px;
 }
 
 
@@ -377,6 +600,12 @@ export default {
     flex : 0 0 10%;
     text-align: center;
     border: 1px solid black;
+}
+.button-group {
+    display: flex;
+    flex-direction: row;
+    /* justify-content: space-between;
+    width: 100%; */
 }
 .small-button {
     width: 250px; 

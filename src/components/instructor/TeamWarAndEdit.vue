@@ -1,4 +1,5 @@
 <template>
+    <button @click="this.$router.back()">Previous page</button>
     <p>Select dates to get WAR for {{ teamname }}</p>
     <label for="start-date">Start Date:</label>
     <input type="date" id="start-date" v-model="startDate" />
@@ -20,8 +21,16 @@
         <label>Enter New Team name: </label>
         <input type="text" v-model="newTeamName"/>
         <button @click="editTeamName = false;">Cancel</button>
-        <button @click="editTeamName = false; editTeam();">Save</button>
+        <button @click="editTeam();">Save</button>
     </div>
+
+    <div v-if="hasChangedName" class="popup-overlay">
+        <div class="success">
+            <p>Team Name changed!</p>
+            <button @click="hasChangedName = false; editTeamName = false">Close</button>
+        </div>
+    </div>
+
     <div v-if="hasDeletedTeam" class="popup-overlay">
         <div class="success">
             <p>Team Succesfully Deleted!</p>
@@ -57,6 +66,7 @@ export default{
                 sectionId: this.sectionId
             },
             hasEntry: false,
+            hasChangedName: false,
 
         }
     },
@@ -80,7 +90,6 @@ export default{
         },
         getWeeks(){
             this.weeksSelected = []
-            console.log(storeWeek.weeksForSemester)
             let end = this.formatDate(this.endDate)
             let start = this.formatDate(this.startDate)
             for(const week of storeWeek.weeksForSemester){
@@ -89,7 +98,6 @@ export default{
                     this.weeksSelected.push(week)
                 }
             }
-            console.log(this.weeksSelected)
 
         },
         formatActivities(activities){
@@ -124,7 +132,7 @@ export default{
             }
             const auth = localStorage.getItem('auth')
             
-        
+            this.isLoading = true;
             apiClient.post(`https://www.peerevaltool.xyz/api/v1/team/edit`,
             {
                 id: this.teamOBJ.id,
@@ -135,7 +143,8 @@ export default{
             },
             {  headers: { 'Authorization': `Bearer ${auth}` }}
             ).then(response => {
-                
+                this.isLoading = false;
+                this.hasChangedName = true;
                 console.log(response)
 
                 
@@ -146,7 +155,6 @@ export default{
       async getWar(){
         this.getWeeks()
         this.isLoading = true
-        console.log(this.weeksSelected)
         this.teamList = []
 
         for(const week of this.weeksSelected){
@@ -177,7 +185,6 @@ export default{
             // }
         }
         this.teamList.push(this.team)
-        console.log(this.teamList)
         this.team = []
 
         
@@ -186,7 +193,6 @@ export default{
       },
       removeTeam(){
             this.isLoading = true
-            console.log(this.teamid);
             apiClient.post(`https://www.peerevaltool.xyz/api/v1/team/delete`,
             
             {

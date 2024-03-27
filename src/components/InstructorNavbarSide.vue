@@ -34,6 +34,12 @@
            <span class="link-text">View All Sections</span>
          </router-link>
        </li>
+
+       <li class="nav-item">
+         <router-link class="nav-link" to="/instructorhome/manageassistant">
+           <span class="link-text">View All Assistant Instructors</span>
+         </router-link>
+       </li>
        
        <li class="nav-item">
          <router-link class="nav-link" to="/instructorhome/editteams">

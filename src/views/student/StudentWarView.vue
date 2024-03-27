@@ -57,7 +57,10 @@ export default {
          selectedWeek: ref(null),
          studentTasks : {
             name : storeUser.userFullName,
-            tasks : []
+            tasks : [],
+            weekStart : storeWeek.selectedWeek.start,
+            weekEnd : storeWeek.selectedWeek.end
+
          },
          tasksToBeSubmitted : [],
 
@@ -128,8 +131,6 @@ export default {
          this.hasSubmited = false
          const auth = localStorage.getItem('auth')
          this.studentTasks.tasks = []
-         console.log("WEEK BEFORE REQ")
-         console.log(storeWeek.selectedWeekId)
          apiClient.get(`https://www.peerevaltool.xyz/api/v1/war/get`,
          {
             headers: { 'Authorization': `Bearer ${auth}` },
@@ -182,7 +183,6 @@ export default {
    },
    watch: {
       'storeWeek.selectedWeekId': function(newVal, oldVal) {
-         console.log(`SelectedWeekId changed from ${oldVal} to ${newVal}`);
          this.tasks = []
          this.getStudentWar();
          this.setWARVisibility(storeWeek.currentWeekId, storeWeek.selectedWeekId)

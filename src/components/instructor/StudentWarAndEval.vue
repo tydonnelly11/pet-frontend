@@ -1,6 +1,6 @@
 <template>
-    
-    <p>Select dates to get WAR/Peer Evaluation for {{ student.studentName }}</p>
+    <button @click="this.$router.back()">Previous page</button>
+    <p>Select dates to get WAR/Peer Evaluation for {{ studentName }}</p>
     <label for="start-date">Start Date:</label>
     <input type="date" id="start-date" v-model="startDate" />
 
@@ -80,7 +80,7 @@ export default{
             student : {
                 teamId: this.$route.params.teamid,
                 studentId: this.$route.params.studentid,
-                studentName: this.$route.params.studentName,
+                studentName: this.studentName,
                 weekEnd: "",
                 weekStart: "",
                 tasks: []
@@ -119,7 +119,11 @@ export default{
         },
         getWeeks(){
             this.weeksSelected = []
-            console.log(storeWeek.weeksForSemester)
+            if(this.startDate == null || this.endDate == null){
+                
+                alert("Please select a start and end date")
+                return
+            }
             let end = this.formatDate(this.endDate)
             let start = this.formatDate(this.startDate)
             for(const week of storeWeek.weeksForSemester){
@@ -144,19 +148,20 @@ export default{
                     },
                 });
 
-                console.log(response.data);
                 this.student.weekEnd = week.end;
                 this.student.weekStart = week.start;
 
                 for (const activity of response.data.data.activities) {
                     if (activity.studentId == this.student.studentId) {
+                        
                         this.student.tasks.push(activity);
                     }
                 }
-
+                this.student.name = this.studentName;
                 this.studentList.push(this.student);
                 // Resetting student for next iteration
                 this.student = {
+                    name: this.studentName,
                     teamId: this.$route.params.teamid,
                     studentId: this.$route.params.studentid,
                     weekEnd: "",
@@ -165,12 +170,12 @@ export default{
                 };
             } catch (error) {
             // Error handling
-                console.error(error);
                 this.student.weekEnd = week.end;
                 this.student.weekStart = week.start;
                 this.studentList.push(this.student);
                 // Resetting student for next iteration
                 this.student = {
+                    studentName: this.studentName,
                     teamId: this.$route.params.teamid,
                     studentId: this.$route.params.studentid,
                     weekEnd: "",
@@ -187,7 +192,6 @@ export default{
             this.getWeeks()
             this.studentListPeer = []
             for (const week of this.weeksSelected) {
-                console.log("HERE")
                 try {
                     const response = await apiClient.get(`https://www.peerevaltool.xyz/api/v1/peerEvaluation/getEvaluationReportWithPrivateComments`, {
                         params: {
@@ -218,7 +222,6 @@ export default{
             }
             this.hasPeerEntry = true;
             this.isLoading = false
-            console.log(this.studentList)
 
         },
 
@@ -228,7 +231,6 @@ export default{
                 id: this.$route.params.studentid 
             }).then(response => {
                 console.log(response)
-                console.log("Student Deleted")
             }).catch(error => {
                 console.log(error)
             })
@@ -246,24 +248,19 @@ export default{
             let total = 0
             for(const criteria of response.data.data.criteria){
                 total = total + criteria.maxScore
-                console.log(criteria)
             }
             this.totalScore = total
-            console.log(this.totalScore)
          })
          
             let total = 0
             for(const criteria in rubric){
                 total = total + criteria.maxScore
-                console.log(criteria)
             }
             this.totalScore = total
-            console.log(this.totalScore)
         },
 
     },
     mounted(){
-        console.log(this.$route.params)
         this.student.teamId = this.$route.params.teamid
         this.student.studentId = this.$route.params.studentid
         this.getRubric()

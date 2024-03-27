@@ -53,7 +53,6 @@ export default {
          .then((response) => {
             console.log(response.data.data)
             storeTeam.setTeamMembers(response.data.data);
-            console.log(storeTeam.teamMembers);
          })
          .catch((error) => {
             console.log(error);
@@ -66,9 +65,7 @@ export default {
    created() {
       storeWeek.calcCurrentWeek();
       this.getTeamMembers();
-      console.log(storeWeek.currentWeek)
-      console.log(storeWeek.currentWeekId)
-      console.log(storeWeek.weeksForSemester)
+     
    }
 }
 </script>

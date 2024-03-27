@@ -78,7 +78,6 @@ export default {
              })
             }
              
-             console.log(this.listOfStudents)
         },
         submitStudents() {
             this.isLoading = true
@@ -100,6 +99,7 @@ export default {
                 this.isLoading = false
                 this.hasError = true
             })
+            this.listOfStudents = [];
             
         },
      },

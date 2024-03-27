@@ -51,12 +51,10 @@ export default {
             headers: { 'Authorization': `Bearer ${auth}` }
          })
          .then((response) => {
-            console.log('RUBRIC')
             this.isLoading = false
             this.hasLoaded = true
             
             this.rubric = response.data.data.criteria
-            console.log(this.rubric)
          })
       },
         
@@ -66,7 +64,6 @@ export default {
     },
     watch: {
         'storeSection.selectedSectionId': function(newVal, oldVal) {
-            console.log(`sectionID changed from ${oldVal} to ${newVal}`);
             // Call your function here
             this.getRubric();
         }

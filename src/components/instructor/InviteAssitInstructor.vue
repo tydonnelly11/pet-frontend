@@ -77,7 +77,6 @@ export default {
              })
             }
              
-             console.log(this.listOfStudents)
         },
         submitInstructor() {
             this.isLoading = true

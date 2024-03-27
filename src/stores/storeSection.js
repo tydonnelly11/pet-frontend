@@ -2,6 +2,7 @@ import { reactive } from "vue";
 
 export const storeSection = reactive({
     sections: [],
+    selectedSection : null,
     selectedSectionId: "",
     selectedSectionName: "",
     setSections(sections) {
@@ -16,6 +17,7 @@ export const storeSection = reactive({
     },
     setSelectedSection(section) {
         this.selectedSectionId = section.id;
+        this.selectedSection = section;
         this.selectedSectionName = section.name;
     },
     addSection(section) {
