@@ -143,7 +143,7 @@
         <div v-for="instructor in activeInstructors">
             <label>{{ instructor.firstName }} {{ instructor.lastName }}</label>
             <div v-for="team in teams">
-                <button v-if="team.assistantInstructorDTO == null || instructor.id != team.assistantInstructorDTO.id " @click="showConfirmationPopup(team, instructor)">{{ team.name }}</button>
+                <button v-if="(team.assistantInstructorDTO == null || instructor.id != team.assistantInstructorDTO.id) && team.name != null" @click="showConfirmationPopup(team, instructor)">{{ team.name }}</button>
                 
             </div>
             

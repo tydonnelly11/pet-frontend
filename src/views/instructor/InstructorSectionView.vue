@@ -168,6 +168,7 @@ export default {
          weeksForSemester: [],
          weeksCalculated: false,
          makeOwnRubric: false,
+         sectionConfirmation: false,
 
 
 
