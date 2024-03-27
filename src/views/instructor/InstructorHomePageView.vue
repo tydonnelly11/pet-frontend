@@ -32,20 +32,20 @@ export default {
       toggleSidebar(isOpen) {
       this.isSidebarOpen = isOpen;
    },
-   getWeeksForSection(sectionId)
-        {
-        apiClient.get(`https://www.peerevaltool.xyz/api/v1/section/getWeeks/${sectionId}`, {
+   // getWeeksForSection(sectionId)
+   //      {
+   //      apiClient.get(`http://localhost:80/api/v1/section/getWeeks/${sectionId}`, {
 
-        })
-        .then(response => {
-            console.log(response)
-            storeWeek.setWeekList(response.data.data)
-            localStorage.setItem('storeWeek', JSON.stringify(storeWeek));
-        })
-        .catch(error => {
-            console.log(error)
-        })
-        }
+   //      })
+   //      .then(response => {
+   //          console.log(response)
+   //          storeWeek.setWeekList(response.data.data)
+   //          localStorage.setItem('storeWeek', JSON.stringify(storeWeek));
+   //      })
+   //      .catch(error => {
+   //          console.log(error)
+   //      })
+   //      }
 },
    //computed: {
       
