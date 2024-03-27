@@ -4,7 +4,7 @@
       <!--@select-week is the emit from child component with week as first arg of the func-->
       <div v-if="this.isPastWeek" class="display-grade">
          <h1>Grade for {{ storeWeek.selectedWeek.start }} to {{ storeWeek.selectedWeek.end }} : {{ this.gradeForWeek }} / {{ this.totalScore }}</h1>
-         <CommentTable :comments="this.publicComments"/>
+         <CommentTable v-if="this.publicComments != null" :comments="this.publicComments"/>
       </div>
    
 
@@ -257,7 +257,7 @@ export default {
             if(response.data.data.length == 0){
                this.gradeForWeek = 0
                this.didNotSubmit = true
-               this.publicComments = "No Comments"
+               this.publicComments = null;
                return
             }
             else{
