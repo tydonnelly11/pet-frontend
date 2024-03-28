@@ -8,7 +8,7 @@ export default defineConfig({
    resolve: {
       alias: {
          '@': '/src',
-         'baseurl':'https://www.peerevaltool.xyz/'
+         'baseurl':'http://localhost:80/'
          
       },
       test: {

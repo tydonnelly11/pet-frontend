@@ -54,7 +54,7 @@ export default {
       getTeamMatesWar(){
          this.isLoading = true
          const auth = localStorage.getItem('auth')
-         apiClient.get(`https://www.peerevaltool.xyz/api/v1/war/get`,
+         apiClient.get(`http://localhost:80/api/v1/war/get`,
          {
             params: {
                teamId: storeUser.teamId,
