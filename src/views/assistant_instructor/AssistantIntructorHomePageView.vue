@@ -8,7 +8,6 @@
 </template>
 
 <script setup>
-//  import InstructorNavbarSide from '../../components/InstructorNavbarSide.vue'
 import AssistantInstructorNavbarSide from '../../components/AssistantInstructorNavbarSide.vue';
 import WeekDropdown from '../../components/WeekDropdown.vue';
 import { storeWeek } from '@/stores/storeWeek.js';

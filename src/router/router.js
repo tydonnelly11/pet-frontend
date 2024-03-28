@@ -22,6 +22,7 @@ import RegisterPageInstructorView from '../components/instructor/RegisterPageIns
 import AssistantInstructorHomePage from '../views/assistant_instructor/AssistantIntructorHomePageView.vue'
 import AssistantInstructorRubricView from '../views/assistant_instructor/AssistantInstructorRubricView.vue'
 import AssistantInstructorWARView from '../views/assistant_instructor/AssistantInstructorWARView.vue'
+import AssistantInstructorPeerEvalView from '../views/assistant_instructor/AssistantInstructorPeerEvalView.vue'
 
 const routes = [
    {
@@ -143,6 +144,11 @@ const routes = [
       path: '/assistantinstructorhome',
       component: AssistantInstructorHomePage,
       children: [
+         {
+            path: '',
+            name: 'AssistantInstructorPeerEval',
+            component: AssistantInstructorPeerEvalView,
+         },
          {
             path: 'rubric',
             name: 'AssistantInstructorRubric',
