@@ -202,7 +202,7 @@ loginAssistInstructor(){
       }
       else
       {
-         this.$router.push('/studenthome')
+         this.$router.push('/assistantinstructorhome')
       }
 
 
