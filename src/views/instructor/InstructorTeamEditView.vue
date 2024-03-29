@@ -3,9 +3,8 @@
     <div :style="'display: flex; justify-content: center; flex-direction: row; margin-bottom: 20px;'">
         <button class="small-button" @click="inviteStudentPressed = true">Invite Students</button>
         <button class="small-button" @click="inviteInstructorPressed = true" style="margin-left: 10px;">Invite Instructors</button>
-        <button @click="editSection = true">Edit Section</button>
-        <button @click="setCurrentSection">Click to set Section as Active</button>
-
+        <button class="small-button" @click="editSection = true">Edit Section</button>
+        <button class="small-button" @click="setCurrentSection">Click to set Section as Active</button>
     </div>
     
 
@@ -617,11 +616,16 @@ export default {
 }
 .small-button {
    width: 250px; 
-   height: 50px;
+   height: 70px; /* Adjust height if needed */
    font-size: 1rem; 
    margin: 1px; 
-   border-radius: 4px;
-   margin: 0 10px; /* Adjust the margin as needed */
+   border-radius: 4px; 
+   background-color: #6f42c1; /* Your button color */
+   color: white; /* Text color */
+   border: none; /* Remove default border */
+   cursor: pointer; /* Mouse cursor for clickable items */
+   margin: 0 10px; /* Space between buttons */
+   /* Add any additional styling that you require for these buttons */
 }
 
 

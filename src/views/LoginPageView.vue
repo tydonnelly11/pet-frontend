@@ -9,7 +9,7 @@
    <!-- Right Side (Login Form) -->
    <div class="right col-md-6">
      <div class="input-box">
-       <header>Login</header>
+       <header>LogIn</header>
        <form @submit.prevent="loginStudent">
          <div class="input-field">
            <input type="email" id="email" class="input" v-model="email" required>
@@ -27,7 +27,7 @@
        <div v-if="this.isLoading" class="loading">
          <h1>Logging In...<img src="/img/loading-gif.gif"></h1>
       </div>
-       <!-- <div class="signin">
+        <div class="signin">
 
           <div>
 
@@ -39,7 +39,7 @@
 
          </div>
 
-      </div> -->
+      </div> 
      </div>
    </div>
 </div>
@@ -265,6 +265,7 @@ getWeeksForSection(sectionId)
 font-family: 'Poppins', sans-serif;
 }
 
+
 .full-page {
 min-height: 100vh; 
 width: 100vw; 
@@ -323,10 +324,12 @@ display: flex;
 justify-content: center;
 align-items: center;
 position: relative;
+flex-direction: center;
 }
 
 .input-box{
-width: 330px;
+   
+width: 400px;
 box-sizing: border-box;
 color: #000;
 }
@@ -339,9 +342,11 @@ left: 30px;
 }
 
 .input-box header{
+text-align: center;
 font-weight: 700;
 text-align: center;
 margin-bottom: 45px;
+width: 100%;
 }
 
 .input-field{
@@ -352,39 +357,61 @@ padding: 0 10px 0 10px;
 }
 
 .input{
-height: 45px;
-width: 100%;
-background: transparent;
-border: none;
-border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-outline: none;
-margin-bottom: 20px;
-color: #40414a;
+  height: 45px;
+  width: 100%;
+  background: transparent; 
+  border: none; 
+  border-bottom: 2px solid rgba(0, 0, 0, 0.2); 
+  outline: none;
+  margin-bottom: 20px;
+  color: #40414a;
+  padding: 5px 0; 
+  font-size: 16px; 
 }
 
-.input-box .input-field label{
-position: absolute;
-top: 10px;
-left: 10px;
-pointer-events: none;
-transition: .5s;
+.input-box .input-field input {
+  height: 45px;
+  width: 100%;
+  background: transparent;
+  border: none; 
+  border-bottom: 2px solid rgba(0, 0, 0, 0.2); 
+  outline: none;
+  padding: 10px 0;
+  box-sizing: border-box; 
+  color: #40414a; 
 }
 
+.input-box .input-field label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: top 0.3s ease, font-size 0.3s ease;
+  color: rgba(0, 0, 0, 0.5); 
+}
+.input-box .input-field input:focus {
+  border-bottom: 2px solid #743ae1;
+}
+
+.input-box .input-field input:focus ~ label,
+.input-box .input-field input:valid ~ label {
+  top: -20px;
+  font-size: 12px;
+  color: #743ae1; 
+}
 .input-field input:focus ~ label
 {
 top: -10px;
 font-size: 13px;
 }
 
-.input-field input:valid ~ label
-{
-top: -10px;
-font-size: 13px;
-color: #5d5076;
+.input-field input:focus ~ label, .input-field input:valid ~ label {
+  top: -20px;
+  font-size: 13px; 
+  color: #5d5076;
 }
 
-.input-field .input:focus, .input-field .input:valid{
-border-bottom: 1px solid #743ae1;
+.input:focus, .input:valid{
+  border-bottom: 2px solid #743ae1;
 }
 
 .submit{
