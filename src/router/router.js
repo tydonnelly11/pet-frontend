@@ -20,9 +20,9 @@ import InstructorShowSectionView from '@/views/instructor/InstructorShowSectionV
 import TeamWarAndEdit from '../components/instructor/TeamWarAndEdit.vue'
 import RegisterPageInstructorView from '../components/instructor/RegisterPageInstructorView.vue'
 import AssistantInstructorHomePage from '../views/assistant/AssistantIntructorHomePageView.vue'
-// import AssistantInstructorRubricView from '../views/assistant_instructor/AssistantInstructorRubricView.vue'
-// import AssistantInstructorWARView from '../views/assistant_instructor/AssistantInstructorWARView.vue'
-// import AssistantInstructorPeerEvalView from '../views/assistant_instructor/AssistantInstructorPeerEvalView.vue'
+import AssistantInstructorRubricView from '../views/assistant/AssistantInstructorRubricView.vue'
+import AssistantInstructorWARView from '../views/assistant/AssistantIntructorWARView.vue'
+import AssistantInstructorPeerEvalView from '../views/assistant/AssistantInstructorPeerEvalView.vue'
 
 const routes = [
    {
@@ -143,24 +143,24 @@ const routes = [
    {
       path: '/assistantinstructorhome',
       component: AssistantInstructorHomePage,
-      // children: [
-      //    // {
-      //    //    path: '',
-      //    //    name: 'AssistantInstructorPeerEval',
-      //    //    component: AssistantInstructorPeerEvalView,
-      //    // },
-      //    // {
-      //    //    path: 'rubric',
-      //    //    name: 'AssistantInstructorRubric',
-      //    //    component: AssistantInstructorRubricView,
+      children: [
+         {
+            path: '',
+            name: 'AssistantInstructorPeerEval',
+            component: AssistantInstructorPeerEvalView,
+         },
+         {
+            path: 'rubric',
+            name: 'AssistantInstructorRubric',
+            component: AssistantInstructorRubricView,
 
-      //    // },
-      //    // {
-      //    //    path: 'war',
-      //    //    name: 'AssistantInstructorWar',
-      //    //    component: AssistantInstructorWARView,
-      //    // },
-      // ]
+         },
+         {
+            path: 'war',
+            name: 'AssistantInstructorWar',
+            component: AssistantInstructorWARView,
+         },
+      ]
    },
 ]
 
