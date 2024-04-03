@@ -19,8 +19,10 @@ import StudentWarAndEval from '@/components/instructor/StudentWarAndEval.vue'
 import InstructorShowSectionView from '@/views/instructor/InstructorShowSectionView.vue'
 import TeamWarAndEdit from '../components/instructor/TeamWarAndEdit.vue'
 import RegisterPageInstructorView from '../components/instructor/RegisterPageInstructorView.vue'
-import ManageAssistantInstructorView from '@/views/instructor/ManageAssistantInstructorView.vue'
-
+import AssistantInstructorHomePage from '../views/assistant/AssistantIntructorHomePageView.vue'
+import AssistantInstructorRubricView from '../views/assistant/AssistantInstructorRubricView.vue'
+import AssistantInstructorWARView from '../views/assistant/AssistantIntructorWARView.vue'
+import AssistantInstructorPeerEvalView from '../views/assistant/AssistantInstructorPeerEvalView.vue'
 
 const routes = [
    {
@@ -98,11 +100,6 @@ const routes = [
          //    props: true // This allows you to pass the teamId as a prop to the component
          // },
          {
-            path: 'manageassistant',
-            name: 'ManageAssistantInstructor',
-            component: ManageAssistantInstructorView,
-         },
-         {
             path: 'section',
             name: 'InstructorSection',
             component: InstructorSectionView,
@@ -141,6 +138,29 @@ const routes = [
       path: '/:catchAll(.*)',
       name: 'not-found',
       component: LoginPageView,
+   },
+
+   {
+      path: '/assistantinstructorhome',
+      component: AssistantInstructorHomePage,
+      children: [
+         {
+            path: '',
+            name: 'AssistantInstructorPeerEval',
+            component: AssistantInstructorPeerEvalView,
+         },
+         {
+            path: 'rubric',
+            name: 'AssistantInstructorRubric',
+            component: AssistantInstructorRubricView,
+
+         },
+         {
+            path: 'war',
+            name: 'AssistantInstructorWar',
+            component: AssistantInstructorWARView,
+         },
+      ]
    },
 ]
 
