@@ -133,7 +133,7 @@ export default{
             const auth = localStorage.getItem('auth')
             
             this.isLoading = true;
-            apiClient.post(`http://localhost:80/api/v1/team/edit`,
+            apiClient.post(`https://www.peerevaltool.xyz/api/v1/team/edit`,
             {
                 id: this.teamOBJ.id,
                 name: this.newTeamName,
@@ -160,7 +160,7 @@ export default{
         for(const week of this.weeksSelected){
          this.isLoading = true
          try {
-            const response = await apiClient.get(`http://localhost:80/api/v1/war/get`,
+            const response = await apiClient.get(`https://www.peerevaltool.xyz/api/v1/war/get`,
             {
                 params: {
                 teamId: this.teamid,
@@ -193,7 +193,7 @@ export default{
       },
       removeTeam(){
             this.isLoading = true
-            apiClient.post(`http://localhost:80/api/v1/team/delete`,
+            apiClient.post(`https://www.peerevaltool.xyz/api/v1/team/delete`,
             
             {
                 id: this.teamid,

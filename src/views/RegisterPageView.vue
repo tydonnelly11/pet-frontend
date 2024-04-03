@@ -68,7 +68,7 @@ export default {
         getRegistrationInfo(){
 
             
-            apiClient.get(`http://localhost:80/api/v1/auth/register/user/getRegistrationTokenInfo/${this.token}`, {
+            apiClient.get(`https://www.peerevaltool.xyz/api/v1/auth/register/user/getRegistrationTokenInfo/${this.token}`, {
                 
             }).then(response => {
                 console.log(response)
@@ -90,7 +90,7 @@ export default {
             }
             this.isLoading = true
             this.hasRegistered = false
-            apiClient.post(`http://localhost:80/api/v1/auth/register/student`, {
+            apiClient.post(`https://www.peerevaltool.xyz/api/v1/auth/register/student`, {
                 
                 firstName: this.studentInfo.firstName,
                 middleName: this.studentInfo.middleName,
