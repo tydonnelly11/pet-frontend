@@ -356,19 +356,31 @@ top: 10px;
 left: 10px;
 pointer-events: none;
 transition: .5s;
+padding-left: 10px;
 }
 
-.input-field input:focus ~ label
-{
-top: -10px;
-font-size: 13px;
+.input-field input:focus ~ label {
+   top: -20px;
+   font-size: 13px;
+   
 }
 
-.input-field input:valid ~ label
-{
-top: -10px;
-font-size: 13px;
-color: #5d5076;
+.input-field #email:focus ~ label {
+   top: -20px;
+   font-size: 13px;
+}
+
+.input-field #password:focus ~ label {
+   top: -20px;
+   font-size: 13px;
+}
+
+
+.input-field input:valid ~ label {
+   top: -20px;
+   font-size: 13px;
+   color: #5d5076;
+   
 }
 
 .input-field .input:focus, .input-field .input:valid{
