@@ -43,8 +43,8 @@ export default {
     },
     methods: {
         getRubric() {
-            this.isLoading = true
-            this.hasLoaded = false
+        this.isLoading = true
+        this.hasLoaded = false
          const auth = localStorage.getItem('auth')
 
          apiClient.get(`${this.$baseURL}/api/v1/section/getRubric/${storeSection.selectedSectionId}`, {

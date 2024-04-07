@@ -1,5 +1,9 @@
 <template>
+    <div class="section-info">
     <h1>Information For {{ storeSection.selectedSectionName }}</h1>
+    <h3 v-if="isActiveSection">Active Section</h3>
+    <h3 v-else>Inactive Section</h3>
+    </div>
     <div class="section-btn">
         <button class="small-button" @click="inviteStudentPressed = true">Invite Students</button>
         <button class="small-button" @click="inviteInstructorPressed = true">Invite Instructors</button>
@@ -25,11 +29,27 @@
     </div>
 
     
-    <div v-if="inviteStudentPressed">
+    <div class="popup-overlay" v-if="inviteStudentPressed">
+        <el-dialog
+    v-model="dialogVisible"
+    title="Tips"
+    width="500"
+    :before-close="handleClose"
+  >
+    <span>This is a message</span>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="dialogVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="dialogVisible = false">
+          Confirm
+        </el-button>
+      </div>
+    </template>
+    </el-dialog>
         <InstructorInviteStudents />
         <button class="small-button" style="max-width: 250px; margin-right: 10px;" @click="inviteStudentPressed = false">Cancel</button>
     </div>
-    <div v-if="inviteInstructorPressed">
+    <div class="popup-overlay" v-if="inviteInstructorPressed">
         <InviteAssitInstructor />
         <button class="small-button" style="max-width: 250px; margin-right: 10px;" @click="inviteInstructorPressed = false">Cancel</button>
     </div>
@@ -252,6 +272,7 @@ export default {
         currentTeam: null,
         currentInstructor: null,
         teamConformation: false,
+        isActiveSection: false,
         teamCreationFailed: false,
       }
    },
@@ -373,6 +394,7 @@ export default {
             console.log(res)
             this.isLoading = false;
             this.hasSetActiveSection = true;
+            this.isActiveSection = true;
             localStorage.setItem('storeSection', JSON.stringify(storeSection))
 
          });
@@ -589,6 +611,10 @@ export default {
    },
 
    created() {
+    if(storeSection.getActiveSection()){
+        this.isActiveSection = true
+    }
+    console.log(storeSection.getActiveSection())
     this.getStudents()
     this.getTeams()
     this.getActiveAssistantInstructors()
@@ -615,6 +641,13 @@ export default {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-left: auto; /* Centers the element along the horizontal axis */
     margin-right: auto; /* Centers the element along the horizontal axis */
+}
+
+.section-info{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
 }
 
 .conformation-popup{

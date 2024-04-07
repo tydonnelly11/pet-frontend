@@ -23,6 +23,7 @@ import AssistantInstructorHomePage from '../views/assistant/AssistantIntructorHo
 import AssistantInstructorRubricView from '../views/assistant/AssistantInstructorRubricView.vue'
 import AssistantInstructorWARView from '../views/assistant/AssistantIntructorWARView.vue'
 import AssistantInstructorPeerEvalView from '../views/assistant/AssistantInstructorPeerEvalView.vue'
+import ManageAssistantInstructorView from '../views/instructor/ManageAssistantInstructorView.vue'
 
 const routes = [
    {
@@ -86,6 +87,12 @@ const routes = [
             path: 'rubric',
             name: 'InstructorRubric',
             component: InstructorRubricView,
+
+         },
+         {
+            path : 'manageassistant',
+            name : 'InstructorManageAssistant',
+            component : ManageAssistantInstructorView
 
          },
          {

@@ -89,10 +89,10 @@
          <button @click="generateWeekList">Calculate Weeks</button>
          <div v-if="weeksCalculated">
             <h4>Check the boxes for weeks you want to exclude from a section</h4>
-            <ul v-if="weeksForSemester.length > 0">
+            <ul class="week-list" v-if="weeksForSemester.length > 0">
                <li v-for="(week, index) in weeksForSemester" :key="index">
                <input type="checkbox" :id="'week-' + index" v-model="week.execlude">
-               <label :for="'week-' + index">{{ week.start }} - {{ week.end }}</label>
+               <label :style="'flex-basis: 50%; display: flex;'" :for="'week-' + index">{{ week.start }} - {{ week.end }}</label>
                </li>
             </ul>
          </div>
@@ -136,6 +136,7 @@ import { storeUser } from '@/stores/store.js'
 import { storeSection } from '../../stores/storeSection'
 import apiClient from  '@/axios-setup.js'
 import axios from 'axios'
+import { storeWeek } from '@/stores/storeWeek.js'
 import ErrorPopUp from '@/components/utilities/ErrorPopUp.vue'
 export default {
    name: 'InstructorSectionView',
@@ -329,12 +330,27 @@ export default {
                }
                storeUser.setSectionId(this.sectionId)
                storeSection.addSection(section)
+               this.getWeeksForSection(this.sectionId)
 
             })
             .catch(err => {
                console.log(err)
             })
       },
+      getWeeksForSection(sectionId)
+        {
+        apiClient.get(`http://localhost:80/api/v1/section/getWeeks/${sectionId}`, {
+
+        })
+        .then(response => {
+            console.log(response)
+            storeWeek.setWeekList(response.data.data)
+            localStorage.setItem('storeWeek', JSON.stringify(storeWeek));
+        })
+        .catch(error => {
+            console.log(error)
+        })
+        }
       
    },
    computed: {},
@@ -346,11 +362,22 @@ export default {
 }
 
 </script>
-<style scooped>
+<style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
 * {
   font-family: 'Poppins', sans-serif;
+}
+
+.week-list{
+   list-style-type: none;
+   display: flex;
+   flex-direction: column;
+}
+.week-list li{
+   display: flex;
+   justify-content: space-around;
+   align-items: center;
 }
 
 .InstructorSectionView {
@@ -361,6 +388,7 @@ export default {
   position: relative;
   margin-bottom: 30px;
 }
+
 
 .input-field label {
   display: block;

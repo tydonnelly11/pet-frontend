@@ -26,7 +26,7 @@
        </li>
        <li class="nav-item">
          <router-link @click="toggleSidebar" class="nav-link" to="/instructorhome/section">
-           <span class="link-text">Section</span>
+           <span class="link-text">Add a Section</span>
          </router-link>
        </li>
        <li class="nav-item">
