@@ -45,7 +45,7 @@ export default {
       getTeamMembers() {
          const auth = localStorage.getItem('auth')
 
-         apiClient.get(`https://www.peerevaltool.xyz/api/v1/team/getStudents/${storeUser.teamId}`,
+         apiClient.get(`${this.$baseURL}/api/v1/team/getStudents/${storeUser.teamId}`,
          {
              headers: { 'Authorization': `Bearer ${auth}` },
          }

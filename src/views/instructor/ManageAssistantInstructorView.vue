@@ -48,7 +48,7 @@ export default {
             this.inactiveInstructors = []
             this.activeInstructors = []
             this.isLoading = true
-            apiClient.get(`https://www.peerevaltool.xyz/api/v1/assistantInstructor/getAllInstructors`, {
+            apiClient.get(`${this.$baseURL}/api/v1/assistantInstructor/getAllInstructors`, {
 
             })
             .then(response => {
@@ -79,7 +79,7 @@ export default {
 
         activateInstructor(instructor){
             this.isLoading = true
-            apiClient.post(`https://www.peerevaltool.xyz/api/v1/assistantInstructor/activate`,{
+            apiClient.post(`${this.$baseURL}/api/v1/assistantInstructor/activate`,{
                 id : instructor.id
 
             }).then(response => {
@@ -95,7 +95,7 @@ export default {
         },
         deactivateInstructor(instructor){
             this.isLoading = true
-            apiClient.post(`https://www.peerevaltool.xyz/api/v1/assistantInstructor/deactivate`,{
+            apiClient.post(`${this.$baseURL}/api/v1/assistantInstructor/deactivate`,{
                 id: instructor.id
 
             }).then(response => {

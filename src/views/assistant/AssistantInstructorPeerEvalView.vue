@@ -69,7 +69,7 @@ export default {
     async fetchRubricAndReports() {
       try {
         const auth = localStorage.getItem('auth');
-        const rubricResponse = await apiClient.get(`https://www.peerevaltool.xyz/api/v1/section/getRubric/${storeSection.selectedSectionId}`, {
+        const rubricResponse = await apiClient.get(`${this.$baseURL}/api/v1/section/getRubric/${storeSection.selectedSectionId}`, {
           headers: { 'Authorization': `Bearer ${auth}` }
         });
         this.rubric = rubricResponse.data.data.criteria;
@@ -86,7 +86,7 @@ export default {
 
       try {
         const auth = localStorage.getItem('auth');
-        const response = await apiClient.get(`https://www.peerevaltool.xyz/api/v1/peerEvaluation/getEvaluationReportWithPrivateComments`, {
+        const response = await apiClient.get(`${this.$baseURL}/api/v1/peerEvaluation/getEvaluationReportWithPrivateComments`, {
           params: {
             week: storeWeek.selectedWeekId,
             sectionId: this.getSectionIdForRequest(),
