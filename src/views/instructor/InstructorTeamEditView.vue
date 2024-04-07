@@ -1,46 +1,51 @@
 <template>
-    <h1>Information For:  {{ storeSection.selectedSectionName }}</h1>
-    <div :style="'display: flex; justify-content: center; flex-direction: row; margin-bottom: 20px;'">
+    <h1>Information For {{ storeSection.selectedSectionName }}</h1>
+    <div class="section-btn">
         <button class="small-button" @click="inviteStudentPressed = true">Invite Students</button>
-        <button class="small-button" @click="inviteInstructorPressed = true" style="margin-left: 10px;">Invite Instructors</button>
-        <button @click="editSection = true">Edit Section</button>
-        <button @click="setCurrentSection">Click to set Section as Active</button>
+        <button class="small-button" @click="inviteInstructorPressed = true">Invite Instructors</button>
+        <button class="small-button" @click="editSection = true">Edit Section</button>
+        <button class="small-button" @click="setCurrentSection">Click to set Section as Active</button>
 
     </div>
     
 
-    <div v-if="editSection">
-        <label>Enter New Name</label>
-        <input v-model="newSectionName" type="text" />
-
-        <label></label>
-
-        <button @click="editSectionInfo()">Update Section</button>
-        <button @click="editSection = false">Cancel</button>
+    <div v-if="editSection" style="margin-bottom: 20px;">
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;">
+            <label style="color:#4E2A84;">
+                <h5>
+                    Enter New Section Name
+                </h5>
+            </label>
+            <input class="team-name-input" v-model="newSectionName" type="text" />
+            <label></label>
+        </div>
+        
+        <button class="small-button" style ="max-width: 200px;" @click="editSectionInfo()">Update Section</button>
+        <button class="small-button" style ="max-width: 200px;" @click="editSection = false">Cancel</button>
     </div>
 
     
     <div v-if="inviteStudentPressed">
         <InstructorInviteStudents />
-        <button @click="inviteStudentPressed = false">Cancel</button>
+        <button class="small-button" style="max-width: 250px; margin-right: 10px;" @click="inviteStudentPressed = false">Cancel</button>
     </div>
     <div v-if="inviteInstructorPressed">
         <InviteAssitInstructor />
-        <button @click="inviteInstructorPressed = false">Cancel</button>
+        <button class="small-button" style="max-width: 250px; margin-right: 10px;" @click="inviteInstructorPressed = false">Cancel</button>
     </div>
     
-    <h2> Add Teams To:  {{ storeSection.selectedSectionName }}</h2>
+    <h2> Add Teams To {{ storeSection.selectedSectionName }}</h2>
     <div>
       <!-- Add Teams for Section: {{sectionName}} -->
       <div class="input-field">
-         <label>Team Name</label>
+         <label>
+            <h5>
+                Team Name
+            </h5>
+         </label>
          <input type="text" id="sectionName" v-model="this.teamName" required class="team-name-input"/>
       </div>
-
-
-      
-
-      <button type="submit" class="small-button" @click="createTeams()">Create Team</button>
+      <button type="submit" class="small-button" style="max-width: 250px; margin-bottom: 20px;" @click="createTeams()">Create Team</button>
    <div v-if="hasCreatedTeams" class="popup-overlay">
       <div class="success">
          <p>Team Successfully Created!</p>
@@ -48,6 +53,12 @@
          <button @click="hasCreatedTeams = false">Close</button>
       </div>
       </div>
+    <div v-if="teamCreationFailed" class="popup-overlay">
+        <div class="success">
+            <p>Team creation failed either because a team with this name already exists or a server error occured.</p>
+            <button @click="teamCreationFailed = false">Close</button>
+        </div>
+    </div>
     <div v-if="isProcessingTeamCreation" class="popup-overlay">
          <img src="/img/loading-gif.gif">
       </div>
@@ -64,50 +75,71 @@
             and click the save button.
         </h3>
     -->
-        <div v-if="isLoading" class="popup-overlay">
-         <img src="/img/loading-gif.gif">
-      </div>    
-      <div v-if="hasLoaded" class="page">
-        <!-- Teams Section -->
+    <div v-if="hasLoaded" class="page">
+  <!-- Teams Section -->
+  <div class="teams">
+    <div class="teams-container">
+      <h2 class="teams-header">Teams</h2>
+      <div class="team-card" v-for="team in teams" :key="team.id">
+        <div class="team-name-checkbox">   
+            <div>
+                <h3>
+                    {{ team.name }}
+                </h3>
+            </div>
+            <input type="checkbox" 
+            :value="team.id" 
+            :checked="team.id === selectedTeamId" 
+            @change="selectTeam(team)"
+            >
+        </div>
+        <button class="view-team-btn" v-if="team.students.length > 0" @click="openTeam(team.name, team.id, team.students)">
+            View Team
+        </button>
+        <div v-else>
+            No students assigned 
+        </div>
+
+        <div v-for="student in team.students" :key="student.id">
+          <div style="margin-top: 20px;">
+            <h4>
+                {{ student.firstName }} {{ student.lastName }}
+            </h4>
+          </div>
+          <button class="view-team-btn" v-if="student.teamId" @click="openWARAndEval(student, team)">View Student</button>
+          <button class="remove-btn" v-if="student.teamId" @click="toggleStudentOnTeam(student, team)">Remove</button>
+        </div>
+        <div style="margin-top: 20px;">
+            <h2>Assistant Instructor</h2>
+            <div v-if="team.assistantInstructorDTO == null">
+                No Assistant Instructor assigned
+            </div>
+            <div v-else>    
+                <div>
+                    <h3>
+                        {{ team.assistantInstructorDTO.firstName }} {{ team.assistantInstructorDTO.lastName }}
+                    </h3>
+                </div>
+                <button class="remove-btn" @click="removeInstructorFromTeam(team, team.assistantInstructorDTO)">Remove Instructor</button>
+            </div>
+        </div>
         
-        <div class="teams">
-            <h2>Teams</h2>
-            <div class="team" v-for="team in teams" :key="team.id">
-                {{ team.name }}
-                <input type="checkbox" 
-                    :value="team.id" 
-                    :checked="team.id === selectedTeamId" 
-                    @change="selectTeam(team)"
-                >
-                <p @click="openTeam(team.name, team.id, team.students)">View Team</p>
-                <div class="team-students">
-                    <div class="student" v-for="student in team.students" :key="student.id">
-                        <label>{{ student.firstName }} {{ student.lastName }}</label>
-                        <p v-if="(student.teamId)" @click="toggleStudentOnTeam(student, team)">Remove</p>
-                        <p v-if="(student.teamId)" @click="openWARAndEval(student, team)">View Student</p>
-
-                    </div>
-                </div>
-                <div v-if="team.assistantInstructorDTO == null">
-                    No Assistant Instructor assigned
-                </div>
-                <div v-else>
-                    <label>{{ team.assistantInstructorDTO.firstName }} {{ team.assistantInstructorDTO.lastName }}</label>
-                    <p @click="removeInstructorFromTeam(team, team.assistantInstructorDTO)">Remove Instructor</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Students Section -->
-        <div class="students">
-            <h2>Students</h2>
-            <div v-for="student in students" :key="student.id">
-                <label>{{ student.firstName }} {{ student.lastName }}</label>
-                <input type="checkbox" :value="student.id" @change="toggleStudent(student)">
-            </div>
-        </div>
-
+      </div>
     </div>
+  <!-- Students Section -->
+        <div class="teams-container">
+            <h2 class="teams-header">Students</h2>
+            <div class="student-entry" v-for="student in students" :key="student.id">
+                <div class="team-name-checkbox">
+                    <label class="student-name">
+                        <h4>{{ student.firstName }} {{ student.lastName }}</h4>
+                    </label>
+                    <input style="margin-bottom: 5px;" type="checkbox" class="student-checkbox" :value="student.id" @change="toggleStudent(student)">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
     
 
@@ -126,7 +158,7 @@
       </div>
 
 
-    <button type="submit" class="small-button" @click="saveTeam()">Save Team</button>
+    <button type="submit" class="small-button" style="max-width: 400px; margin-top: 20px;" @click="saveTeam()" >Save Team</button>
     <div v-if="hasSavedTeam" class="popup-overlay">
       <div class="success">
          <p>Team Successfully Saved!</p>
@@ -136,22 +168,24 @@
     <div v-if="isProcessingTeamSave" class="popup-overlay">
          <img src="/img/loading-gif.gif">
       </div>
-      <button type="submit" class="small-button" @click="clearSelection()">Clear Selection</button>
+      <button type="submit" class="small-button" style="max-width: 400px; margin-top: 20px;" @click="clearSelection()">Clear Selection</button>
 
-      <div>
+      <div style="margin-top: 20px;">
         <h3>Assistant Instructors</h3>
         <div v-for="instructor in activeInstructors">
-            <label>{{ instructor.firstName }} {{ instructor.lastName }}</label>
+            <label style="margin-bottom: 20px; margin-top: 20px;">
+                <h4>
+                    {{ instructor.firstName }} {{ instructor.lastName }}
+                </h4>
+            </label>
             <div v-for="team in teams">
-                <button v-if="(team.assistantInstructorDTO == null || instructor.id != team.assistantInstructorDTO.id) && team.name != null" @click="showConfirmationPopup(team, instructor)">{{ team.name }}</button>
+                <button class="small-button" style="max-width: 400px;" v-if="(team.assistantInstructorDTO == null || instructor.id != team.assistantInstructorDTO.id) && team.name != null" @click="showConfirmationPopup(team, instructor)">{{ team.name }}</button>
                 
             </div>
             
             <!-- <button v-if="instructor.id != team.assistantInstructorDTO.id" @click="addInstructorToTeam(team, instructor)">{{ team.name }}</button> -->
-            <button @click="addInstructorToSection(instructor)">Assign to {{this.selectedSectionInfo.name}}</button>
+            <button class="small-button" style="max-width: 400px; margin-right: 10px;" @click="addInstructorToSection(instructor)">Assign to {{this.selectedSectionInfo.name}}</button>
         </div>
-
-
     </div>
     <div v-if="teamConformation" class="popup-overlay">
         <div class="conformation-popup">
@@ -218,7 +252,7 @@ export default {
         currentTeam: null,
         currentInstructor: null,
         teamConformation: false,
-         
+        teamCreationFailed: false,
       }
    },
    methods: {
@@ -253,7 +287,7 @@ export default {
             return
         }
         this.isLoading = true;
-        apiClient.post(`https://www.peerevaltool.xyz/api/v1/section/save`, {
+        apiClient.post(`${this.$baseURL}/api/v1/section/save`, {
             id: storeSection.selectedSectionId,
             name: this.newSectionName,
             instructorId: storeUser.userID,
@@ -273,9 +307,9 @@ export default {
             id : instructor.id
         }
         team.assistantInstructorDTO = dto
-        var newTeam = [team]
-
-        apiClient.post(`https://www.peerevaltool.xyz/api/v1/team/assignInstructors`, newTeam
+        var newTeam = JSON.parse(JSON.stringify([team]));
+        newTeam = newTeam.map(team => ({ ...team, students: [] }));
+        apiClient.post(`${this.$baseURL}/api/v1/team/assignInstructors`, newTeam
         ).then(response => {
             console.log(response)
             this.getTeams()
@@ -303,7 +337,7 @@ export default {
         this.selectedSectionInfo.assistantInstructorDTOs.push(instructorVar)
 
 
-        apiClient.post(`https://www.peerevaltool.xyz/api/v1/section/editInstructors`, 
+        apiClient.post(`${this.$baseURL}/api/v1/section/editInstructors`, 
             this.selectedSectionInfo
         ).then(response => {
             console.log(response)
@@ -318,22 +352,21 @@ export default {
             id : instructor.id
         }
         team.assistantInstructorDTO = dto
-        
-
-        apiClient.post(`https://www.peerevaltool.xyz/api/v1/team/removeInstructor`, team
+        var newTeam = JSON.parse(JSON.stringify(team));
+        newTeam.students = []
+        apiClient.post(`${this.$baseURL}/api/v1/team/removeInstructor`, newTeam
         ).then(response => {
             console.log(response)
         }).catch(error => {
             console.log(error)
         })
         team.assistantInstructorDTO = null;
-
     },
 
     setCurrentSection(){
         this.isLoading = true;
         this.hasSetActiveSection = false;
-         apiClient.post(`https://www.peerevaltool.xyz/api/v1/section/setCurrentSection`, {
+         apiClient.post(`${this.$baseURL}/api/v1/section/setCurrentSection`, {
             id : storeSection.selectedSectionId
          })
          .then(res => {
@@ -352,7 +385,7 @@ export default {
             headers: { 'Authorization': `Bearer ${auth}` }
          };
         
-        apiClient.get(`https://www.peerevaltool.xyz/api/v1/section/getAllStudents/${storeSection.selectedSectionId}`,
+        apiClient.get(`${this.$baseURL}/api/v1/section/getAllStudents/${storeSection.selectedSectionId}`,
         {  headers: { 'Authorization': `Bearer ${auth}` }}
         )
         .then(response => {
@@ -377,7 +410,7 @@ export default {
     getActiveAssistantInstructors(){
         this.activeInstructors = []
             this.isLoading = true
-            apiClient.get(`https://www.peerevaltool.xyz/api/v1/assistantInstructor/getAllInstructors`, {
+            apiClient.get(`${this.$baseURL}/api/v1/assistantInstructor/getAllInstructors`, {
 
             })
             .then(response => {
@@ -433,7 +466,7 @@ export default {
          const config = {
             headers: { 'Authorization': `Bearer ${auth}` }
          };
-        apiClient.get(`https://www.peerevaltool.xyz/api/v1/section/getAllTeams/${storeSection.selectedSectionId}`,
+        apiClient.get(`${this.$baseURL}/api/v1/section/getAllTeams/${storeSection.selectedSectionId}`,
         {  headers: { 'Authorization': `Bearer ${auth}` }}
         )
         .then(response => {
@@ -471,7 +504,7 @@ export default {
           } else {
             student.weeks = null;
             this.updatedTeam.students.push(student);
-          }
+          ``}
       },
    
    saveTeam(){
@@ -486,7 +519,7 @@ export default {
     }
     
    
-    apiClient.post(`https://www.peerevaltool.xyz/api/v1/team/edit`,
+    apiClient.post(`${this.$baseURL}/api/v1/team/edit`,
     {
         id: this.updatedTeam.id,
         name: this.updatedTeam.name,
@@ -518,7 +551,7 @@ export default {
             headers: { 'Authorization': `Bearer ${auth}` }
     };
 
-         apiClient.post(`https://www.peerevaltool.xyz/api/v1/team/save`, {
+         apiClient.post(`${this.$baseURL}/api/v1/team/save`, {
             id : null,
             name: this.teamName,
             sectionId: storeSection.selectedSectionId,
@@ -531,12 +564,13 @@ export default {
                console.log(res.data.data)
                this.getTeams()
                this.isProcessingTeamCreation = false
-            
+               this.teamName = ''
                this.hasCreatedTeams = true
-               
-               
             })
             .catch(err => {
+               this.isProcessingTeamCreation = false;
+               this.teamCreationFailed = true;
+               this.hasCreatedTeams = false;
                console.log(err)
             })
       },
@@ -564,27 +598,34 @@ export default {
 </script>
 
 <style scoped>
+.small-button:not(:first-child) {
+   margin-left: 10px;
+}
 .team-name-input {
-    margin-left: auto;
-    margin-right: auto;
-    width: 50%; 
-   height: 20px; 
-   border-radius: 20px; 
-   border: 1px solid #cccccc; 
-   margin-bottom: 10px; 
-   font-size: 1rem; 
-   color: #333; 
-   background-color: #fff; 
+    width: 100%;
+    max-width: 700px; /* Maximum width of the element */
+    height: 40px;
+    border-radius: 8px;
+    border: none;
+    margin-bottom: 5px;
+    font-size: 1.2rem;
+    padding: 10px 20px; /* Padding for top/bottom and left/right */
+    color: #333;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-left: auto; /* Centers the element along the horizontal axis */
+    margin-right: auto; /* Centers the element along the horizontal axis */
 }
 
 .conformation-popup{
-    
     display: flex;
     flex-direction: column;
     z-index: 1000;
     color: white;
-    background-color: #743ae1;
-    padding: 50px;
+    background-color: #4E2A84; /* Adjusted to TCU purple */
+    padding: 30px; /* Adjust padding for better spacing */
+    border-radius: 8px; /* Add rounded corners */
+    align-items: center; /* Center the items horizontally */
 }
 
 
@@ -593,56 +634,186 @@ export default {
    border: 1px solid #6f42c1;
    box-shadow: 0 0 0 2px rgba(111, 66, 193, 0.25);
 }
-.page{
+
+.page {
     display: flex;
     flex-direction: row;
-    width: 100%;
-}
-.teams{
-    display: flex;
-    flex-direction: column;
-    flex : 0 0 50%;
+    flex-wrap: wrap; /* Wrap items on smaller screens */
 }
 
-.team{
-    flex : 0 0 10%;
+.teams, .students {
+    width: 100%; /* Take full width of the container */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Create a responsive grid */
+    gap: 10px; /* Space between tiles */
+}
+
+.team, .student {
     text-align: center;
-    border: 1px solid black;
+    border: none;
+    border-radius: 4px; /* Rounded corners for tiles */
+    padding: 15px; /* Padding inside tiles */
+    background-color: #4E2A84; /* TCU purple background */
+    color: white; /* White text */
+    cursor: pointer; /* Indicate clickable */
+    transition: transform 0.3s, box-shadow 0.3s; /* Smooth transitions for interactions */
 }
-.button-group {
-    display: flex;
-    flex-direction: row;
-    /* justify-content: space-between;
-    width: 100%; */
+
+.team:hover, .student:hover {
+    transform: translateY(-3px); /* Slight lift effect on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect for depth */
 }
+
 .small-button {
-   width: 250px; 
-   height: 50px;
-   font-size: 1rem; 
-   margin: 1px; 
-   border-radius: 4px;
-   margin: 0 10px; /* Adjust the margin as needed */
+    padding: 10px 15px; /* Ample padding for tap targets */
+    font-size: 1rem; 
+    border-radius: 20px;
+    background-color: #5C4B93; /* A slightly different purple shade for contrast */
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-bottom: 10px;
 }
 
-
-.students{
-    display: flex;
-    flex-direction: column;
-    flex : 0 0 50%;
-}
-.student{
-    display: flex;
-    flex-direction: row;
-    text-align: left;
-    align-items: flex-start;
-    justify-content: space-between;
-
+.small-button:hover {
+    background-color: #6f42c1; /* Lighter purple on hover for interaction feedback */
 }
 
 .centered-text {
    text-align: center;
-   font-size: 1.3rem;
-   margin: 20px;
+   font-size: 1.5rem; /* Larger font size for readability */
+   margin-bottom: 30px; /* More space below the heading */
+}
+.teams-header {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 30px; /* Adjust as needed */
+  color: #4E2A84; /* TCU purple or any other color that fits the theme */
 }
 
+/* Style for the overall Teams container */
+.teams-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Style for the team cards */
+.team-card {
+  background-color: #4E2A84; /* TCU purple */
+  color: white;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  width: 80%; /* Adjust the width as per your layout */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+/* Style for individual buttons */
+.view-team-btn {
+  background-color: #5C4B93; /* A lighter shade of purple for contrast */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  margin-top: 5px;
+  cursor: pointer;
+  max-width: 200px;
+  margin-right: 5px;
+}
+
+.remove-btn {
+  background-color: #FF4136; /* Bright red for remove buttons */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  margin-top: 5px;
+  cursor: pointer;
+  max-width: 200px;
+  margin-left: 5px;
+  margin-right: 8px;
+}
+
+/* Hover effects for buttons */
+.view-team-btn:hover,
+.remove-btn:hover {
+  opacity: 0.9;
+}
+
+/* Media query for responsive design */
+@media (max-width: 768px) {
+  .team-card {
+    width: 90%; /* Full width on smaller screens */
+  }
+}
+.students-container {
+  /* Use a percentage width for fluid responsiveness and max-width to cap the size */
+  width: 90%;
+  max-width: 700px; /* You can adjust this to what you feel is best for content */
+  margin: auto; /* This centers the container */
+  
+  /* Rest of the styles */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: #EDEDED;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.students-header {
+  text-align: center;
+  color: #4E2A84; /* TCU purple */
+  font-size: 2rem; /* Large, readable text */
+  margin-bottom: 20px; /* Space below the header */
+}
+
+.student-entry {
+  display: flex;
+  align-items: center; /* Vertical alignment */
+  justify-content: space-between; /* Space between name and checkbox */
+  padding: 10px 0; /* Padding for each entry */
+  border-bottom: 1px solid #EEE; /* Separator between entries */
+}
+
+.student-name {
+  margin-right: 5px; /* Space between name and checkbox */
+}
+
+.student-checkbox {
+  cursor: pointer;
+  /* Add custom styles or use a library like 'pretty-checkbox' for better styling */
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+  .students-container {
+    width: 95%; /* More width on small screens */
+    margin: 10px; /* Less margin on small screens */
+    padding: 10px; /* Less padding on small screens */
+  }
+}
+
+.team-name-checkbox {
+  display: flex; /* This will place child elements in a row */
+  align-items: center; /* This will vertically center the items in the container */
+  justify-content: center;
+}
+.team-name-checkbox > *:not(:last-child) {
+  margin-right: 10px; /* Add right margin to all child elements except the last one */
+}
+.section-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+.section-btn > *:not(:last-child) {
+    margin-right: 10px;
+}
 </style>
