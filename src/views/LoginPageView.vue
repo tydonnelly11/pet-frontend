@@ -64,7 +64,8 @@ loginInstructor()
    
    this.isLoading = true
    let creds = this.encodeCredentials(this.email, this.password)
-   apiClient.post('https://www.peerevaltool.xyz/api/v1/auth/login/instructor', {},{
+   console.log(this.$baseURL)
+   apiClient.post(`${this.$baseURL}/api/v1/auth/login/instructor`, {},{
       headers: {
          'Authorization': `Basic ${creds}`
       }

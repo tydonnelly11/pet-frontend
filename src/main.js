@@ -51,4 +51,7 @@ if(savedState5){
 
 import './scss/styles.scss'
 // import { c } from 'vitest/dist/reporters-5f784f42.js';
-createApp(App).use(router).mount('#app')
+const app = createApp(App);
+// useful for local testing
+app.config.globalProperties.$baseURL = window.location.hostname === '127.0.0.1' ? 'http://localhost:80' : 'https://www.peerevaltool.xyz';
+app.use(router).mount('#app')
