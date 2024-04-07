@@ -50,7 +50,7 @@ export default {
             this.isLoading = true;
             this.teams = [];
             const auth = localStorage.getItem('auth');
-            apiClient.get(`https://www.peerevaltool.xyz/api/v1/section/getAllTeams/${storeSection.selectedSectionId}`, {
+            apiClient.get(`http://localhost:80/api/v1/section/getAllTeams/${storeSection.selectedSectionId}`, {
                 headers: { 'Authorization': `Bearer ${auth}` }
             })
             .then(response => {
@@ -75,7 +75,7 @@ export default {
                 }
             }
             const auth = localStorage.getItem('auth');
-            apiClient.get(`https://www.peerevaltool.xyz/api/v1/war/get`, {
+            apiClient.get(`http://localhost:80/api/v1/war/get`, {
                 params: {
                     teamId: team.id,
                     weekId: storeWeek.selectedWeekId,
