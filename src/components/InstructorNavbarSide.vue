@@ -132,7 +132,7 @@ body {
 }
 
 .sidebar.open {
-  width: 300px;
+  width: 400px;
 }
 
 .logo-details {
@@ -205,6 +205,7 @@ body {
   text-decoration: none;
   transition: background-color 0.3s;
   font-weight: bold;
+  font-size: 20px;
 }
 
 .nav-link:hover {
