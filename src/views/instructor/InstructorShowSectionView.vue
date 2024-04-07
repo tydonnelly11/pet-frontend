@@ -37,7 +37,7 @@ export default {
         
         getWeeksForSection(sectionId)
         {
-        apiClient.get(`http://localhost:80/api/v1/section/getWeeks/${sectionId}`, {
+        apiClient.get(`${this.$baseURL}/api/v1/section/getWeeks/${sectionId}`, {
 
         })
         .then(response => {

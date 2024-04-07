@@ -69,7 +69,7 @@ export default {
         getRegistrationInfo(){
 
             
-            axios.get(`http://localhost:80/api/v1/auth/register/user/getRegistrationTokenInfo/${this.token}`, {
+            axios.get(`${this.$baseURL}/api/v1/auth/register/user/getRegistrationTokenInfo/${this.token}`, {
                 
             }).then(response => {
                 console.log(response)
@@ -91,7 +91,7 @@ export default {
             }
             this.isLoading = true
             this.hasRegistered = false
-            apiClient.post(`http://localhost:80/api/v1/auth/register/assistantInstructor`, {
+            apiClient.post(`${this.$baseURL}/api/v1/auth/register/assistantInstructor`, {
                 
                 firstName: this.studentInfo.firstName,
                 middleName: this.studentInfo.middleName,

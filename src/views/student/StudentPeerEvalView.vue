@@ -86,7 +86,7 @@ export default {
       async getPeerEvalEntriesForWeek() {
          this.isLoading = true
          const auth = localStorage.getItem('auth')
-         apiClient.get(`http://localhost:80/api/v1/peerEvaluation/getPeerEvaluation/${storeUser.userID}/${storeWeek.selectedWeekId}`,
+         apiClient.get(`${this.$baseURL}/api/v1/peerEvaluation/getPeerEvaluation/${storeUser.userID}/${storeWeek.selectedWeekId}`,
                // {
                //    headers: { 'Authorization': `Bearer ${auth}` }            
                // }
@@ -230,7 +230,7 @@ export default {
       getRubric() {
          const auth = localStorage.getItem('auth')
 
-         apiClient.get(`http://localhost:80/api/v1/section/getRubric/${storeUser.sectionId}`, {
+         apiClient.get(`${this.$baseURL}/api/v1/section/getRubric/${storeUser.sectionId}`, {
             // headers: { 'Authorization': `Bearer ${auth}` }
          })
          .then((response) => {
@@ -247,7 +247,7 @@ export default {
       },
       getGradeAndCommentsForPastWeek(){      
          // const auth = localStorage.getItem('auth')
-         apiClient.get(`http://localhost:80/api/v1/peerEvaluation/getEvaluationReportWithoutPrivateComments`, {
+         apiClient.get(`${this.$baseURL}/api/v1/peerEvaluation/getEvaluationReportWithoutPrivateComments`, {
             params: {
                week: storeWeek.selectedWeekId,
                studentId: storeUser.userID,

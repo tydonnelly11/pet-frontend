@@ -93,7 +93,7 @@ export default {
          // }
          const auth = localStorage.getItem('auth')
          
-         apiClient.post('http://localhost:80/api/v1/activity/submit', this.newTasks,
+         apiClient.post('${this.$baseURL}/api/v1/activity/submit', this.newTasks,
          {
             headers: { 'Authorization': `Bearer ${auth}` }
          }).then(response => {
@@ -131,7 +131,7 @@ export default {
          this.hasSubmited = false
          const auth = localStorage.getItem('auth')
          this.studentTasks.tasks = []
-         apiClient.get(`http://localhost:80/api/v1/war/get`,
+         apiClient.get(`${this.$baseURL}/api/v1/war/get`,
          {
             headers: { 'Authorization': `Bearer ${auth}` },
             params: {

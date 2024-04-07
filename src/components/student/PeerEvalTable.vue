@@ -118,7 +118,7 @@ export default {
          
          const auth = localStorage.getItem('auth')
 
-         apiClient.post('http://localhost:80/api/v1/peerEvaluation/submitPeerEvaluation', targetPayload, {
+         apiClient.post('${this.$baseURL}/api/v1/peerEvaluation/submitPeerEvaluation', targetPayload, {
                headers: { 'Authorization': `Bearer ${auth}` },
             })
             .then((response) => {

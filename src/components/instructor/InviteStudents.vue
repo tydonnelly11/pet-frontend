@@ -84,7 +84,7 @@ export default {
             const auth = localStorage.getItem('auth')
             
 
-            apiClient.post(`http://localhost:80/api/v1/auth/register/student/inviteStudents`, 
+            apiClient.post(`${this.$baseURL}/api/v1/auth/register/student/inviteStudents`, 
                 
                     this.listOfStudents
             ,{

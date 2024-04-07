@@ -64,7 +64,7 @@ loginInstructor()
    
    this.isLoading = true
    let creds = this.encodeCredentials(this.email, this.password)
-   apiClient.post('http://localhost:80/api/v1/auth/login/instructor', {},{
+   apiClient.post('${this.$baseURL}/api/v1/auth/login/instructor', {},{
       headers: {
          'Authorization': `Basic ${creds}`
       }
@@ -120,7 +120,7 @@ loginStudent()
 {
    this.isLoading = true
    let creds = this.encodeCredentials(this.email, this.password)
-   apiClient.post('http://localhost:80/api/v1/auth/login/student', {}, {
+   apiClient.post('${this.$baseURL}/api/v1/auth/login/student', {}, {
       headers: {
          Authorization: `Basic ${creds}`
       }
@@ -164,7 +164,7 @@ loginStudent()
 loginAssistInstructor(){
    this.isLoading = true
    let creds = this.encodeCredentials(this.email, this.password)
-   axios.post('http://localhost:80/api/v1/auth/login/assistantInstructor', {}, {
+   axios.post('${this.$baseURL}/api/v1/auth/login/assistantInstructor', {}, {
       headers: {
          Authorization: `Basic ${creds}`
       }
@@ -228,7 +228,7 @@ pushInstructor2()
 
 getWeeksForSection(sectionId)
 {
-   apiClient.get(`http://localhost:80/api/v1/section/getWeeks/${sectionId}`, {
+   apiClient.get(`${this.$baseURL}/api/v1/section/getWeeks/${sectionId}`, {
 
    })
    .then(response => {
