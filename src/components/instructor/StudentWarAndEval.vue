@@ -1,15 +1,21 @@
 <template>
-    <button @click="this.$router.back()">Previous page</button>
-    <p>Select dates to get WAR/Peer Evaluation for {{ studentName }}</p>
-    <label for="start-date">Start Date:</label>
-    <input type="date" id="start-date" v-model="startDate" />
+    <button class="small-button" style="max-width: 200px; margin-top: 20px;" @click="this.$router.back()">Previous page</button>
+    <p>
+        Select dates to get WAR/Peer Evaluation for <h3>{{ studentName }}</h3>
+    </p>
+    <div style="margin-bottom: 20px;">
+        <label for="start-date" style="margin-right: 5px;">Start Date:</label>
+        <input style="margin-right: 10px;" type="date" id="start-date" v-model="startDate" />
 
-    <label for="end-date">End Date:</label>
-    <input type="date" id="end-date" v-model="endDate" />
-
-    <button @click="getWarAndEval">Get WAR</button>
-    <button @click="getPeerEvaluationReport">Get Peer Evaluation</button>
-
+        <label for="end-date" style="margin-right: 5px;">End Date:  </label>
+        <input type="date" id="end-date" v-model="endDate" />
+    </div>
+    
+    <div class="button-group">
+        <button class="small-button" @click="getWarAndEval">Get WAR</button>
+        <button class="small-button" @click="getPeerEvaluationReport">Get Peer Evaluation</button>
+    </div>
+    
     <div v-if="this.hasEntry" v-for="student in studentList">
         <p>War for {{ student.weekStart }} - {{ student.weekEnd }}</p>
         <WarList :isTeamWar="false" :studentTasks="student"/>
@@ -46,7 +52,7 @@
             <img src="/img/loading-gif.gif">
     </div>
 
-    <button @click="removeStudent">Delete Student</button>
+    <button class="remove-btn" @click="removeStudent">Delete Student</button>
     <div v-if="hasDeletedStudent" class="popup-overlay">
         <div class="success">
             <p>Student Succesfully Deleted!</p>
@@ -273,6 +279,26 @@ export default{
 </script>
 
 <style scoped>
+.small-button {
+    padding: 10px 15px; /* Ample padding for tap targets */
+    font-size: 1rem; 
+    border-radius: 20px;
+    background-color: #5C4B93; /* A slightly different purple shade for contrast */
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-bottom: 10px;
+}
+
+.small-button:hover {
+    background-color: #6f42c1; /* Lighter purple on hover for interaction feedback */
+}
+
+.small-button:not(:first-child) {
+   margin-left: 10px;
+}
+
 .table{
     display: flex;
     flex-direction: row;
@@ -280,5 +306,22 @@ export default{
 
 .comments-box{
     border: solid 1px blueviolet;
+}
+
+.remove-btn {
+  background-color: #FF4136; /* Bright red for remove buttons */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  margin-top: 5px;
+  cursor: pointer;
+  max-width: 200px;
+  margin-left: 5px;
+  margin-right: 8px;
+}
+
+.remove-btn:hover {
+  background-color: #c3352d;
 }
 </style>

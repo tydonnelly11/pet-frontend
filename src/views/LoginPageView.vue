@@ -64,7 +64,13 @@ loginInstructor()
    
    this.isLoading = true
    let creds = this.encodeCredentials(this.email, this.password)
+ css-fixes-final
    apiClient.post('${this.$baseURL}/api/v1/auth/login/instructor', {},{
+
+   console.log(this.$baseURL)
+   console.log(window.location.hostname)
+   apiClient.post(`${this.$baseURL}/api/v1/auth/login/instructor`, {},{
+ main
       headers: {
          'Authorization': `Basic ${creds}`
       }

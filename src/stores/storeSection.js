@@ -33,5 +33,15 @@ export const storeSection = reactive({
         this.sections = [];
         this.selectedSectionId = "";
         this.selectedSectionName = "";
+    },
+    getActiveSection(){
+        console.log(this.sections);
+        if(this.sections.find(section => section.id === this.selectedSectionId && section.isCurrent === true) === undefined){
+            return false;
+        }
+        else{
+            return true;
+        }
+        // return this.sections.find(section => section.id === this.selectedSectionId && section.isCurrent === true);
     }
 });
