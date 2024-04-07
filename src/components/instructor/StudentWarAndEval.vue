@@ -147,7 +147,7 @@ export default{
 
             for (const week of this.weeksSelected) {
             try {
-                const response = await apiClient.get(`https://www.peerevaltool.xyz/api/v1/war/get`, {
+                const response = await apiClient.get(`${this.$baseURL}/api/v1/war/get`, {
                     params: {
                         teamId: this.$route.params.teamid,
                         weekId: week.id
@@ -199,7 +199,7 @@ export default{
             this.studentListPeer = []
             for (const week of this.weeksSelected) {
                 try {
-                    const response = await apiClient.get(`https://www.peerevaltool.xyz/api/v1/peerEvaluation/getEvaluationReportWithPrivateComments`, {
+                    const response = await apiClient.get(`${this.$baseURL}/api/v1/peerEvaluation/getEvaluationReportWithPrivateComments`, {
                         params: {
                             week: week.id,
                             studentId: this.student.studentId,
@@ -233,7 +233,7 @@ export default{
 
         removeStudent(){
             this.hasDeletedStudent = true;
-            apiClient.post(`https://www.peerevaltool.xyz/api/v1/section/deleteStudent`, {
+            apiClient.post(`${this.$baseURL}/api/v1/section/deleteStudent`, {
                 id: this.$route.params.studentid 
             }).then(response => {
                 console.log(response)
@@ -246,7 +246,7 @@ export default{
         getRubric() {
          let rubric = null;
          
-         apiClient.get(`https://www.peerevaltool.xyz/api/v1/section/getRubric/${storeSection.selectedSectionId}`, 
+         apiClient.get(`${this.$baseURL}/api/v1/section/getRubric/${storeSection.selectedSectionId}`, 
          
          )
          .then((response) => {

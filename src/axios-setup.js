@@ -7,7 +7,7 @@ back to login if there token exires as well as being able to refresh page and
 stay logged in
 */
 const apiClient = axios.create({
-  baseURL: 'https://www.peerevaltool.xyz/',
+  baseURL: '${this.$baseURL}/',
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',

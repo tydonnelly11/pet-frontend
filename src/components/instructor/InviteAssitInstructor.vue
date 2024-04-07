@@ -83,7 +83,7 @@ export default {
             const auth = localStorage.getItem('auth')
             
 
-            apiClient.post(`https://www.peerevaltool.xyz/api/v1/auth/register/assistantInstructor/inviteInstructors`, 
+            apiClient.post(`${this.$baseURL}/api/v1/auth/register/assistantInstructor/inviteInstructors`, 
                 
                     this.listOfStudents
             ,{
