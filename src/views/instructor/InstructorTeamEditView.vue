@@ -328,8 +328,13 @@ export default {
             id : instructor.id
         }
         team.assistantInstructorDTO = dto
+ css-fixes-final
+        var newTeam = [team]
+
+
         var newTeam = JSON.parse(JSON.stringify([team]));
         newTeam = newTeam.map(team => ({ ...team, students: [] }));
+ main
         apiClient.post(`${this.$baseURL}/api/v1/team/assignInstructors`, newTeam
         ).then(response => {
             console.log(response)
@@ -373,9 +378,15 @@ export default {
             id : instructor.id
         }
         team.assistantInstructorDTO = dto
+ css-fixes-final
+        
+
+        apiClient.post(`${this.$baseURL}/api/v1/team/removeInstructor`, team
+
         var newTeam = JSON.parse(JSON.stringify(team));
         newTeam.students = []
         apiClient.post(`${this.$baseURL}/api/v1/team/removeInstructor`, newTeam
+ main
         ).then(response => {
             console.log(response)
         }).catch(error => {

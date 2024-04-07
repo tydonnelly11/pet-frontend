@@ -64,9 +64,13 @@ loginInstructor()
    
    this.isLoading = true
    let creds = this.encodeCredentials(this.email, this.password)
+ css-fixes-final
+   apiClient.post('${this.$baseURL}/api/v1/auth/login/instructor', {},{
+
    console.log(this.$baseURL)
    console.log(window.location.hostname)
    apiClient.post(`${this.$baseURL}/api/v1/auth/login/instructor`, {},{
+ main
       headers: {
          'Authorization': `Basic ${creds}`
       }
@@ -358,19 +362,31 @@ top: 10px;
 left: 10px;
 pointer-events: none;
 transition: .5s;
+padding-left: 10px;
 }
 
-.input-field input:focus ~ label
-{
-top: -10px;
-font-size: 13px;
+.input-field input:focus ~ label {
+   top: -20px;
+   font-size: 13px;
+   
 }
 
-.input-field input:valid ~ label
-{
-top: -10px;
-font-size: 13px;
-color: #5d5076;
+.input-field #email:focus ~ label {
+   top: -20px;
+   font-size: 13px;
+}
+
+.input-field #password:focus ~ label {
+   top: -20px;
+   font-size: 13px;
+}
+
+
+.input-field input:valid ~ label {
+   top: -20px;
+   font-size: 13px;
+   color: #5d5076;
+   
 }
 
 .input-field .input:focus, .input-field .input:valid{
