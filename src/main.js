@@ -52,3 +52,14 @@ if(savedState5){
 import './scss/styles.scss'
 // import { c } from 'vitest/dist/reporters-5f784f42.js';
 createApp(App).use(router).mount('#app')
+
+// Import Font Awesome related packages
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
+// Add Font Awesome icons to the library
+library.add(fas);
+
+// Add Font Awesome component globally
+createApp(App).component('font-awesome-icon', FontAwesomeIcon);
