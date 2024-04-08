@@ -1,5 +1,4 @@
 <template>
- css-fixes-final
   <div class="sidebar" :class="{ 'open': isSidebarOpen }">
     <div class="logo-details" @click="toggleSidebar">
       <!-- Hamburger icon created with divs -->
@@ -69,66 +68,6 @@
 <script>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
-
-   <div class="sidebar" :class="{ 'open': isSidebarOpen }">
-     <div class="logo-details" @click="toggleSidebar">
-       <!-- Hamburger icon created with divs -->
-       <div class="icon" :class="{ 'open': isSidebarOpen }">
-         <div class="line"></div>
-         <div class="line"></div>
-         <div class="line"></div>
-       </div>
-     </div>
-     <ul class="nav-links">
-       <li class="nav-item">
-         <router-link @click="toggleSidebar" class="nav-link" to="/instructorhome/">
-           <span class="link-text">Instructor Peer Evaluation</span>
-         </router-link>
-       </li>
-       <li class="nav-item">
-         <router-link @click="toggleSidebar" class="nav-link" to="/instructorhome/war">
-           <span class="link-text">Instructor War</span>
-         </router-link>
-       </li>
-       <li class="nav-item">
-         <router-link @click="toggleSidebar" class="nav-link" to="/instructorhome/rubric">
-           <span class="link-text">Rubric</span>
-         </router-link>
-       </li>
-       <li class="nav-item">
-         <router-link @click="toggleSidebar" class="nav-link" to="/instructorhome/section">
-           <span class="link-text">Add a Section</span>
-         </router-link>
-       </li>
-       <li class="nav-item">
-         <router-link @click="toggleSidebar" class="nav-link" to="/instructorhome/showsection">
-           <span class="link-text">View All Sections</span>
-         </router-link>
-       </li>
-
-       <li class="nav-item">
-         <router-link @click="toggleSidebar" class="nav-link" to="/instructorhome/manageassistant">
-           <span class="link-text">View All Assistant Instructors</span>
-         </router-link>
-       </li>
-       
-       <li class="nav-item">
-         <router-link @click="toggleSidebar" class="nav-link" to="/instructorhome/editteams">
-           <span class="link-text">Section Information</span>
-         </router-link>
-       </li>
-       <li class="nav-item">
-         <router-link class="nav-link" to="/">
-           <span @click="logout" class="link-text">Logout</span>
-         </router-link>
-       </li>
-     </ul>
-   </div>
- </template>
- 
- 
- <script>
- main
 import { storeSection } from '../stores/storeSection';
 
 export default {
