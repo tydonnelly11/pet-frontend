@@ -1,4 +1,5 @@
 <template>
+   <!-- this is a comment -->
    <div class="full-page">
    <div class="main">
       <div class="row g-0">
