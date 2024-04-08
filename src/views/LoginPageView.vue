@@ -399,10 +399,6 @@ span a:hover {
    color: #000;
 }
 
- body {
-   overflow: hidden;
-}
-
 @media only screen and (max-width: 768px) {
    .side-image {
       border-radius: 10px 10px 0 0;
