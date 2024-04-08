@@ -34,7 +34,7 @@ export default {
             
             localStorage.setItem('storeWeek', JSON.stringify(storeWeek))
             localStorage.setItem('storeSection', JSON.stringify(storeSection))
-            this.$router.push('/instructorhome/editteams')
+            this.$router.push({ name: 'InstructorEditTeams', query: { fromViewAllSection: 'true' }})
         },
         
         getWeeksForSection(sectionId)

@@ -1,13 +1,15 @@
 <template>
-    <button @click="this.$router.back()">Previous page</button>
-    <p>Select dates to get WAR for {{ teamname }}</p>
-    <label for="start-date">Start Date:</label>
+    <button class="small-button" style="max-width: 200px; margin-top: 20px;" @click="this.$router.back()">Previous page</button>
+    <p>Select dates to get WAR for <h3>{{ teamname }}</h3></p>
+    <div style="margin-bottom: 20px;">
+    <label for="start-date" style="margin-right: 5px;">Start Date:</label>
     <input type="date" id="start-date" v-model="startDate" />
 
-    <label for="end-date">End Date:</label>
+    <label for="end-date" style="margin-right: 5px;">End Date:</label>
     <input type="date" id="end-date" v-model="endDate" />
+</div>
 
-    <button @click="getWar">Get WAR</button>
+    <button class="small-button" @click="getWar">Get WAR</button>
     <!-- <button @click="getPeerEvaluationReport">Get Peer Evaluation</button> -->
 
     <div v-if="this.hasEntry" v-for="(team, index) in teamList">
@@ -15,8 +17,8 @@
         <WarTeamTable :teamProp="team"/>
     </div>
 
-    <button @click="removeTeam">Delete Team</button>
-    <button @click="editTeamName = true;">Edit Team name</button>
+    <button class="small-button" @click="editTeamName = true;">Edit Team name</button>
+    <button class="remove-btn" @click="removeTeam">Delete Team</button>
     <div v-if="editTeamName">
         <label>Enter New Team name: </label>
         <input type="text" v-model="newTeamName"/>
@@ -219,6 +221,52 @@ export default{
 }
 </script>
 
-<style>
+<style scoped>
+
+.small-button {
+    padding: 10px 15px; /* Ample padding for tap targets */
+    font-size: 1rem; 
+    border-radius: 20px;
+    background-color: #5C4B93; /* A slightly different purple shade for contrast */
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-bottom: 10px;
+}
+
+.small-button:hover {
+    background-color: #6f42c1; /* Lighter purple on hover for interaction feedback */
+}
+
+.small-button:not(:first-child) {
+   margin-left: 10px;
+}
+
+.table{
+    display: flex;
+    flex-direction: row;
+}
+
+.comments-box{
+    border: solid 1px blueviolet;
+}
+
+.remove-btn {
+  background-color: #FF4136; /* Bright red for remove buttons */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  margin-top: 5px;
+  cursor: pointer;
+  max-width: 200px;
+  margin-left: 5px;
+  margin-right: 8px;
+}
+
+.remove-btn:hover {
+  background-color: #c3352d;
+}
 
 </style>

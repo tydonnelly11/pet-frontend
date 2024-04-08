@@ -5,11 +5,21 @@ export const storeSection = reactive({
     selectedSection : null,
     selectedSectionId: "",
     selectedSectionName: "",
+    activeSection: null,
     setSections(sections) {
         this.sections = sections;
+
         if(this.selectedSectionId === "" && sections.length > 0){
-            this.selectedSectionId = sections[0].id;
-            this.selectedSectionName = sections[0].name;
+            for(const section of this.sections){
+
+                console.log(section.isCurrent)
+                if(section.isCurrent === true){
+                    this.selectedSectionId = section.id;
+                    this.selectedSectionName = section.name;
+                    this.activeSection = section;
+            }
+        }
+
         
         }
 
@@ -36,6 +46,7 @@ export const storeSection = reactive({
     },
     getActiveSection(){
         console.log(this.sections);
+        
         if(this.sections.find(section => section.id === this.selectedSectionId && section.isCurrent === true) === undefined){
             return false;
         }

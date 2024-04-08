@@ -116,6 +116,7 @@ const routes = [
             path: 'showsection',
             name: 'InstructorShowSection',
             component: InstructorShowSectionView,
+            meta: { fromViewAllSection: true }
          },
          
          {
