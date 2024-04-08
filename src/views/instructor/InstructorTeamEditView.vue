@@ -30,28 +30,12 @@
 
     
     <div class="popup-overlay" v-if="inviteStudentPressed">
-        <el-dialog
-    v-model="dialogVisible"
-    title="Tips"
-    width="500"
-    :before-close="handleClose"
-  >
-    <span>This is a message</span>
-    <template #footer>
-      <div class="dialog-footer">
-        <el-button @click="dialogVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="dialogVisible = false">
-          Confirm
-        </el-button>
-      </div>
-    </template>
-    </el-dialog>
         <InstructorInviteStudents />
-        <button class="small-button" style="max-width: 250px; margin-right: 10px;" @click="inviteStudentPressed = false">Cancel</button>
+        <button class="small-button" style="max-width: 250px; margin-right: 10px;" @click="inviteStudentPressed = false">Done</button>
     </div>
     <div class="popup-overlay" v-if="inviteInstructorPressed">
         <InviteAssitInstructor />
-        <button class="small-button" style="max-width: 250px; margin-right: 10px;" @click="inviteInstructorPressed = false">Cancel</button>
+        <button class="small-button" style="max-width: 250px; margin-right: 10px;" @click="inviteInstructorPressed = false">Done</button>
     </div>
     
     <h2> Add Teams To {{ storeSection.selectedSectionName }}</h2>
@@ -151,17 +135,33 @@
             <h2 class="teams-header">Students</h2>
             <div class="student-entry" v-for="student in students" :key="student.id">
                 <div class="team-name-checkbox">
+                    <input style="margin-bottom: 5px;" type="checkbox" class="student-checkbox" :value="student.id" @change="toggleStudent(student)">
                     <label class="student-name">
                         <h4>{{ student.firstName }} {{ student.lastName }}</h4>
                     </label>
-                    <input style="margin-bottom: 5px;" type="checkbox" class="student-checkbox" :value="student.id" @change="toggleStudent(student)">
+                    <button class="remove-btn" @click="this.studentIDToDelete = student.id; this.hasSelectedDeleteStudent = true;">Delete Student</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+    <div v-if="hasSelectedDeleteStudent" class="popup-overlay">
+      <div class="success">
+            <p>Are you sure you want to delete this student?</p>
+         <button @click="hasSelectedDeleteStudent = false">Cancel</button>
+         <button @click="deleteStudent(this.studentIDToDelete); hasSelectedDeleteStudent = false; hasDeletedStudent = true; ">Delete</button>
+      </div>
+    </div>    
+
+    <div v-if="hasDeletedStudent" class="popup-overlay">
+        <div class="success">
+            <p>Student Succesfully Deleted!</p>
+            <button @click="hasDeletedStudent = false; this.resetInfo()">Close</button>
+        </div>
+    </div>
     
+
 
     <div v-if="hasSetActiveSection" class="popup-overlay">
       <div class="success">
@@ -199,7 +199,7 @@
                 </h4>
             </label>
             <div v-for="team in teams">
-                <button class="small-button" style="max-width: 400px;" v-if="(team.assistantInstructorDTO == null || instructor.id != team.assistantInstructorDTO.id) && team.name != null" @click="showConfirmationPopup(team, instructor)">{{ team.name }}</button>
+                <button class="small-button" style="max-width: 400px;" v-if="(team.assistantInstructorDTO == null || instructor.id != team.assistantInstructorDTO.id) && team.name != null" @click="showConfirmationPopup(team, instructor)">Assign instructor to {{ team.name }}</button>
                 
             </div>
             
@@ -250,6 +250,7 @@ export default {
             students: [],
 
         },
+        studentIDToDelete : null,
         selectedTeamId: null,
         isLoading: false,
         isSuccess: false,
@@ -274,6 +275,8 @@ export default {
         teamConformation: false,
         isActiveSection: false,
         teamCreationFailed: false,
+        hasSelectedDeleteStudent: false,
+        hasDeletedStudent: false,
       }
    },
    methods: {
@@ -302,6 +305,18 @@ export default {
         // Logic if the user cancels the action
         this.teamConformation = false; // Hide the popup
     },
+
+    deleteStudent(id){
+            this.hasDeletedStudent = true;
+            apiClient.post(`${this.$baseURL}/api/v1/section/deleteStudent`, {
+                id: id
+            }).then(response => {
+                console.log(response)
+            }).catch(error => {
+                console.log(error)
+            })
+        
+        },
     editSectionInfo(){
         if(this.newSectionName == "" || this.newSectionName == " "){
             alert("Please enter a section name")
@@ -400,15 +415,10 @@ export default {
          });
       },
     getStudents(){
-        
         this.isLoading = true
-        const auth = localStorage.getItem('auth')
-         const config = {
-            headers: { 'Authorization': `Bearer ${auth}` }
-         };
         
         apiClient.get(`${this.$baseURL}/api/v1/section/getAllStudents/${storeSection.selectedSectionId}`,
-        {  headers: { 'Authorization': `Bearer ${auth}` }}
+        
         )
         .then(response => {
             this.students = []
@@ -521,12 +531,11 @@ export default {
 
           console.log(index)
           if (index > -1) {
-              // Student is already in the array, remove them
               this.updatedTeam.students.splice(index, 1);
           } else {
             student.weeks = null;
             this.updatedTeam.students.push(student);
-          ``}
+          }
       },
    
    saveTeam(){
@@ -596,6 +605,10 @@ export default {
                console.log(err)
             })
       },
+      resetInfo(){
+        this.getStudents()
+        this.getTeams()
+      }
 },
    computed: {
         isLoading() {
@@ -848,5 +861,22 @@ export default {
 }
 .section-btn > *:not(:last-child) {
     margin-right: 10px;
+}
+
+.popup-overlay{
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding-left: 20%;
+    padding-right: 20%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.90);
+    z-index: 1000;
+    flex-direction: column;
 }
 </style>
