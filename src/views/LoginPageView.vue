@@ -92,6 +92,7 @@ loginInstructor()
                this.getWeeksForSection(section.id)
               
                storeSection.setSelectedSection(section)
+               storeSection.activeSection = section;
             }
          }
          storeSection.setSections(response.data.data.userInfo.sections)

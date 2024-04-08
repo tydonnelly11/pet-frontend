@@ -300,6 +300,7 @@ export default {
    justify-content: center;
    margin-top: 5%;
    height: 70%;
+   position: relative;
 }
 .week-not-started {
    margin-top: 5%;

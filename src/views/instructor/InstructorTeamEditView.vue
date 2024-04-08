@@ -8,7 +8,9 @@
         <button class="small-button" @click="inviteStudentPressed = true">Invite Students</button>
         <button class="small-button" @click="inviteInstructorPressed = true">Invite Instructors</button>
         <button class="small-button" @click="editSection = true">Edit Section</button>
+        <button class="small-button" @click="selectInviteTeam = true">Invite Teams</button>
         <button class="small-button" @click="setCurrentSection">Click to set Section as Active</button>
+
 
     </div>
     
@@ -37,24 +39,25 @@
         <InviteAssitInstructor />
         <button class="small-button" style="max-width: 250px; margin-right: 10px;" @click="inviteInstructorPressed = false">Done</button>
     </div>
-    
+    <div v-if="selectInviteTeam" class="popup-overlay">
     <h2> Add Teams To {{ storeSection.selectedSectionName }}</h2>
     <div>
       <!-- Add Teams for Section: {{sectionName}} -->
       <div class="input-field">
          <label>
-            <h5>
+            <h5 :style="'color: white;'">
                 Team Name
             </h5>
          </label>
          <input type="text" id="sectionName" v-model="this.teamName" required class="team-name-input"/>
       </div>
       <button type="submit" class="small-button" style="max-width: 250px; margin-bottom: 20px;" @click="createTeams()">Create Team</button>
+      </div>
    <div v-if="hasCreatedTeams" class="popup-overlay">
       <div class="success">
          <p>Team Successfully Created!</p>
          <!-- Add a button or a way to close the overlay -->
-         <button @click="hasCreatedTeams = false">Close</button>
+         <button @click="hasCreatedTeams = false; selectInviteTeam = false;">Close</button>
       </div>
       </div>
     <div v-if="teamCreationFailed" class="popup-overlay">
@@ -131,7 +134,7 @@
       </div>
     </div>
   <!-- Students Section -->
-        <div class="teams-container">
+        <div v-if="students.length > 0" class="teams-container">
             <h2 class="teams-header">Students</h2>
             <div class="student-entry" v-for="student in students" :key="student.id">
                 <div class="team-name-checkbox">
@@ -148,7 +151,7 @@
 
     <div v-if="hasSelectedDeleteStudent" class="popup-overlay">
       <div class="success">
-            <p>Are you sure you want to delete this student?</p>
+            <p :style="'color: black;'">Are you sure you want to delete this student?</p>
          <button @click="hasSelectedDeleteStudent = false">Cancel</button>
          <button @click="deleteStudent(this.studentIDToDelete); hasSelectedDeleteStudent = false; hasDeletedStudent = true; ">Delete</button>
       </div>
@@ -250,6 +253,7 @@ export default {
             students: [],
 
         },
+        selectInviteTeam: false,
         studentIDToDelete : null,
         selectedTeamId: null,
         isLoading: false,
@@ -323,6 +327,7 @@ export default {
             return
         }
         this.isLoading = true;
+        
         apiClient.post(`${this.$baseURL}/api/v1/section/save`, {
             id: storeSection.selectedSectionId,
             name: this.newSectionName,
@@ -330,6 +335,7 @@ export default {
 
         })
         .then(response => {
+            storeSection.selectedSectionName = this.newSectionName;
             console.log(response)
             this.isLoading = false;
             this.hasUpdatedSection = true;
@@ -343,13 +349,12 @@ export default {
             id : instructor.id
         }
         team.assistantInstructorDTO = dto
- css-fixes-final
         var newTeam = [team]
 
 
         var newTeam = JSON.parse(JSON.stringify([team]));
         newTeam = newTeam.map(team => ({ ...team, students: [] }));
- main
+
         apiClient.post(`${this.$baseURL}/api/v1/team/assignInstructors`, newTeam
         ).then(response => {
             console.log(response)
@@ -416,6 +421,7 @@ export default {
             this.isLoading = false;
             this.hasSetActiveSection = true;
             this.isActiveSection = true;
+            storeSection.activeSection = storeSection.selectedSection
             localStorage.setItem('storeSection', JSON.stringify(storeSection))
 
          });
@@ -630,10 +636,16 @@ export default {
    },
 
    created() {
-    if(storeSection.getActiveSection()){
+    const fromViewAllSection = this.$route.query.fromViewAllSection === 'true';
+    if(!fromViewAllSection){
+        storeSection.setSelectedSection(storeSection.activeSection)
+    }
+    if(storeSection.activeSection.id == storeSection.selectedSectionId){
         this.isActiveSection = true
     }
-    console.log(storeSection.getActiveSection())
+    else{
+        this.isActiveSection = false
+    }
     this.getStudents()
     this.getTeams()
     this.getActiveAssistantInstructors()

@@ -52,14 +52,21 @@
             <img src="/img/loading-gif.gif">
     </div>
 
-    <button class="remove-btn" @click="removeStudent">Delete Student</button>
+    <button class="remove-btn" @click="hasSelectedDeleteStudent = true;">Delete Student</button>
+    <div v-if="hasSelectedDeleteStudent" class="popup-overlay">
+      <div class="success">
+            <p :style="'color: black;'">Are you sure you want to delete this student?</p>
+         <button @click="hasSelectedDeleteStudent = false">Cancel</button>
+         <button @click="removeStudent(); hasSelectedDeleteStudent = false; hasDeletedStudent = true; ">Delete</button>
+      </div>
+    </div>    
+
     <div v-if="hasDeletedStudent" class="popup-overlay">
         <div class="success">
             <p>Student Succesfully Deleted!</p>
-            <button @click="hasDeletedStudent = false;this.$router.push('/instructorhome/editteams')">Close</button>
+            <button @click="hasDeletedStudent = false;">Close</button>
         </div>
     </div>
-
 
 
     
@@ -96,6 +103,7 @@ export default{
             hasEntry: false,
             hasDeletedStudent: false,
             hasPeerEntry: false,
+            hasSelectedDeleteStudent: false,
         }
             
     },
