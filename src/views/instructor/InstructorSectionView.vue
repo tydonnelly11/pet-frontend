@@ -1,4 +1,6 @@
 <template>
+
+<!-- This is a comment -->
    <!-- <div class="InstructorSectionView">
      <h1>Instructor Section View</h1>
      <div class="register-instructor">
