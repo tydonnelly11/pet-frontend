@@ -110,9 +110,7 @@ export default {
          this.isLoading = true
          this.teams = []
          
-         apiClient.get(`${this.$baseURL}/api/v1/section/getAllTeams/${storeSection.selectedSectionId}`,
-            {  headers: { 'Authorization': `Bearer ${auth}` }}
-        )
+         apiClient.get(`${this.$baseURL}/api/v1/section/getAllTeams/${storeSection.selectedSectionId}`,)
         .then(response => {
             this.teams = response.data.data
             this.hasLoaded = true

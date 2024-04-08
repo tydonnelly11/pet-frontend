@@ -96,12 +96,12 @@
          <button @click="generateWeekList" style="border-radius: 12px">Calculate Weeks</button>
          <div v-if="weeksCalculated">
             <h4>Check the boxes for weeks you want to exclude from a section</h4>
-            <ul v-if="weeksForSemester.length > 0" class="week-list">
+            <!-- <ul v-if="weeksForSemester.length > 0" class="week-list">
                <li v-for="(week, index) in weeksForSemester" :key="index">
                   <input type="checkbox" :id="'week-' + index" v-model="week.execlude">
                   <label :for="'week-' + index">{{ week.start }} - {{ week.end }}</label>
                   </li>
-            </ul>
+            </ul> -->
             <ul class="week-list" v-if="weeksForSemester.length > 0">
                <li v-for="(week, index) in weeksForSemester" :key="index">
                <input type="checkbox" :id="'week-' + index" v-model="week.execlude">

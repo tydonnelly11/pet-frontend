@@ -45,14 +45,15 @@ if(savedState5){
 }
 
 
+const app = createApp(App);
 
 
-
+// useful for local testing
+app.config.globalProperties.$baseURL = window.location.hostname === 'localhost' ? 'http://localhost:80' : 'https://www.peerevaltool.xyz';
+app.use(router).mount('#app')
 
 import './scss/styles.scss'
 // import { c } from 'vitest/dist/reporters-5f784f42.js';
-createApp(App).use(router).mount('#app')
-
 // Import Font Awesome related packages
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
@@ -62,4 +63,4 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 library.add(fas);
 
 // Add Font Awesome component globally
-createApp(App).component('font-awesome-icon', FontAwesomeIcon);
+app.component('font-awesome-icon', FontAwesomeIcon);

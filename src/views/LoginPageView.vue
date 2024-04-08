@@ -66,7 +66,7 @@ loginInstructor()
    let creds = this.encodeCredentials(this.email, this.password)
    console.log(this.$baseURL)
    console.log(window.location.hostname)
-   apiClient.post(`${this.$baseURL}/api/v1/auth/login/instructor`, {},{
+   axios.post(`${this.$baseURL}/api/v1/auth/login/instructor`, {},{
       headers: {
          'Authorization': `Basic ${creds}`
       }
@@ -122,7 +122,7 @@ loginStudent()
 {
    this.isLoading = true
    let creds = this.encodeCredentials(this.email, this.password)
-   apiClient.post('${this.$baseURL}/api/v1/auth/login/student', {}, {
+   axios.post(`${this.$baseURL}/api/v1/auth/login/student`, {}, {
       headers: {
          Authorization: `Basic ${creds}`
       }
@@ -166,7 +166,7 @@ loginStudent()
 loginAssistInstructor(){
    this.isLoading = true
    let creds = this.encodeCredentials(this.email, this.password)
-   axios.post('${this.$baseURL}/api/v1/auth/login/assistantInstructor', {}, {
+   axios.post(`${this.$baseURL}/api/v1/auth/login/assistantInstructor`, {}, {
       headers: {
          Authorization: `Basic ${creds}`
       }
