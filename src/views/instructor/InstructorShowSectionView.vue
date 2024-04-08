@@ -39,11 +39,7 @@ export default {
         
         getWeeksForSection(sectionId)
         {
- css-fixes-final
-        apiClient.get(`${this.$baseURL}/api/v1/section/getWeeks/${sectionId}`, {
-
         apiClient.get(`${this.$baseURL}api/v1/section/getWeeks/${sectionId}`, {
- main
 
         })
         .then(response => {
@@ -60,7 +56,8 @@ export default {
     created() {
         
     }
-}
+  }
+
 
 </script>
 

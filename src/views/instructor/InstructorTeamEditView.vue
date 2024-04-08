@@ -378,15 +378,10 @@ export default {
             id : instructor.id
         }
         team.assistantInstructorDTO = dto
- css-fixes-final
         
-
-        apiClient.post(`${this.$baseURL}/api/v1/team/removeInstructor`, team
-
         var newTeam = JSON.parse(JSON.stringify(team));
         newTeam.students = []
         apiClient.post(`${this.$baseURL}/api/v1/team/removeInstructor`, newTeam
- main
         ).then(response => {
             console.log(response)
         }).catch(error => {

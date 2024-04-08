@@ -96,17 +96,16 @@
          <button @click="generateWeekList" style="border-radius: 12px">Calculate Weeks</button>
          <div v-if="weeksCalculated">
             <h4>Check the boxes for weeks you want to exclude from a section</h4>
- css-fixes-final
             <ul v-if="weeksForSemester.length > 0" class="week-list">
                <li v-for="(week, index) in weeksForSemester" :key="index">
                   <input type="checkbox" :id="'week-' + index" v-model="week.execlude">
                   <label :for="'week-' + index">{{ week.start }} - {{ week.end }}</label>
-
+                  </li>
+            </ul>
             <ul class="week-list" v-if="weeksForSemester.length > 0">
                <li v-for="(week, index) in weeksForSemester" :key="index">
                <input type="checkbox" :id="'week-' + index" v-model="week.execlude">
                <label :style="'flex-basis: 50%; display: flex;'" :for="'week-' + index">{{ week.start }} - {{ week.end }}</label>
- main
                </li>
             </ul>
          </div>
@@ -195,15 +194,10 @@ export default {
    },
    methods: {
 
- css-fixes-final
-      setCurrentSection() {
-         apiClient.post(`${this.$baseURL}/api/v1/section/setIsCurrentSection`, {
-            id: storeSection.selectedSectionId
-
+     
       setCurrentSection(){
          apiClient.post(`${this.$baseURL}/api/v1/section/setIsCurrentSection`, {
             id : storeSection.selectedSectionId
- main
          })
             .then(res => {
                console.log(res)
@@ -276,17 +270,6 @@ export default {
       },
       registerInstructor() {
          axios.post(`${this.$baseURL}/api/v1/auth/register/instructor`, {
- css-fixes-final
-            firstName: this.firstName,
-            middleName: this.middleName,
-            lastName: this.lastName,
-            id: null,
-            email: this.email,
-            password: this.password,
-            roles: "admin user",
-            sections: null,
-         })
-
                firstName: this.firstName,
                middleName: this.middleName,
                lastName: this.lastName,
@@ -296,7 +279,6 @@ export default {
                roles : "admin user",
                sections : null,
             })
- main
             .then(res => {
                storeUser.updateLoginStatus(res.data.data, true)
                this.hasSubmittedInstructor = true
@@ -339,15 +321,9 @@ export default {
 
          const auth = localStorage.getItem('auth')
 
- css-fixes-final
-
-         apiClient.post(`${this.$baseURL}/api/v1/section/save`, {
-            id: null,
-
-         
+ 
          apiClient.post(`${this.$baseURL}/api/v1/section/save`, {
             id : null,
- main
             name: this.sectionName,
             instructorId: storeUser.userID,
             isRubricDefault: this.isRubricDefault,
@@ -377,25 +353,6 @@ export default {
                console.log(err)
             })
       },
- css-fixes-final
-
-
-      getWeeksForSection(sectionId)
-        {
-        apiClient.get(`http://localhost:80/api/v1/section/getWeeks/${sectionId}`, {
-
-        })
-        .then(response => {
-            console.log(response)
-            storeWeek.setWeekList(response.data.data)
-            localStorage.setItem('storeWeek', JSON.stringify(storeWeek));
-        })
-        .catch(error => {
-            console.log(error)
-        })
-        }
-      
- main
    },
    computed: {},
    watch: {

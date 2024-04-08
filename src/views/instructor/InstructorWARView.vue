@@ -47,25 +47,6 @@ export default {
       }
    },
    methods: {
- css-fixes-final
-      getTeamWar(team) {
-         this.selectedTeam = team
-         this.hasSelectedTeam = false;
-         const auth = localStorage.getItem('auth')
-
-         apiClient.get(`${this.$baseURL}/api/v1/war/get`,
-            {
-               params: {
-                  teamId: team.id,
-                  weekId: storeWeek.selectedWeekId,
-               },
-               headers: { 'Authorization': `Bearer ${auth}` }
-            }).then(response => {
-               this.isLoading = false
-
-               console.log(response.data.data.activities)
-               this.formatActivities(response.data.data.activities)
-
     getTeamWar(team){
         this.selectedTeam = team
         this.hasSelectedTeam = false;
@@ -89,9 +70,8 @@ export default {
             console.log(error.response.data.code)
             if(error.response.data.code == 500){
                this.formatActivities([])
- main
                this.hasSelectedTeam = true
-            }).catch(error => {
+            }}).catch(error => {
                this.isLoading = false
                console.log(error.response.data.code)
                if (error.response.data.code == 500) {
@@ -126,33 +106,12 @@ export default {
          }
          this.teamFormated = team
       },
-
       getTeams() {
          this.isLoading = true
          this.teams = []
-         const auth = localStorage.getItem('auth')
-         const config = {
-            headers: { 'Authorization': `Bearer ${auth}` }
-         };
- css-fixes-final
+         
          apiClient.get(`${this.$baseURL}/api/v1/section/getAllTeams/${storeSection.selectedSectionId}`,
-            { headers: { 'Authorization': `Bearer ${auth}` } }
-         )
-            .then(response => {
-               this.teams = response.data.data
-               this.hasLoaded = true
-
-            })
-            .catch(error => {
-               console.log(error)
-               if (error.response.data.code == 500) {
-
-               }
-            })
-      },
-
-        apiClient.get(`${this.$baseURL}/api/v1/section/getAllTeams/${storeSection.selectedSectionId}`,
-        {  headers: { 'Authorization': `Bearer ${auth}` }}
+            {  headers: { 'Authorization': `Bearer ${auth}` }}
         )
         .then(response => {
             this.teams = response.data.data
@@ -162,8 +121,8 @@ export default {
         .catch(error => {
             console.log(error)
             if(error.response.data.code == 500){
- main
-
+            }})
+      },
    },
    computed: {
       watchedSectionId() {
