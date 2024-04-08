@@ -25,7 +25,7 @@
         </div>
         <div v-if="hasSubmittedStudents" class="popup-overlay">
             <div class="success">
-            <p>Students Succesfully Invited!</p>
+            <p :style="'color: black;'">Students Succesfully Invited!</p>
             <button class="small-button" @click="hasSubmittedStudents = false">Close</button>
         </div>
 
@@ -144,6 +144,8 @@ export default {
     width: 100%;
     
 }
+
+
 
 .student{
     display: flex;

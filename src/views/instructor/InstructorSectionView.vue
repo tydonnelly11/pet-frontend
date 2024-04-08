@@ -353,6 +353,21 @@ export default {
                console.log(err)
             })
       },
+      getWeeksForSection(sectionId)
+        {
+        apiClient.get(`${this.$baseURL}/api/v1/section/getWeeks/${sectionId}`, {
+
+        })
+        .then(response => {
+            console.log(response)
+            storeWeek.setWeekList(response.data.data)
+            localStorage.setItem('storeWeek', JSON.stringify(storeWeek));
+        })
+        .catch(error => {
+            console.log(error)
+        })
+        }
+      
    },
    computed: {},
    watch: {
