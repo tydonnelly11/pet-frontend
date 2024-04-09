@@ -8,8 +8,7 @@ export default defineConfig({
    resolve: {
       alias: {
          '@': '/src',
-         'baseurl':'${this.$baseURL}/'
-         
+         baseurl: '${this.$baseURL}/',
       },
       test: {
          globals: true,

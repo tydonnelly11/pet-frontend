@@ -50,7 +50,7 @@
             <button @click="hasDeletedTeam = false; this.$router.push('/instructorhome/editteams')">Close</button>
         </div>
     </div>
-</div>
+
 
 </template>
 

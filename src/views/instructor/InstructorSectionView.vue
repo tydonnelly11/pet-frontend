@@ -1,6 +1,5 @@
 <template>
-
-<!-- This is a comment -->
+   <!-- This is a comment -->
    <!-- <div class="InstructorSectionView">
      <h1>Instructor Section View</h1>
      <div class="register-instructor">
@@ -34,41 +33,68 @@
          </div>
       </div>
    </div> -->
-   <div class="create-section" style="margin-top: 20px;">
-      <h2 style="color: #5d5076;">Enter Details below to create a new section</h2>
+   <div class="create-section" style="margin-top: 20px">
+      <h2 style="color: #5d5076">
+         Enter Details below to create a new section
+      </h2>
       <div class="input-field">
-         <label style="font-weight: bold; font-size: 20px; margin-top: 10px;"></label>
-         <input type="text" id="sectionName" v-model="sectionName" placeholder="Enter section name" required />
-
+         <label
+            style="font-weight: bold; font-size: 20px; margin-top: 10px"
+         ></label>
+         <input
+            type="text"
+            id="sectionName"
+            v-model="sectionName"
+            placeholder="Enter section name"
+            required
+         />
       </div>
       <div class="input-field">
          <div class="checkbox-container">
-            <label style="font-weight: bold; font-size: 20px; margin-top: 10px;">Check to use last year's
-               rubric:</label>
-            <input type="checkbox" id="defaultRubric" v-model="isRubricDefault" />
+            <label style="font-weight: bold; font-size: 20px; margin-top: 10px"
+               >Check to use last year's rubric:</label
+            >
+            <input
+               type="checkbox"
+               id="defaultRubric"
+               v-model="isRubricDefault"
+            />
          </div>
       </div>
 
       <div class="input-field">
-         <button @click="makeOwnRubric = true" style="border-radius: 12px">Click to make own rubric</button>
+         <button @click="makeOwnRubric = true" style="border-radius: 12px">
+            Click to make own rubric
+         </button>
       </div>
-
 
       <div v-if="makeOwnRubric">
          <h4>Enter Rubric Critera for Year</h4>
          <div class="input-field">
             <label>Criteria Name</label>
-            <input type="text" id="criteriaName" v-model="criteriaName" required />
+            <input
+               type="text"
+               id="criteriaName"
+               v-model="criteriaName"
+               required
+            />
          </div>
          <div class="input-field">
             <label>Criteria Description</label>
-            <input type="text" id="criteriaDesc" v-model="criteriaDesc" required />
+            <input
+               type="text"
+               id="criteriaDesc"
+               v-model="criteriaDesc"
+               required
+            />
          </div>
          <div class="input-field">
             <label>Criteria Max Score</label>
             <input type="text" id="maxScore" v-model="maxScore" required />
          </div>
-         <button type="submit" @click="addRubric" style="border-radius: 12px">Add Criteria</button>
+         <button type="submit" @click="addRubric" style="border-radius: 12px">
+            Add Criteria
+         </button>
 
          <div class="list-of-rubrics">
             <h2>List of Criteria</h2>
@@ -76,26 +102,48 @@
                <p>Name: {{ rubric.criterionName }}</p>
                <p>Description: {{ rubric.criterionDesc }}</p>
                <p>Max Score: {{ rubric.maxScore }}</p>
-
             </div>
          </div>
-         <button @click="resetRubric()" style="border-radius: 12px">Cancel rubric creation</button>
+         <button @click="resetRubric()" style="border-radius: 12px">
+            Cancel rubric creation
+         </button>
       </div>
 
       <div>
-         <label for="start-date"
-            style="font-weight: bold; font-size: 20px; margin-top: 10px; color: #5d5076; margin-bottom: 10px;">Start
-            Date:</label>
+         <label
+            for="start-date"
+            style="
+               font-weight: bold;
+               font-size: 20px;
+               margin-top: 10px;
+               color: #5d5076;
+               margin-bottom: 10px;
+            "
+            >Start Date:</label
+         >
          <input type="date" id="start-date" v-model="startDate" />
 
-         <label for="end-date"
-            style="font-weight: bold; font-size: 20px; margin-top: 10px; color: #5d5076; margin-bottom: 10px; margin-left: 10px;">End
-            Date:</label>
+         <label
+            for="end-date"
+            style="
+               font-weight: bold;
+               font-size: 20px;
+               margin-top: 10px;
+               color: #5d5076;
+               margin-bottom: 10px;
+               margin-left: 10px;
+            "
+            >End Date:</label
+         >
          <input type="date" id="end-date" v-model="endDate" />
 
-         <button @click="generateWeekList" style="border-radius: 12px">Calculate Weeks</button>
+         <button @click="generateWeekList" style="border-radius: 12px">
+            Calculate Weeks
+         </button>
          <div v-if="weeksCalculated">
-            <h4>Check the boxes for weeks you want to exclude from a section</h4>
+            <h4>
+               Check the boxes for weeks you want to exclude from a section
+            </h4>
             <!-- <ul v-if="weeksForSemester.length > 0" class="week-list">
                <li v-for="(week, index) in weeksForSemester" :key="index">
                   <input type="checkbox" :id="'week-' + index" v-model="week.execlude">
@@ -104,46 +152,63 @@
             </ul> -->
             <ul class="week-list" v-if="weeksForSemester.length > 0">
                <li v-for="(week, index) in weeksForSemester" :key="index">
-               <input type="checkbox" :id="'week-' + index" v-model="week.execlude">
-               <label :style="'flex-basis: 50%; display: flex;'" :for="'week-' + index">{{ week.start }} - {{ week.end }}</label>
+                  <input
+                     type="checkbox"
+                     :id="'week-' + index"
+                     v-model="week.execlude"
+                  />
+                  <label
+                     :style="'flex-basis: 50%; display: flex;'"
+                     :for="'week-' + index"
+                     >{{ week.start }} - {{ week.end }}</label
+                  >
                </li>
             </ul>
          </div>
-
-
       </div>
 
-
-
-      <button type="submit" @click="this.sectionConfirmation = true"
-         style="margin-top: 40px; border-radius: 12px">Create Section</button>
+      <button
+         type="submit"
+         @click="this.sectionConfirmation = true"
+         style="margin-top: 40px; border-radius: 12px"
+      >
+         Create Section
+      </button>
       <div v-if="isLoading" class="popup-overlay">
-         <img src="/img/loading-gif.gif">
+         <img src="/img/loading-gif.gif" />
       </div>
       <div v-if="sectionConfirmation" class="popup-overlay">
          <div class="conformation-popup">
             <p>Do you want to create {{ this.sectionName }}</p>
             <div class="button-group">
-               <button :style="'border: 1px solid black;'" @click="submitSection()">Yes</button>
-               <button :style="'border: 1px solid black;'" @click="this.sectionConfirmation = false">No</button>
+               <button
+                  :style="'border: 1px solid black;'"
+                  @click="submitSection()"
+               >
+                  Yes
+               </button>
+               <button
+                  :style="'border: 1px solid black;'"
+                  @click="this.sectionConfirmation = false"
+               >
+                  No
+               </button>
             </div>
          </div>
       </div>
-
-
 
       <div v-if="hasCreatedSection" class="popup-overlay">
          <div class="success">
             <p>Section Successfully Created!</p>
             <!-- Add a button or a way to close the overlay -->
-            <button @click="hasCreatedSection = false; sectionConfirmation = false;">Close</button>
+            <button
+               @click="hasCreatedSection = false; sectionConfirmation = false"
+            >
+               Close
+            </button>
          </div>
       </div>
    </div>
-
-
-
-
 </template>
 
 <script>
@@ -156,57 +221,52 @@ import ErrorPopUp from '@/components/utilities/ErrorPopUp.vue'
 export default {
    name: 'InstructorSectionView',
    components: {
-      ErrorPopUp
+      ErrorPopUp,
    },
    data() {
       return {
          listOfTeams: [],
          criteria: [],
-         teamName: "",
-         rubricName: "",
+         teamName: '',
+         rubricName: '',
          maxScore: 0,
-         criteriaName: "",
-         criteriaDesc: "",
-         sectionId: "",
+         criteriaName: '',
+         criteriaDesc: '',
+         sectionId: '',
          isLoading: false,
          isRubricDefault: false,
          hasCreatedSection: false,
          hasSubmittedInstructor: false,
          hasCreatedTeams: false,
-         storeUser, storeSection,
-         sectionName: "",
-         firstName: "",
-         middleName: "",
-         lastName: "",
-         email: "",
-         password: "",
+         storeUser,
+         storeSection,
+         sectionName: '',
+         firstName: '',
+         middleName: '',
+         lastName: '',
+         email: '',
+         password: '',
          hasError: false,
          weeksForSemester: [],
          weeksCalculated: false,
          makeOwnRubric: false,
          sectionConfirmation: false,
-         startDate: "",
-         endDate: "",
-
-
-
-
-
+         startDate: '',
+         endDate: '',
       }
    },
    methods: {
-
-     
-      setCurrentSection(){
-         apiClient.post(`${this.$baseURL}/api/v1/section/setIsCurrentSection`, {
-            id : storeSection.selectedSectionId
-         })
-            .then(res => {
+      setCurrentSection() {
+         apiClient
+            .post(`${this.$baseURL}/api/v1/section/setIsCurrentSection`, {
+               id: storeSection.selectedSectionId,
+            })
+            .then((res) => {
                console.log(res)
                this.isLoading = false
                this.hasSetCurrentSection = true
                storeSection.selectedSection()
-            });
+            })
       },
 
       resetRubric() {
@@ -214,10 +274,9 @@ export default {
          this.makeOwnRubric = false
       },
 
-
       generateWeekList() {
-         if (this.startDate === "" || this.endDate === "") {
-            alert("Please enter a start and end date")
+         if (this.startDate === '' || this.endDate === '') {
+            alert('Please enter a start and end date')
             return
          }
          const startDate1 = new Date(this.startDate) // Start date
@@ -229,7 +288,7 @@ export default {
          let weekId = 1
 
          while (currentDate.getDay() !== 1) {
-            currentDate.setDate(currentDate.getDate() + 1);
+            currentDate.setDate(currentDate.getDate() + 1)
          }
          while (currentDate <= endDate) {
             const startOfWeek = new Date(currentDate)
@@ -248,7 +307,7 @@ export default {
             weekId++
          }
          this.weeksForSemester = weeks
-         this.weeksCalculated = true;
+         this.weeksCalculated = true
       },
       formatDate(date) {
          //Formats date for display on week dropdown
@@ -266,40 +325,38 @@ export default {
             maxScore: this.maxScore,
          })
          this.maxScore = 0
-         this.criteriaName = ""
-         this.criteriaDesc = ""
+         this.criteriaName = ''
+         this.criteriaDesc = ''
          this.hasError = true
       },
       registerInstructor() {
-         axios.post(`${this.$baseURL}/api/v1/auth/register/instructor`, {
+         axios
+            .post(`${this.$baseURL}/api/v1/auth/register/instructor`, {
                firstName: this.firstName,
                middleName: this.middleName,
                lastName: this.lastName,
                id: null,
                email: this.email,
                password: this.password,
-               roles : "admin user",
-               sections : null,
+               roles: 'admin user',
+               sections: null,
             })
-            .then(res => {
+            .then((res) => {
                storeUser.updateLoginStatus(res.data.data, true)
                this.hasSubmittedInstructor = true
-
             })
-            .catch(err => {
+            .catch((err) => {
                console.log(err)
             })
       },
       submitSection() {
          this.isLoading = true
          let rubric = {
-            criteria: this.criteria
-
+            criteria: this.criteria,
          }
          if (this.isRubricDefault) {
-            rubric = null;
+            rubric = null
          }
-
 
          const dto = {
             id: null,
@@ -312,31 +369,30 @@ export default {
             if (week.execlude) {
                weeksToExcludeVar.push({
                   startDate: week.start,
-                  endDate: week.end
+                  endDate: week.end,
                })
             }
-
-
-
          }
          this.weeksForSemester = []
 
          const auth = localStorage.getItem('auth')
 
- 
-         apiClient.post(`${this.$baseURL}/api/v1/section/save`, {
-            id : null,
-            name: this.sectionName,
-            instructorId: storeUser.userID,
-            isRubricDefault: this.isRubricDefault,
-            rubric: rubric,
-            startDate: { date: this.startDate },
-            endDate: { date: this.endDate },
-            weeksToExclude: weeksToExcludeVar,
-         },
-            { headers: { 'Authorization': `Bearer ${auth}` } }
-         )
-            .then(res => {
+         apiClient
+            .post(
+               `${this.$baseURL}/api/v1/section/save`,
+               {
+                  id: null,
+                  name: this.sectionName,
+                  instructorId: storeUser.userID,
+                  isRubricDefault: this.isRubricDefault,
+                  rubric: rubric,
+                  startDate: { date: this.startDate },
+                  endDate: { date: this.endDate },
+                  weeksToExclude: weeksToExcludeVar,
+               },
+               { headers: { Authorization: `Bearer ${auth}` } }
+            )
+            .then((res) => {
                console.log(res)
                console.log(res.data.data)
                this.sectionId = res.data.data
@@ -345,41 +401,34 @@ export default {
                var section = {
                   name: this.sectionName,
                   id: this.sectionId,
-                  isCurrent: false
+                  isCurrent: false,
                }
                storeUser.setSectionId(this.sectionId)
                storeSection.addSection(section)
                this.getWeeksForSection(this.sectionId)
-
             })
-            .catch(err => {
+            .catch((err) => {
                console.log(err)
             })
       },
-      getWeeksForSection(sectionId)
-        {
-        apiClient.get(`${this.$baseURL}/api/v1/section/getWeeks/${sectionId}`, {
-
-        })
-        .then(response => {
-            console.log(response)
-            storeWeek.setWeekList(response.data.data)
-            localStorage.setItem('storeWeek', JSON.stringify(storeWeek));
-        })
-        .catch(error => {
-            console.log(error)
-        })
-        }
-      
+      getWeeksForSection(sectionId) {
+         apiClient
+            .get(`${this.$baseURL}/api/v1/section/getWeeks/${sectionId}`, {})
+            .then((response) => {
+               console.log(response)
+               storeWeek.setWeekList(response.data.data)
+               localStorage.setItem('storeWeek', JSON.stringify(storeWeek))
+            })
+            .catch((error) => {
+               console.log(error)
+            })
+      },
    },
    computed: {},
    watch: {
-      'storeSection.selectedSectionId': function (newVal, oldVal) {
-
-      }
-   }
+      'storeSection.selectedSectionId': function (newVal, oldVal) {},
+   },
 }
-
 </script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
@@ -388,12 +437,12 @@ export default {
    font-family: 'Poppins', sans-serif;
 }
 
-.week-list{
+.week-list {
    list-style-type: none;
    display: flex;
    flex-direction: column;
 }
-.week-list li{
+.week-list li {
    display: flex;
    justify-content: space-around;
    align-items: center;
@@ -408,7 +457,6 @@ export default {
    margin-bottom: 30px;
 }
 
-
 .input-field label {
    display: block;
    margin-bottom: 5px;
@@ -418,7 +466,7 @@ export default {
 .input-field input {
    width: 100%;
    padding: 15px;
-   background: #E4E9F7;
+   background: #e4e9f7;
    border: 1px solid #000;
    border-radius: 4px;
    font-size: 14px;
@@ -444,12 +492,9 @@ export default {
    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
 }
 
-
-
 .uniform-button:hover {
    background: #5d5076;
 }
-
 
 .overlay {
    position: fixed;
@@ -501,7 +546,7 @@ button {
 }
 
 button:hover {
-   background: #11101D;
+   background: #11101d;
 }
 
 .checkbox-container {
@@ -512,7 +557,7 @@ button:hover {
    /* Set color to default */
 }
 
-.checkbox-container input[type="checkbox"] {
+.checkbox-container input[type='checkbox'] {
    margin-left: 400px;
    margin-right: 8px;
    /* Adjust the margin between the checkbox and the text */
@@ -532,12 +577,12 @@ button:hover {
 }
 
 /* Custom checkbox checked state */
-.checkbox-container input[type="checkbox"]:checked {
+.checkbox-container input[type='checkbox']:checked {
    background-color: #5d5076;
 }
 
 /* Custom checkbox checked state icon (tick) */
-.checkbox-container input[type="checkbox"]:checked::after {
+.checkbox-container input[type='checkbox']:checked::after {
    content: '\2714';
    /* Unicode character for checkmark */
    display: block;
@@ -568,13 +613,12 @@ button:hover {
    /* Add some vertical spacing between list items */
 }
 
-.week-list li input[type="checkbox"] {
+.week-list li input[type='checkbox'] {
    margin-right: 10px;
    /* Add some spacing between checkbox and label */
-
 }
 
-.week-list li input[type="checkbox"] {
+.week-list li input[type='checkbox'] {
    margin-right: 10px;
    /* Add some spacing between checkbox and label */
    /* Custom checkbox styles */
@@ -595,13 +639,13 @@ button:hover {
    /* Show pointer cursor on hover */
 }
 
-.week-list li input[type="checkbox"]:checked {
+.week-list li input[type='checkbox']:checked {
    background-color: #5d5076;
    /* Change background color when checked */
 }
 
-.week-list li input[type="checkbox"]::before {
-   content: "";
+.week-list li input[type='checkbox']::before {
+   content: '';
    /* Hide default checkbox */
    display: block;
    width: 12px;
@@ -622,7 +666,7 @@ button:hover {
    /* Hide the checkmark by default */
 }
 
-.week-list li input[type="checkbox"]:checked::before {
+.week-list li input[type='checkbox']:checked::before {
    opacity: 1;
    /* Show the checkmark when checked */
 }

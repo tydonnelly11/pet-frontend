@@ -30,7 +30,6 @@ const routes = [
       path: '/', //This is the parent route
       name: 'Login',
       component: LoginPageView,
-      
    },
    {
       ///register/student?token=:token
@@ -38,19 +37,17 @@ const routes = [
       name: 'Register',
       component: RegisterPageView,
       //http://localhost:5173/auth/register/student?token=1
-   
    },
    {
       path: '/auth/register/assistantInstructor/token=:token',
       name: 'RegisterIns',
       component: RegisterPageInstructorView,
-
    },
    {
       path: '/waitingroom',
       component: WaitingForTeam,
    },
-   
+
    {
       path: '/studenthome', //Will need to add id param to this route
       component: StudentHomePageView,
@@ -87,13 +84,11 @@ const routes = [
             path: 'rubric',
             name: 'InstructorRubric',
             component: InstructorRubricView,
-
          },
          {
-            path : 'manageassistant',
-            name : 'InstructorManageAssistant',
-            component : ManageAssistantInstructorView
-
+            path: 'manageassistant',
+            name: 'InstructorManageAssistant',
+            component: ManageAssistantInstructorView,
          },
          {
             path: 'war',
@@ -110,21 +105,19 @@ const routes = [
             path: 'section',
             name: 'InstructorSection',
             component: InstructorSectionView,
-
          },
          {
             path: 'showsection',
             name: 'InstructorShowSection',
             component: InstructorShowSectionView,
-            meta: { fromViewAllSection: true }
+            meta: { fromViewAllSection: true },
          },
-         
+
          {
             path: 'editteams',
             name: 'InstructorEditTeams',
             component: InstructorTeamEditView,
             props: true,
-
          },
          {
             path: ':teamid/:studentid/:studentName',
@@ -137,7 +130,7 @@ const routes = [
             name: 'InstructorViewTeam',
             component: TeamWarAndEdit,
             props: true,
-         }
+         },
          // The Instructor WAR is going to be added later
       ],
    },
@@ -161,14 +154,13 @@ const routes = [
             path: 'rubric',
             name: 'AssistantInstructorRubric',
             component: AssistantInstructorRubricView,
-
          },
          {
             path: 'war',
             name: 'AssistantInstructorWar',
             component: AssistantInstructorWARView,
          },
-      ]
+      ],
    },
 ]
 
@@ -177,25 +169,28 @@ const router = createRouter({
    routes,
 })
 
-  router.beforeEach(async (to, from) => {
+router.beforeEach(async (to, from) => {
    const loggedIn = localStorage.getItem('logginstatus')
    if (!loggedIn) {
       // Allow access to the login page
       if (to.path === '/') {
-          return true;
+         return true
       }
 
       // Allow access to the registration page (adjust the condition to match your register route pattern)
-      if (to.path.startsWith('/auth/register/student/token=') || to.path.startsWith('/auth/register/assistantInstructor/token=')) {
-          return true;
+      if (
+         to.path.startsWith('/auth/register/student/token=') ||
+         to.path.startsWith('/auth/register/assistantInstructor/token=')
+      ) {
+         return true
       }
 
       // For all other routes, redirect to the login page
-      return {name: 'Login'};
-  }
+      return { name: 'Login' }
+   }
 
-  // If logged in, continue as normal
-  return true;
+   // If logged in, continue as normal
+   return true
 })
 
 export default router

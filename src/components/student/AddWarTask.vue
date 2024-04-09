@@ -66,14 +66,17 @@
          />
       </div>
 
-      <button class="add-button" @click="$emit('addTask', { ...newTask }), resetForm()">Add</button>
+      <button
+         class="add-button"
+         @click="$emit('addTask', { ...newTask }), resetForm()"
+      >
+         Add
+      </button>
       <button class="done-button" @click="toggleFormVisibility">Done</button>
-
    </form>
 
    <button v-if="!isFormVisible" @click="toggleFormVisibility">Add Task</button>
    <!-- <button v-else @click="toggleFormVisibility">Done</button> -->
-
 </template>
 
 <script>
@@ -123,8 +126,8 @@ export default {
 <style scoped>
 .war-form {
    display: grid;
-   grid-template-columns: 1fr 1fr; 
-   gap: 20px; 
+   grid-template-columns: 1fr 1fr;
+   gap: 20px;
    justify-content: center;
    height: 45%;
 }
@@ -136,9 +139,9 @@ export default {
 }
 
 .label {
-   margin-bottom: 5px; 
-   width: 120px; 
-   text-align: right; 
+   margin-bottom: 5px;
+   width: 120px;
+   text-align: right;
 }
 
 .input-field,
@@ -148,13 +151,13 @@ export default {
    padding: 8px;
    background-color: rgba(255, 255, 255, 0.7);
    margin-top: 5px;
-   color: black; 
+   color: black;
 }
 
 .text-area {
    height: 80px;
    /* Disable textarea resizing else its messing with everything*/
-   resize: none; 
+   resize: none;
 }
 
 .input-field::placeholder,
@@ -162,7 +165,8 @@ export default {
    text-align: center;
 }
 
-.add-button, .done-button {
+.add-button,
+.done-button {
    width: 100%;
    padding: 8px;
    border: none;
@@ -178,9 +182,7 @@ button {
 
 @media only screen and (max-width: 700px) {
    .war-form {
-      grid-template-columns: 1fr; 
+      grid-template-columns: 1fr;
    }
 }
 </style>
-
-

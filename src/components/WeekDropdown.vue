@@ -1,5 +1,5 @@
 <template>
-   <div class="week-dropdown-container" style="width: 100%;">
+   <div class="week-dropdown-container" style="width: 100%">
       <div class="dropdown-center">
          <a
             class="btn btn-primary dropdown-toggle"
@@ -21,27 +21,31 @@
                :value="week.id"
                @click="storeWeek.updateSelectedWeek(week)"
             >
-               <a v-if="!isCurrentWeek(week.id)" class="dropdown-item" href="#">{{ convertWeekFormat(week) }}</a>
-               <a v-else class="active">{{ convertWeekFormat(week) }}</a> 
+               <a
+                  v-if="!isCurrentWeek(week.id)"
+                  class="dropdown-item"
+                  href="#"
+                  >{{ convertWeekFormat(week) }}</a
+               >
+               <a v-else class="active">{{ convertWeekFormat(week) }}</a>
             </li>
          </ul>
       </div>
       <div class="button-container">
-         <button class="prev-week-btn" @click="setPrevWeek()">Previous Week</button>
+         <button class="prev-week-btn" @click="setPrevWeek()">
+            Previous Week
+         </button>
          <button class="next-week-btn" @click="setNextWeek()">Next Week</button>
       </div>
    </div>
 </template>
-
 
 <script>
 import { ref, toRaw } from 'vue'
 import { storeWeek } from '../stores/storeWeek.js'
 export default {
    name: 'WeekDropdown',
-   props: {
-      
-   },
+   props: {},
    data() {
       return {
          storeWeek,
@@ -54,12 +58,11 @@ export default {
       userSelectsWeek() {
          this.hasSelectedWeek = true
       },
-      
+
       convertWeekFormat(week) {
-         if(week == undefined){
+         if (week == undefined) {
             return
-         }
-         else{
+         } else {
             var weekStart = week.start
             var weekEnd = week.end
             return weekStart + ' to ' + weekEnd
@@ -68,37 +71,37 @@ export default {
       isCurrentWeek(weekId) {
          return weekId == storeWeek.currentWeek.id
       },
-      setPrevWeek(){
-         var prevWeek = (storeWeek.weeksForSemester[storeWeek.weeksForSemester.indexOf((storeWeek.selectedWeek)) - 1])
-         if(prevWeek != null){
+      setPrevWeek() {
+         var prevWeek =
+            storeWeek.weeksForSemester[
+               storeWeek.weeksForSemester.indexOf(storeWeek.selectedWeek) - 1
+            ]
+         if (prevWeek != null) {
             storeWeek.updateSelectedWeek(prevWeek)
          }
       },
-      setNextWeek(){
-         var nextWeek = (storeWeek.weeksForSemester[storeWeek.weeksForSemester.indexOf((storeWeek.selectedWeek)) + 1])
+      setNextWeek() {
+         var nextWeek =
+            storeWeek.weeksForSemester[
+               storeWeek.weeksForSemester.indexOf(storeWeek.selectedWeek) + 1
+            ]
          storeWeek.updateSelectedWeek(nextWeek)
-
-      }
+      },
    },
    computed: {
-
       // filteredWeeks() {
       //    const currentWeekIndex = storeWeek.weeksForSemester.findIndex(week => week.id === storeWeek.currentWeek.id);
       //    const start = Math.max(currentWeekIndex - 5, 0);
       //    const end = Math.min(currentWeekIndex + 6, storeWeek.weeksForSemester.length); // +6 because slice is non-inclusive at the end
       //    return storeWeek.weeksForSemester.slice(start, end);
       // }
-      
    },
-   mounted() {
-     
-   },
+   mounted() {},
 
    //Note for future self while doing visual only, so i think I
    //should try to emit event to warList which I think will handle what week is
    //in the little row as well as adding rows
    //also look at bootstrap docs
-
 }
 </script>
 
@@ -111,7 +114,7 @@ export default {
 }
 
 .dropdown-center {
-   margin-bottom: 10px; 
+   margin-bottom: 10px;
 }
 
 .button-container {
@@ -122,7 +125,7 @@ export default {
 .prev-week-btn {
    width: 200px;
    border-radius: 12px;
-   margin-right: 10px; 
+   margin-right: 10px;
 }
 
 .next-week-btn {
@@ -132,8 +135,7 @@ export default {
 
 @media screen and (max-width: 900px) {
    .button-container {
-      flex-direction: column; 
+      flex-direction: column;
    }
 }
 </style>
-

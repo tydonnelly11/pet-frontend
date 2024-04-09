@@ -51,7 +51,7 @@
         style="max-width: 250px; margin-right: 10px;"
         @click="inviteInstructorPressed = false">Done</button>
     </div>
-    <div v-if="selectInviteTeam" class="popup-overlay">
+<div v-if="selectInviteTeam" class="popup-overlay">
     <h2> Add Teams To {{ storeSection.selectedSectionName }}</h2>
     <div>
       <!-- Add Teams for Section: {{sectionName}} -->
@@ -67,6 +67,7 @@
       </div>
       <button type="submit" class="small-button" style="max-width: 250px; margin-bottom: 20px;" @click="createTeams()">Create Team</button>
       </div>
+</div>
    <div v-if="hasCreatedTeams" class="popup-overlay">
       <div class="success">
          <p>Team Successfully Created!</p>
@@ -85,11 +86,10 @@
       </div>
     
 
-   </div>
 
    <div class="centered-text">
   To add students to a team, please select a team, then select all the students you wish to add to that team and click the save button.
-</div>
+    </div>
 
     <!--<h3>To add students to a team, please select a team, 
             then select all the students you wish to add to that team 

@@ -3,8 +3,9 @@
       <div class="main">
          <div class="row g-0">
             <!-- Side Image -->
-            <div class="side-image col-md-6 d-flex align-items-center justify-content-center">
-            </div>
+            <div
+               class="side-image col-md-6 d-flex align-items-center justify-content-center"
+            ></div>
 
             <!-- Right Side (Login Form) -->
             <div class="right col-md-6">
@@ -12,23 +13,43 @@
                   <header>Login</header>
                   <form @submit.prevent="loginStudent">
                      <div class="input-field">
-                        <input type="email" id="email" class="input" v-model="email" required>
+                        <input
+                           type="email"
+                           id="email"
+                           class="input"
+                           v-model="email"
+                           required
+                        />
                         <label for="email">Email</label>
                      </div>
                      <div class="input-field">
-                        <input type="password" id="password" class="input" v-model="password" required>
+                        <input
+                           type="password"
+                           id="password"
+                           class="input"
+                           v-model="password"
+                           required
+                        />
                         <label for="password">Password</label>
                      </div>
                      <!-- <button type="button" class="submit" @click="loginInstructor">Login Instructor</button> -->
                   </form>
-                  <button @click="loginStudent" type="submit" class="submit">Login Student</button>
-                  <button @click="loginAssistInstructor" type="submit" class="submit">Login Assistant
-                     Instructor</button>
-                  <button @click="loginInstructor" type="submit" class="submit">Login Instructor</button>
+                  <button @click="loginStudent" type="submit" class="submit">
+                     Login Student
+                  </button>
+                  <button
+                     @click="loginAssistInstructor"
+                     type="submit"
+                     class="submit"
+                  >
+                     Login Assistant Instructor
+                  </button>
+                  <button @click="loginInstructor" type="submit" class="submit">
+                     Login Instructor
+                  </button>
                   <div v-if="this.isLoading" class="loading">
-                     <h1>Logging In...<img src="/img/loading-gif.gif"></h1>
+                     <h1>Logging In...<img src="/img/loading-gif.gif" /></h1>
                   </div>
-
                </div>
             </div>
          </div>
@@ -36,202 +57,225 @@
    </div>
 </template>
 
-
-
 <script>
 import { storeUser } from '../stores/store.js'
 import apiClient from '@/axios-setup.js'
-import { storeSection } from '../stores/storeSection';
-import { storeWeek } from '../stores/storeWeek.js';
-import { setAuthHeader } from '@/axios-setup.js';
+import { storeSection } from '../stores/storeSection'
+import { storeWeek } from '../stores/storeWeek.js'
+import { setAuthHeader } from '@/axios-setup.js'
 import axios from 'axios'
 export default {
    name: 'LoginPageView',
    data() {
       return {
          storeUser,
-         email: "",
-         password: "",
+         email: '',
+         password: '',
          isLoading: false,
-
       }
    },
    methods: {
       encodeCredentials(email, password) {
-         return btoa(`${email}:${password}`);
+         return btoa(`${email}:${password}`)
       },
       loginInstructor() {
-
          this.isLoading = true
          let creds = this.encodeCredentials(this.email, this.password)
          console.log(this.$baseURL)
          console.log(window.location.hostname)
-         axios.post(`${this.$baseURL}/api/v1/auth/login/instructor`, {}, {
-            headers: {
-               'Authorization': `Basic ${creds}`
-            }
-         })
-            .then((response) => {
-               console.log(response)
-               this.isLoading = false
-               storeUser.updateLoginStatus(response.data.data.userInfo.id, true)
-               localStorage.setItem('auth', response.data.data.token);
-               let authToken = response.data.data.token
-               localStorage.setItem('logginstatus', true)
-               setAuthHeader(authToken)
-               if (response.data.data.userInfo.sections.length == 0) {
-                  this.$router.push('/instructorhome/section')
-                  storeWeek.setWeekList([])
-
+         axios
+            .post(
+               `${this.$baseURL}/api/v1/auth/login/instructor`,
+               {},
+               {
+                  headers: {
+                     Authorization: `Basic ${creds}`,
+                  },
                }
-               else {
-                  for (const section of response.data.data.userInfo.sections) {
-                     if (section.isCurrent == true) {
-                        this.getWeeksForSection(section.id)
+            )
+            .then(
+               (response) => {
+                  console.log(response)
+                  this.isLoading = false
+                  storeUser.updateLoginStatus(
+                     response.data.data.userInfo.id,
+                     true
+                  )
+                  localStorage.setItem('auth', response.data.data.token)
+                  let authToken = response.data.data.token
+                  localStorage.setItem('logginstatus', true)
+                  setAuthHeader(authToken)
+                  if (response.data.data.userInfo.sections.length == 0) {
+                     this.$router.push('/instructorhome/section')
+                     storeWeek.setWeekList([])
+                  } else {
+                     for (const section of response.data.data.userInfo
+                        .sections) {
+                        if (section.isCurrent == true) {
+                           this.getWeeksForSection(section.id)
 
-                        storeSection.setSelectedSection(section)
-                        storeSection.activeSection = section;
+                           storeSection.setSelectedSection(section)
+                           storeSection.activeSection = section
+                        }
                      }
+                     storeSection.setSections(
+                        response.data.data.userInfo.sections
+                     )
                   }
-                  storeSection.setSections(response.data.data.userInfo.sections)
 
-
+                  storeUser.setName(
+                     response.data.data.userInfo.firstName,
+                     response.data.data.userInfo.lastName
+                  )
+                  console.log(response.data.data.userInfo.firstName)
+                  localStorage.setItem('storeUser', JSON.stringify(storeUser))
+                  localStorage.setItem(
+                     'storeSection',
+                     JSON.stringify(storeSection)
+                  )
+                  localStorage.setItem('storeWeek', JSON.stringify(storeWeek))
+                  this.$router.push('/instructorhome')
+               },
+               (error) => {
+                  console.log(error)
+                  this.isLoading = false
+                  if (error.response.status == 401) {
+                     alert('Invalid Credentials')
+                  }
                }
-
-
-               storeUser.setName(response.data.data.userInfo.firstName, response.data.data.userInfo.lastName)
-               console.log(response.data.data.userInfo.firstName)
-               localStorage.setItem('storeUser', JSON.stringify(storeUser));
-               localStorage.setItem('storeSection', JSON.stringify(storeSection));
-               localStorage.setItem('storeWeek', JSON.stringify(storeWeek));
-               this.$router.push('/instructorhome')
-            }, (error) => {
-               console.log(error)
-               this.isLoading = false
-               if (error.response.status == 401) {
-                  alert("Invalid Credentials")
-               }
-            })
-
-
-
+            )
       },
       loginStudent() {
          this.isLoading = true
          let creds = this.encodeCredentials(this.email, this.password)
-         apiClient.post(`${this.$baseURL}/api/v1/auth/login/student`, {}, {
-            headers: {
-               Authorization: `Basic ${creds}`
-            }
-         })
-            .then((response) => {
-               console.log(response)
-               this.isLoading = false
-               storeUser.updateLoginStatus(response.data.data.userInfo.id, true)
+         apiClient
+            .post(
+               `${this.$baseURL}/api/v1/auth/login/student`,
+               {},
+               {
+                  headers: {
+                     Authorization: `Basic ${creds}`,
+                  },
+               }
+            )
+            .then(
+               (response) => {
+                  console.log(response)
+                  this.isLoading = false
+                  storeUser.updateLoginStatus(
+                     response.data.data.userInfo.id,
+                     true
+                  )
 
-               storeUser.setTeamId(response.data.data.userInfo.teamId)
-               storeUser.setName(response.data.data.userInfo.firstName, response.data.data.userInfo.lastName)
-               storeUser.setSectionId(response.data.data.userInfo.sectionId)
-               storeWeek.setWeekList(response.data.data.userInfo.weeks)
-               let authToken = response.data.data.token
-               setAuthHeader(authToken)
-               localStorage.setItem('auth', response.data.data.token);
-               localStorage.setItem('logginstatus', true)
-               localStorage.setItem('storeUser', JSON.stringify(storeUser));
-               localStorage.setItem('storeSection', JSON.stringify(storeSection));
-               localStorage.setItem('storeWeek', JSON.stringify(storeWeek));
+                  storeUser.setTeamId(response.data.data.userInfo.teamId)
+                  storeUser.setName(
+                     response.data.data.userInfo.firstName,
+                     response.data.data.userInfo.lastName
+                  )
+                  storeUser.setSectionId(response.data.data.userInfo.sectionId)
+                  storeWeek.setWeekList(response.data.data.userInfo.weeks)
+                  let authToken = response.data.data.token
+                  setAuthHeader(authToken)
+                  localStorage.setItem('auth', response.data.data.token)
+                  localStorage.setItem('logginstatus', true)
+                  localStorage.setItem('storeUser', JSON.stringify(storeUser))
+                  localStorage.setItem(
+                     'storeSection',
+                     JSON.stringify(storeSection)
+                  )
+                  localStorage.setItem('storeWeek', JSON.stringify(storeWeek))
 
-               if (storeUser.teamId == null) {
-                  this.$router.push('/waitingroom')
+                  if (storeUser.teamId == null) {
+                     this.$router.push('/waitingroom')
+                  } else {
+                     this.$router.push('/studenthome')
+                  }
+               },
+               (error) => {
+                  console.log(error)
+                  this.isLoading = false
+                  console.log(error.response.status)
+                  if (error.response.status == 401) {
+                     alert('Invalid Credentials')
+                  }
                }
-               else {
-                  this.$router.push('/studenthome')
-               }
-            }, (error) => {
-               console.log(error)
-               this.isLoading = false
-               console.log(error.response.status)
-               if (error.response.status == 401) {
-                  alert("Invalid Credentials")
-               }
-            })
+            )
       },
 
       loginAssistInstructor() {
          this.isLoading = true
          let creds = this.encodeCredentials(this.email, this.password)
-         axios.post(`${this.$baseURL}/api/v1/auth/login/assistantInstructor`, {}, {
-            headers: {
-               Authorization: `Basic ${creds}`
-            }
-         })
-            .then((response => {
+         axios
+            .post(
+               `${this.$baseURL}/api/v1/auth/login/assistantInstructor`,
+               {},
+               {
+                  headers: {
+                     Authorization: `Basic ${creds}`,
+                  },
+               }
+            )
+            .then((response) => {
                console.log(response)
 
                this.isLoading = false
-               localStorage.setItem('auth', response.data.data.token);
+               localStorage.setItem('auth', response.data.data.token)
                let authToken = response.data.data.token
                localStorage.setItem('logginstatus', true)
                setAuthHeader(authToken)
                storeUser.updateLoginStatus(response.data.data.userInfo.id, true)
 
                storeUser.setTeamId(response.data.data.userInfo.teamId)
-               storeUser.setName(response.data.data.userInfo.firstName, response.data.data.userInfo.lastName)
+               storeUser.setName(
+                  response.data.data.userInfo.firstName,
+                  response.data.data.userInfo.lastName
+               )
                storeUser.setSectionId(response.data.data.userInfo.sectionId)
                storeWeek.setWeekList(response.data.data.userInfo.weeks)
                if (storeUser.teamId == null) {
                   this.$router.push('/waitingroom')
-               }
-               else {
+               } else {
                   this.$router.push('/assistantinstructorhome')
                }
 
-
-
-               localStorage.setItem('storeUser', JSON.stringify(storeUser));
-               localStorage.setItem('storeSection', JSON.stringify(storeSection));
-               localStorage.setItem('storeWeek', JSON.stringify(storeWeek));
-
-            }
-
-            ))
-
+               localStorage.setItem('storeUser', JSON.stringify(storeUser))
+               localStorage.setItem(
+                  'storeSection',
+                  JSON.stringify(storeSection)
+               )
+               localStorage.setItem('storeWeek', JSON.stringify(storeWeek))
+            })
       },
 
       pushInstructor() {
-         storeUser.updateLoginStatus("1", true)
+         storeUser.updateLoginStatus('1', true)
 
          // localStorage.setItem('auth', this.encodeCredentials(this.email, this.password));
          this.$router.push('/instructorhome/section')
          localStorage.setItem('logginstatus', true)
 
-         localStorage.setItem('storeUser', JSON.stringify(storeUser));
-
-
+         localStorage.setItem('storeUser', JSON.stringify(storeUser))
       },
       pushInstructor2() {
-         storeUser.updateLoginStatus("1", true)
+         storeUser.updateLoginStatus('1', true)
          localStorage.setItem('logginstatus', true)
-
 
          this.$router.push('/studenthome')
       },
 
       getWeeksForSection(sectionId) {
-         apiClient.get(`${this.$baseURL}/api/v1/section/getWeeks/${sectionId}`, {
-
-         })
-            .then(response => {
+         apiClient
+            .get(`${this.$baseURL}/api/v1/section/getWeeks/${sectionId}`, {})
+            .then((response) => {
                console.log(response)
                storeWeek.setWeekList(response.data.data)
-               localStorage.setItem('storeWeek', JSON.stringify(storeWeek));
+               localStorage.setItem('storeWeek', JSON.stringify(storeWeek))
             })
-            .catch(error => {
+            .catch((error) => {
                console.log(error)
             })
       },
-
-   }
+   },
 }
 </script>
 
@@ -246,7 +290,7 @@ export default {
 .full-page {
    min-height: 100vh;
    width: 100vw;
-   background-color: #11101D;
+   background-color: #11101d;
    display: flex;
    justify-content: center;
    align-items: center;
@@ -261,7 +305,7 @@ export default {
 }
 
 .side-image {
-   background-image: url("/img/logo.png");
+   background-image: url('/img/logo.png');
    background-position: center;
    background-size: cover;
    background-repeat: no-repeat;
@@ -274,7 +318,7 @@ export default {
    width: 900px;
    height: 550px;
    border-radius: 10px;
-   background: #E4E9F7;
+   background: #e4e9f7;
    padding: 0px;
    box-shadow: 5px 5px 10px 1px rgba(0, 0, 0, 0.2);
 }
@@ -345,16 +389,16 @@ img {
    top: 10px;
    left: 10px;
    pointer-events: none;
-   transition: .5s;
+   transition: 0.5s;
    padding-left: 10px;
 }
 
-.input-field input:focus~label {
+.input-field input:focus ~ label {
    top: -20px;
    font-size: 13px;
 }
 
-.input-field input:valid~label {
+.input-field input:valid ~ label {
    top: -20px;
    font-size: 13px;
    color: #5d5076;
@@ -371,13 +415,13 @@ img {
    height: 45px;
    background: #386ca4;
    border-radius: 5px;
-   transition: .4s;
+   transition: 0.4s;
    color: #fff;
    margin: 10px 0;
 }
 
 .submit:hover {
-   background: #11101D;
+   background: #11101d;
    color: #fff;
 }
 
@@ -391,7 +435,7 @@ span a {
    text-decoration: none;
    font-weight: 700;
    color: #000;
-   transition: .5s;
+   transition: 0.5s;
 }
 
 span a:hover {
