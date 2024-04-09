@@ -11,7 +11,7 @@
    <div class="container">
       <div class="grid-container">
          <button v-for="team in this.teams" :class="{ 'selected-item': selectedTeam && team.id === selectedTeam.id }"
-            :key="team.id" @click="getTeamWar(team)" type="button" class="button btn-primary">
+            :key="team.id" @click="getTeamWar(team)" type="button" class="team-tile">
             <p class="team">{{ team.name }}</p>
          </button>
       </div>
@@ -207,4 +207,32 @@ export default {
    border: 4px solid red;
    /* Adjust the color and border size as needed */
 }
+
+.team-tile {
+   /* ... other styles ... */
+   flex: 0 0 auto;  /* Increased flex-basis */
+   max-width: 100%; /* Increased max-width */
+   max-height: 50%;
+   padding: 20px;
+   box-sizing: border-box;
+   word-wrap: break-word;
+   overflow-wrap: break-word;
+   font-size: 1em;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   min-height: 100px;
+   background-color: #4E2A84;
+   color: aliceblue;
+   border-radius: 4px;
+ }
+ 
+ /* Hover effect */
+ .team-tile:hover {
+   transform: translateY(-5px); /* lift tile up */
+   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* shadow effect */
+   cursor: pointer;
+ }
 </style>
