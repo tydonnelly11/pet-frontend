@@ -117,7 +117,7 @@ export default {
               else{
                 tempReports.push({
                   name: `${student.firstName} ${student.lastName}`,
-                  score: `NO PEER EVALUATION SUBMITTED`, 
+                  score: `${student.averageScore}/${this.totalScore} : NO EVAL SUBMITTED`, 
                   privateComments: student.privateComments,
                   publicComments: student.publicComments
               

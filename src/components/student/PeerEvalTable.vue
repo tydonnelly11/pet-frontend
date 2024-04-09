@@ -29,7 +29,7 @@
             </tr>
             <tr v-else v-for="student in this.peerEval">
                <td scope="col">
-                  {{ student.evaluateeFirstName + student.evaluateeLastName }}
+                  {{ student.evaluateeFirstName}} {{ student.evaluateeLastName }}
                </td>
                <td scope="col" v-for="item in student.ratings">
                   <input type="number" v-model="item.score" min="0" :max='item.criterion.maxScore' />
@@ -147,38 +147,30 @@ table {
    position: relative;
    left: 5%;
 }
-
 .comment{
    height: 150px;
    width: 150px;
 }
-
 th, td {
    /* max-width: 200px; Set maximum width for cells */
    overflow: hidden; /* Hide overflow content */
    /* white-space: nowrap; Prevent line breaks */
    text-overflow: ellipsis; /* Show ellipsis for overflow content */
 }
-
 .column-top{
    display: flex;
    flex-direction: column;
    justify-content: space-between;
-
 }
-
 .crit-desc{
    font-size: .75em;
    flex-basis: 50%;
-
 }
-
 .crit-title{
    font-size: 1.25em;
    flex-basis: 60%;
    position: relative;
 }
-
 form {
    margin-top: 2.5%;
 }

@@ -9,21 +9,24 @@
     <input type="date" id="end-date" v-model="endDate" />
 </div>
 
-    <button class="small-button" @click="getWar">Get WAR</button>
     <!-- <button @click="getPeerEvaluationReport">Get Peer Evaluation</button> -->
 
     <div v-if="this.hasEntry" v-for="(team, index) in teamList">
         <p>War for {{ weeksSelected[index].start }} - {{ weeksSelected[index].end }}</p>
         <WarTeamTable :teamProp="team"/>
     </div>
+    <div class="btn-group">
+        <button class="small-button" @click="getWar">Get WAR</button>
+        <button class="small-button" @click="editTeamName = true;">Edit Team name</button>
+        <button class="remove-btn" @click="hasSelectedDeleteTeam = true">Delete Team</button>
 
-    <button class="small-button" @click="editTeamName = true;">Edit Team name</button>
-    <button class="remove-btn" @click="removeTeam">Delete Team</button>
+    </div>
+    
     <div v-if="editTeamName">
         <label>Enter New Team name: </label>
         <input type="text" v-model="newTeamName"/>
-        <button @click="editTeamName = false;">Cancel</button>
-        <button @click="editTeam();">Save</button>
+        <button  class="small-button" @click="editTeamName = false;">Cancel</button>
+        <button  class="small-button" @click="editTeam();">Save</button>
     </div>
 
     <div v-if="hasChangedName" class="popup-overlay">
@@ -33,12 +36,21 @@
         </div>
     </div>
 
+    <div v-if="hasSelectedDeleteTeam" class="popup-overlay">
+      <div class="success">
+            <p :style="'color: black;'">Are you sure you want to delete this team?</p>
+            <button  class="small-button" @click="removeTeam();">Delete</button>
+         <button  class="small-button" @click="hasSelectedDeleteTeam = false">Cancel</button>
+      </div>
+    </div>  
+
     <div v-if="hasDeletedTeam" class="popup-overlay">
         <div class="success">
             <p>Team Succesfully Deleted!</p>
             <button @click="hasDeletedTeam = false; this.$router.push('/instructorhome/editteams')">Close</button>
         </div>
     </div>
+</div>
 
 </template>
 
@@ -57,6 +69,7 @@ export default{
             team: [
 
             ],
+            teamName : this.teamname,
             teamList: [],
             hasDeletedTeam: false,
             isLoading: false,
@@ -69,6 +82,7 @@ export default{
             },
             hasEntry: false,
             hasChangedName: false,
+            hasSelectedDeleteTeam: false,
 
         }
     },
@@ -132,6 +146,7 @@ export default{
             if(this.newTeamName == "" || this.newTeamName == null){
                 this.newTeamName = this.teamOBJ.name
             }
+            this.teamName = this.newTeamName
             const auth = localStorage.getItem('auth')
             
             this.isLoading = true;
@@ -222,6 +237,13 @@ export default{
 </script>
 
 <style scoped>
+.btn-group{
+    display : flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+    flex-basis: 50%;
+}
 
 .small-button {
     padding: 10px 15px; /* Ample padding for tap targets */
@@ -239,9 +261,6 @@ export default{
     background-color: #6f42c1; /* Lighter purple on hover for interaction feedback */
 }
 
-.small-button:not(:first-child) {
-   margin-left: 10px;
-}
 
 .table{
     display: flex;

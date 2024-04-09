@@ -32,6 +32,14 @@
     color:black;
 }
 
+.popup-overlay > p{
+    color: black;
+}
+
+p{
+    color: black;
+
+}
 .conformation-popup{
     
     display: flex;

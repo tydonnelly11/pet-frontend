@@ -185,6 +185,8 @@ export default {
          weeksCalculated: false,
          makeOwnRubric: false,
          sectionConfirmation: false,
+         startDate: "",
+         endDate: "",
 
 
 
@@ -342,7 +344,8 @@ export default {
                this.isLoading = false
                var section = {
                   name: this.sectionName,
-                  id: this.sectionId
+                  id: this.sectionId,
+                  isCurrent: false
                }
                storeUser.setSectionId(this.sectionId)
                storeSection.addSection(section)

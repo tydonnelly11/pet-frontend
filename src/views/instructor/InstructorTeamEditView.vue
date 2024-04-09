@@ -26,18 +26,30 @@
             <label></label>
         </div>
         
-        <button class="small-button" style ="max-width: 200px;" @click="editSectionInfo()">Update Section</button>
-        <button class="small-button" style ="max-width: 200px;" @click="editSection = false">Cancel</button>
+        <button class="small-button" 
+        style ="max-width: 200px;" 
+        @click="editSectionInfo()">
+            Update Section
+        </button>
+        <button class="small-button" 
+        style ="max-width: 200px;" 
+        @click="editSection = false">
+                Cancel
+        </button>
     </div>
 
     
     <div class="popup-overlay" v-if="inviteStudentPressed">
         <InstructorInviteStudents />
-        <button class="small-button" style="max-width: 250px; margin-right: 10px;" @click="inviteStudentPressed = false">Done</button>
+        <button class="small-button" 
+        style="max-width: 250px; margin-right: 10px;" 
+        @click="inviteStudentPressed = false">Done</button>
     </div>
     <div class="popup-overlay" v-if="inviteInstructorPressed">
         <InviteAssitInstructor />
-        <button class="small-button" style="max-width: 250px; margin-right: 10px;" @click="inviteInstructorPressed = false">Done</button>
+        <button class="small-button" 
+        style="max-width: 250px; margin-right: 10px;"
+        @click="inviteInstructorPressed = false">Done</button>
     </div>
     <div v-if="selectInviteTeam" class="popup-overlay">
     <h2> Add Teams To {{ storeSection.selectedSectionName }}</h2>
@@ -49,7 +61,9 @@
                 Team Name
             </h5>
          </label>
-         <input type="text" id="sectionName" v-model="this.teamName" required class="team-name-input"/>
+         <input type="text" id="sectionName" 
+         v-model="this.teamName" 
+         required class="team-name-input"/>
       </div>
       <button type="submit" class="small-button" style="max-width: 250px; margin-bottom: 20px;" @click="createTeams()">Create Team</button>
       </div>
@@ -100,7 +114,8 @@
             @change="selectTeam(team)"
             >
         </div>
-        <button class="view-team-btn" v-if="team.students.length > 0" @click="openTeam(team.name, team.id, team.students)">
+        <button class="view-team-btn" v-if="team.students.length > 0" 
+            @click="openTeam(team.name, team.id, team.students)">
             View Team
         </button>
         <div v-else>
@@ -113,8 +128,11 @@
                 {{ student.firstName }} {{ student.lastName }}
             </h4>
           </div>
-          <button class="view-team-btn" v-if="student.teamId" @click="openWARAndEval(student, team)">View Student</button>
-          <button class="remove-btn" v-if="student.teamId" @click="toggleStudentOnTeam(student, team)">Remove</button>
+          <button class="view-team-btn" 
+          v-if="student.teamId" 
+          @click="openWARAndEval(student, team)">View Student</button>
+          <button class="remove-btn"
+          @click="removeStudentOnTeam(student, team)">Remove</button>
         </div>
         <div style="margin-top: 20px;">
             <h2>Assistant Instructor</h2>
@@ -127,7 +145,10 @@
                         {{ team.assistantInstructorDTO.firstName }} {{ team.assistantInstructorDTO.lastName }}
                     </h3>
                 </div>
-                <button class="remove-btn" @click="removeInstructorFromTeam(team, team.assistantInstructorDTO)">Remove Instructor</button>
+                <button class="remove-btn" 
+                @click="removeInstructorFromTeam(team, team.assistantInstructorDTO)">
+                    Remove Instructor
+                </button>
             </div>
         </div>
         
@@ -138,11 +159,17 @@
             <h2 class="teams-header">Students</h2>
             <div class="student-entry" v-for="student in students" :key="student.id">
                 <div class="team-name-checkbox">
-                    <input style="margin-bottom: 5px;" type="checkbox" class="student-checkbox" :value="student.id" @change="toggleStudent(student)">
+                    <input style="margin-bottom: 5px;" 
+                    type="checkbox" 
+                    class="student-checkbox" 
+                    :value="student.id" 
+                    @change="toggleStudent(student)">
                     <label class="student-name">
                         <h4>{{ student.firstName }} {{ student.lastName }}</h4>
                     </label>
-                    <button class="remove-btn" @click="this.studentIDToDelete = student.id; this.hasSelectedDeleteStudent = true;">Delete Student</button>
+                    <button class="remove-btn" 
+                    @click="this.studentIDToDelete = student.id; 
+                    this.hasSelectedDeleteStudent = true;">Delete Student</button>
                 </div>
             </div>
         </div>
@@ -181,7 +208,7 @@
       </div>
 
 
-    <button type="submit" class="small-button" style="max-width: 400px; margin-top: 20px;" @click="saveTeam()" >Save Team</button>
+    <button type="submit" class="small-button" style="max-width: 400px; margin-top: 20px;" @click="saveAllTeams()" >Save All Teams</button>
     <div v-if="hasSavedTeam" class="popup-overlay">
       <div class="success">
          <p>Team Successfully Saved!</p>
@@ -202,20 +229,27 @@
                 </h4>
             </label>
             <div v-for="team in teams">
-                <button class="small-button" style="max-width: 400px;" v-if="(team.assistantInstructorDTO == null || instructor.id != team.assistantInstructorDTO.id) && team.name != null" @click="showConfirmationPopup(team, instructor)">Assign instructor to {{ team.name }}</button>
+                <button class="small-button" 
+                style="max-width: 400px;" 
+                v-if="(team.assistantInstructorDTO == null || instructor.id != team.assistantInstructorDTO.id) && team.name != null" 
+                @click="showConfirmationPopup(team, instructor)">Assign instructor to {{ team.name }}</button>
                 
             </div>
             
             <!-- <button v-if="instructor.id != team.assistantInstructorDTO.id" @click="addInstructorToTeam(team, instructor)">{{ team.name }}</button> -->
-            <button class="small-button" style="max-width: 400px; margin-right: 10px;" @click="addInstructorToSection(instructor)">Assign to {{this.selectedSectionInfo.name}}</button>
+            <button class="small-button" 
+            style="max-width: 400px; margin-right: 10px;" 
+            @click="addInstructorToSection(instructor)">Assign to {{this.selectedSectionInfo.name}}</button>
         </div>
     </div>
     <div v-if="teamConformation" class="popup-overlay">
         <div class="conformation-popup">
         <p>Do you want to add {{ this.currentInstructor.firstName }} {{ this.currentInstructor.lastName }} to {{ this.currentTeam.name }}?</p>
         <div class="button-group">
-            <button :style="'border: 1px solid black;'" @click="confirmAddInstructor">Yes</button>
-            <button :style="'border: 1px solid black;'" @click="cancelAddInstructor">No</button>
+            <button :style="'border: 1px solid black;'" 
+            @click="confirmAddInstructor">Yes</button>
+            <button :style="'border: 1px solid black;'" 
+            @click="cancelAddInstructor">No</button>
         </div>
         </div>
     </div>
@@ -246,6 +280,7 @@ export default {
       return {
         students: [],
         teams: [],
+        selectedStudent: [],
         updatedTeam: {
             id: "",
             name: "",
@@ -253,6 +288,8 @@ export default {
             students: [],
 
         },
+        
+
         selectInviteTeam: false,
         studentIDToDelete : null,
         selectedTeamId: null,
@@ -362,7 +399,7 @@ export default {
         }).catch(error => {
             console.log(error)
         })
-        // this.getTeams()
+        this.getTeams()
 
     },
 
@@ -480,15 +517,10 @@ export default {
     },
 
 
-    toggleStudentOnTeam(student, team){
-        if(this.selectedTeamId === null){
-            alert("Please select a team to remove a student from")
-            return
-        }
-        const index = team.students.indexOf(student);
-        team.students.splice(index, 1);
+    removeStudentOnTeam(student, team){
+        //This line finds the team in this.teams then removes the student from it
+        this.teams.find(item => item.id === team.id).students = this.teams.find(item => item.id === team.id).students.filter(stu => student.id !== stu.id)
 
-        
         this.students.push(student);
         
     },
@@ -521,66 +553,113 @@ export default {
         .catch(error => {
             console.log(error)
         })
+        
     },
-    selectTeam(team) {
+    selectTeam(teamProp) {
+        
+        // var team  = this.teams.find(item => item.id === this.selectedTeamId)
+        if(this.selectedStudent.length === 0){
+            this.selectedTeamId = teamProp.id
+            this.selectedStudent = [];
+
+        }
+        else{
+            for(const student of this.selectedStudent){
+                teamProp.students.push(student)
+                this.students = this.students.filter(stu => student.id !== stu.id)
+            }
+            this.selectedStudent = [];
+        }
         if (this.selectedTeamId === team.id) {
         // If the team is already selected, deselect it
             this.selectedTeamId = null;
         } else {
         // Otherwise, select the new team and deselect others
             this.selectedTeamId = team.id;
-            this.updatedTeam.id = team.id;
-            this.updatedTeam.name = team.name;
-            this.updatedTeam.students = team.students;
-
+            // this.updatedTeam.id = team.id;
+            // this.updatedTeam.name = team.name;
+            // this.updatedTeam.students = team.students;
         }
+        // }
           
       },
 
       // Method to add/remove a student from the updatedTeam.students array
       toggleStudent(student) {
-          const index = this.updatedTeam.students.indexOf(student);
-
-          console.log(index)
-          if (index > -1) {
-              this.updatedTeam.students.splice(index, 1);
-          } else {
-            student.weeks = null;
-            this.updatedTeam.students.push(student);
-          }
+      if(this.selectedTeamId === null){
+        console.log(this.selectedTeamId)
+          this.selectedStudent.push(student)
+          
+      }
+      else{
+        this.teams.find(team => team.id === this.selectedTeamId).students.push(student)
+        this.students = this.students.filter(stu => student.id !== stu.id)
+      }
+         
       },
    
-   saveTeam(){
+   saveAllTeams(){
     
     this.hasSavedTeam = false
     this.isProcessingTeamSave = true
-    for(const student of this.updatedTeam.students){
+    for(const team of this.teams){
+        console.log(team);
+        for(const student of team.students){
         
         if(student.weeks != null){
             student.weeks = null
         }
+
     }
-    
-   
     apiClient.post(`${this.$baseURL}/api/v1/team/edit`,
     {
-        id: this.updatedTeam.id,
-        name: this.updatedTeam.name,
-        sectionId: this.updatedTeam.sectionId,
-        students: this.updatedTeam.students,
+        id: team.id,
+        name: team.name,
+        sectionId: team.sectionId,
+        students: team.students,
     },
     ).then(response => {
-        this.hasSavedTeam = true
-        this.isProcessingTeamSave = false
+        
         console.log(response)
-        this.getStudents()
-        this.getTeams()
+        this.getStudents();
+        this.getTeams();
+        
 
         
     }).catch(error => {
-        this.isProcessingTeamSave = false
+        // this.isProcessingTeamSave = false
         console.log(error)
     })
+    this.hasSavedTeam = true
+    this.isProcessingTeamSave = false
+    
+
+
+    }
+    
+
+    
+    
+   
+    // apiClient.post(`${this.$baseURL}/api/v1/team/edit`,
+    // {
+    //     id: this.updatedTeam.id,
+    //     name: this.updatedTeam.name,
+    //     sectionId: this.updatedTeam.sectionId,
+    //     students: this.updatedTeam.students,
+    // },
+    // ).then(response => {
+    //     this.hasSavedTeam = true
+    //     this.isProcessingTeamSave = false
+    //     console.log(response)
+    //     this.getStudents()
+    //     this.getTeams()
+
+        
+    // }).catch(error => {
+    //     this.isProcessingTeamSave = false
+    //     console.log(error)
+    // })
    },
    createTeams() {
     if(this.teamName == " " || this.teamName == ""){
@@ -637,6 +716,7 @@ export default {
 
    created() {
     const fromViewAllSection = this.$route.query.fromViewAllSection === 'true';
+    console.log(fromViewAllSection)
     if(!fromViewAllSection){
         storeSection.setSelectedSection(storeSection.activeSection)
     }

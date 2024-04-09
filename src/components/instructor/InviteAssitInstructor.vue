@@ -15,7 +15,7 @@
         <div class="list-of-students">
             <h2>List of Instructors</h2>
             <div class="student" v-for="student in listOfStudents">
-                <p>Email: {{ student.email }}</p>
+                <p :style="'color: white;'">Email: {{ student.email }}</p>
             </div>
         </div>
         <button class="small-button" style="max-width: 250px;" type="submit" @click="submitInstructor">Invite Instructors</button>
