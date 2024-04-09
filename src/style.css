@@ -28,6 +28,14 @@
     z-index: 1000; /* Ensure it's above other content */
 }
 
+.popup-overlay > p{
+    color: black;
+}
+
+p{
+    color: black;
+
+}
 .conformation-popup{
     
     display: flex;

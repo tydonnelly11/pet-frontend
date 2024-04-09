@@ -52,7 +52,15 @@
             <img src="/img/loading-gif.gif">
     </div>
 
-    <button class="remove-btn" @click="removeStudent">Delete Student</button>
+    <div v-if="hasSelectedDeleteStudent" class="popup-overlay">
+      <div class="success">
+            <p :style="'color: black;'">Are you sure you want to delete this student?</p>
+            <button @click="removeStudent(this.student.studentId);">Delete</button>
+         <button @click="hasSelectedDeleteStudent = false">Cancel</button>
+      </div>
+    </div>    
+
+    <button class="remove-btn" @click="hasSelectedDeleteStudent = true;">Delete Student</button>
     <div v-if="hasDeletedStudent" class="popup-overlay">
         <div class="success">
             <p>Student Succesfully Deleted!</p>
@@ -96,6 +104,7 @@ export default{
             hasEntry: false,
             hasDeletedStudent: false,
             hasPeerEntry: false,
+            hasSelectedDeleteStudent: false,
         }
             
     },
@@ -233,6 +242,7 @@ export default{
 
         removeStudent(){
             this.hasDeletedStudent = true;
+            this.hasSelectedDeleteStudent = false;
             apiClient.post(`${this.$baseURL}/api/v1/section/deleteStudent`, {
                 id: this.$route.params.studentid 
             }).then(response => {
