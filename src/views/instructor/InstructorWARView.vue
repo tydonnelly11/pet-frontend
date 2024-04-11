@@ -1,38 +1,29 @@
 <template>
    <div class="dropdowns">
-      <div class="section-dropdown-container">
-         <SectionDropdown :style="{ width: '50%' }" />
-      </div>
       <div class="week-dropdown-container">
-         <WeekDropdown :style="{ width: '50%' }" />
+          <WeekDropdown :style="{ width: '50%' }"/>
       </div>
-   </div>
+  </div>
 
    <div class="container">
       <div class="grid-container">
-         <button
-            v-for="team in this.teams"
-            :class="{
-               'selected-item': selectedTeam && team.id === selectedTeam.id,
-            }"
-            :key="team.id"
-            @click="getTeamWar(team)"
-            type="button"
-            class="team-tile"
-         >
+         <button v-for="team in this.teams" :class="{ 'selected-item': selectedTeam && team.id === selectedTeam.id }"
+            :key="team.id" @click="getTeamWar(team)" type="button" class="team-tile">
             <p class="team">{{ team.name }}</p>
          </button>
       </div>
+
    </div>
    <!---->
    <WarTeamTable :teamProp="this.teamFormated" v-if="this.hasSelectedTeam" />
+
 </template>
 
 <script>
-import SectionDropdown from '../../components/instructor/SectionDropdown.vue'
+import SectionDropdown from '../../components/instructor/SectionDropdown.vue';
 import { storeSection } from '../../stores/storeSection'
 import { storeUser } from '../../stores/store.js'
-import WeekDropdown from '../../components/WeekDropdown.vue'
+import WeekDropdown from '../../components/WeekDropdown.vue';
 import WarTeamTable from '@/components/WarTeamTable.vue'
 import { storeWeek } from '../../stores/storeWeek'
 import apiClient from '@/axios-setup.js'
@@ -49,31 +40,35 @@ export default {
          selectedTeam: null,
          hasSelectedTeam: false,
          teamFormated: [],
-         storeWeek,
+         storeWeek
       }
    },
    methods: {
-      getTeamWar(team) {
-         this.selectedTeam = team
-         this.hasSelectedTeam = false
-         const auth = localStorage.getItem('auth')
+    getTeamWar(team){
+        this.selectedTeam = team
+        this.hasSelectedTeam = false;
+        const auth = localStorage.getItem('auth')
 
-         apiClient
-            .get(`${this.$baseURL}/api/v1/war/get`, {
-               params: {
-                  teamId: team.id,
-                  weekId: storeWeek.selectedWeekId,
-               },
-               headers: { Authorization: `Bearer ${auth}` },
-            })
-            .then((response) => {
-               this.isLoading = false
-
-               console.log(response.data.data.activities)
-               this.formatActivities(response.data.data.activities)
+        apiClient.get(`${this.$baseURL}/api/v1/war/get`,
+         {
+            params: {
+               teamId: team.id,
+               weekId: storeWeek.selectedWeekId,
+            },
+            headers: { 'Authorization': `Bearer ${auth}` }
+         }).then(response => {
+            this.isLoading = false
+            
+            console.log(response.data.data.activities)
+            this.formatActivities(response.data.data.activities)
+            this.hasSelectedTeam = true
+         }).catch(error => {
+            this.isLoading = false
+            console.log(error.response.data.code)
+            if(error.response.data.code == 500){
+               this.formatActivities([])
                this.hasSelectedTeam = true
-            })
-            .catch((error) => {
+            }}).catch(error => {
                this.isLoading = false
                console.log(error.response.data.code)
                if (error.response.data.code == 500) {
@@ -81,17 +76,10 @@ export default {
                   this.hasSelectedTeam = true
                }
             })
-            .catch((error) => {
-               this.isLoading = false
-               console.log(error.response.data.code)
-               if (error.response.data.code == 500) {
-                  this.formatActivities([])
-                  this.hasSelectedTeam = true
-               }
-            })
+
       },
       formatActivities(activities) {
-         const team = []
+         const team = [];
 
          for (const item of this.selectedTeam.students) {
             let student = {
@@ -99,14 +87,16 @@ export default {
                tasks: [],
                id: item.id,
                weekStart: storeWeek.selectedWeek.start,
-               weekEnd: storeWeek.selectedWeek.end,
+               weekEnd: storeWeek.selectedWeek.end
             }
 
             for (const activity of activities) {
                if (activity.studentId == student.id) {
+
                   student.tasks.push(activity)
-               } else {
-                  continue
+               }
+               else {
+                  continue;
                }
             }
             team.push(student)
@@ -116,48 +106,46 @@ export default {
       getTeams() {
          this.isLoading = true
          this.teams = []
+         
+         apiClient.get(`${this.$baseURL}/api/v1/section/getAllTeams/${storeSection.selectedSectionId}`,)
+        .then(response => {
+            this.teams = response.data.data
+            this.hasLoaded = true
 
-         apiClient
-            .get(
-               `${this.$baseURL}/api/v1/section/getAllTeams/${storeSection.selectedSectionId}`
-            )
-            .then((response) => {
-               this.teams = response.data.data
-               this.hasLoaded = true
-            })
-            .catch((error) => {
-               console.log(error)
-               if (error.response.data.code == 500) {
-               }
-            })
+        })
+        .catch(error => {
+            console.log(error)
+            if(error.response.data.code == 500){
+            }})
       },
    },
    computed: {
       watchedSectionId() {
-         return storeSection.selectedSectionId
+         return storeSection.selectedSectionId;
       },
       watchedWeekId() {
-         return storeWeek.selectedWeekId
-      },
+         return storeWeek.selectedWeekId;
+      }
    },
    watch: {
       watchedSectionId(newVal, oldVal) {
-         this.getTeams()
+         this.getTeams();
          this.hasSelectedTeam = false
       },
       watchedWeekId(newVal, oldVal) {
          if (this.hasSelectedTeam) {
-            this.getTeamWar(this.selectedTeam)
+            this.getTeamWar(this.selectedTeam);
             // this.hasSelectedTeam = false
          }
          // this.getTeamWar(this.selectedTeam);
          // this.hasSelectedTeam = false
-      },
+      }
    },
    created() {
       this.getTeams()
-   },
+   }
 }
+
 </script>
 
 <style scoped>
@@ -219,7 +207,7 @@ export default {
 
 .team-tile {
    /* ... other styles ... */
-   flex: 0 0 auto; /* Increased flex-basis */
+   flex: 0 0 auto;  /* Increased flex-basis */
    max-width: 100%; /* Increased max-width */
    max-height: 50%;
    padding: 20px;
@@ -233,15 +221,15 @@ export default {
    align-items: center;
    justify-content: center;
    min-height: 100px;
-   background-color: #4e2a84;
+   background-color: #4E2A84;
    color: aliceblue;
    border-radius: 4px;
-}
-
-/* Hover effect */
-.team-tile:hover {
+ }
+ 
+ /* Hover effect */
+ .team-tile:hover {
    transform: translateY(-5px); /* lift tile up */
    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* shadow effect */
    cursor: pointer;
-}
+ }
 </style>
