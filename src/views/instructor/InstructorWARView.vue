@@ -154,6 +154,10 @@ export default {
    margin: 0;
 }
 
+.team-tile .team {
+   color: white;
+}
+
 .button {
    display: flex;
    justify-content: center;
