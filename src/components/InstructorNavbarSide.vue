@@ -169,18 +169,7 @@ body {
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-/* Adjustments for X icon */
-.sidebar.open .icon .line:nth-child(1) {
-  transform: translateY(-50%) rotate(45deg) translateX(-50%);
-}
 
-.sidebar.open .icon .line:nth-child(2) {
-  opacity: 0;
-}
-
-.sidebar.open .icon .line:nth-child(3) {
-  transform: translateY(-50%) rotate(-45deg) translateX(-50%);
-}
 
 .nav-links {
   list-style: none;
