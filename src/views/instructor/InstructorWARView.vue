@@ -1,8 +1,5 @@
 <template>
    <div class="dropdowns">
-      <div class="section-dropdown-container">
-          <SectionDropdown :style="{ width: '50%' }"/>
-      </div>
       <div class="week-dropdown-container">
           <WeekDropdown :style="{ width: '50%' }"/>
       </div>

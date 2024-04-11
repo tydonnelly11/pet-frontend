@@ -2,7 +2,7 @@
   <div class="sidebar" :class="{ 'open': isSidebarOpen }">
     <div class="logo-details" @click="toggleSidebar">
       <!-- Hamburger icon created with divs -->
-      <div class="icon" :class="{ 'open': isSidebarOpen }">
+      <div class="hamburger" :class="{ 'open': isSidebarOpen }">
         <div class="line"></div>
         <div class="line"></div>
         <div class="line"></div>
@@ -10,29 +10,40 @@
     </div>
     <ul class="nav-links">
       <li class="nav-item">
-        <router-link @click="toggleSidebar" class="nav-link" to="/instructorhome/">
-          <font-awesome-icon v-if="isSidebarOpen" :icon="['fas', 'house']" @click="logout" class="mr-2" style="padding-left: 10px;"/>
-          <span class="link-text">Instructor Peer Evaluation</span>
+        <router-link @click="toggleSidebar" class="nav-link" to="/instructorhome/editteams">
+          <font-awesome-icon v-if="isSidebarOpen" :icon="['fas', 'circle-info']" @click="logout" class="mr-2" style="padding-left: 10px;"/>
+          <span class="link-text">Section Information</span>
         </router-link>
       </li>
+
+      <li class="nav-item">
+        <router-link @click="toggleSidebar" class="nav-link" to="/instructorhome/">
+          <font-awesome-icon v-if="isSidebarOpen" :icon="['fas', 'house']" @click="logout" class="mr-2" style="padding-left: 10px;"/>
+          <span class="link-text">Peer Evaluation</span>
+        </router-link>
+      </li>
+
       <li class="nav-item">
         <router-link @click="toggleSidebar" class="nav-link" to="/instructorhome/war">
           <font-awesome-icon v-if="isSidebarOpen" :icon="['fas', 'list-check']" @click="logout" class="mr-2" style="padding-left: 10px;"/>
-          <span class="link-text">Instructor War</span>
+          <span class="link-text">Weekly Activity Reports (WAR)</span>
         </router-link>
       </li>
+
       <li class="nav-item">
         <router-link @click="toggleSidebar" class="nav-link" to="/instructorhome/rubric">
           <font-awesome-icon v-if="isSidebarOpen" :icon="['fas', 'table-cells']" @click="logout" class="mr-2" style="padding-left: 10px;"/>
           <span class="link-text">Rubric</span>
         </router-link>
       </li>
+
       <li class="nav-item">
         <router-link @click="toggleSidebar" class="nav-link" to="/instructorhome/section">
-          <font-awesome-icon v-if="isSidebarOpen" :icon="['fas', 'section']" @click="logout" class="mr-2" style="padding-left: 10px;"/>
+          <font-awesome-icon v-if="isSidebarOpen" :icon="['fas', 'square-plus']" @click="logout" class="mr-2" style="padding-left: 10px;"/>
           <span class="link-text">Create a Section</span>
         </router-link>
       </li>
+
       <li class="nav-item">
         <router-link @click="toggleSidebar" class="nav-link" to="/instructorhome/showsection">
           <font-awesome-icon v-if="isSidebarOpen" :icon="['fas', 'magnifying-glass']" @click="logout" class="mr-2" style="padding-left: 10px;"/>
@@ -42,17 +53,11 @@
 
       <li class="nav-item">
         <router-link @click="toggleSidebar" class="nav-link" to="/instructorhome/manageassistant">
-          <font-awesome-icon v-if="isSidebarOpen" :icon="['fas', 'chalkboard-user']" @click="logout" class="mr-2" style="padding-left: 10px;"/>
+          <font-awesome-icon v-if="isSidebarOpen" :icon="['fas', 'users']" @click="logout" class="mr-2" style="padding-left: 10px;"/>
           <span class="link-text">View All Assistant Instructors</span>
         </router-link>
       </li>
 
-      <li class="nav-item">
-        <router-link @click="toggleSidebar" class="nav-link" to="/instructorhome/editteams">
-          <font-awesome-icon v-if="isSidebarOpen" :icon="['fas', 'circle-info']" @click="logout" class="mr-2" style="padding-left: 10px;"/>
-          <span class="link-text">Section Information</span>
-        </router-link>
-      </li>
       <li class="nav-item" style="margin-top: auto;">
         <router-link class="nav-link" to="/">
           <font-awesome-icon v-if="isSidebarOpen" :icon="['fas', 'sign-out-alt']" @click="logout" class="mr-2"
@@ -60,6 +65,7 @@
           <span @click="logout" class="link-text">Logout</span>
         </router-link>
       </li>
+
     </ul>
   </div>
 </template>
@@ -165,8 +171,7 @@ body {
 
 /* Adjustments for X icon */
 .sidebar.open .icon .line:nth-child(1) {
-  transform: translateY(-50%) rotate(-45deg);
-  top: 0;
+  transform: translateY(-50%) rotate(45deg) translateX(-50%);
 }
 
 .sidebar.open .icon .line:nth-child(2) {
@@ -174,8 +179,7 @@ body {
 }
 
 .sidebar.open .icon .line:nth-child(3) {
-  transform: translateY(-50%) rotate(45deg);
-  bottom: 0;
+  transform: translateY(-50%) rotate(-45deg) translateX(-50%);
 }
 
 .nav-links {
@@ -194,6 +198,7 @@ body {
   margin: 0;
   display: flex;
   align-items: center;
+  height: 60px; /* Set a fixed height for each navbar item */
 }
 
 
@@ -206,6 +211,8 @@ body {
   transition: background-color 0.3s;
   font-weight: bold;
   font-size: 20px;
+  width: 100%; /* Ensure links take up the full width */
+  padding: 0 20px; /* Adjust padding as needed */
 }
 
 .nav-link:hover {
@@ -236,4 +243,34 @@ body {
   padding-right: 100px;
   /* Adjust this value as needed */
 }
+
+.hamburger {
+  width: 30px;
+  height: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.line {
+  width: 30px;
+  height: 4px;
+  background: #fff;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Adjustments for X icon */
+.hamburger.open .line:nth-child(1) {
+  transform: translateY(9.7px) rotate(45deg);
+}
+
+.hamburger.open .line:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.open .line:nth-child(3) {
+  transform: translateY(-9.7px) rotate(-45deg);
+}
+
 </style>
