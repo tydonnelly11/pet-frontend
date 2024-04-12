@@ -30,11 +30,12 @@
          v-if="!isEditTaskTrue && !isPastWeek && !isFutureWeek"
          @click="submitWarEntry"
       >
-         Submit Task
+         Submit War for Week
       </button>
-      <p v-if="hasSubmited" class="submit-msg">
+      <p v-if="hasSubmited" class="popup-overlay">
          War Submitted for {{ storeWeek.selectedWeek.start }} to
          {{ storeWeek.selectedWeek.end }}
+         <button @click="hasSubmited = false">Close</button>
       </p>
    </div>
 </template>
@@ -106,7 +107,7 @@ export default {
          const auth = localStorage.getItem('auth')
 
          apiClient
-            .post('${this.$baseURL}/api/v1/activity/submit', this.newTasks, {
+            .post(`${this.$baseURL}/api/v1/activity/submit`, this.newTasks, {
                headers: { Authorization: `Bearer ${auth}` },
             })
             .then((response) => {
@@ -122,6 +123,10 @@ export default {
       addTask(task) {
          task.studentId = storeUser.userID
          task.weekId = storeWeek.selectedWeekId
+         if(task.status == '' || task.actualHours == '' || task.plannedTask == '' || task.description == '' || task.plannedHours == '' || task.taskCategories == ''){
+            alert('Please fill in all fields')
+            return
+         }
          this.newTasks.push(task)
          this.studentTasks.tasks.push(task)
       },
@@ -223,8 +228,25 @@ export default {
    border: 2px solid black;
 }
 .button {
-   margin-top: 150px;
+   margin-top: 5%;
    border-radius: 12px;
+}
+
+.popup-overlay{
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding-left: 20%;
+    padding-right: 20%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.90);
+    z-index: 1000;
+    flex-direction: column;
 }
 
 /* Media query for smaller screens */

@@ -61,6 +61,7 @@
       </div>
    </form>
    <button @click="$emit('editTaskComplete', editTask)">Edit</button>
+   
 </template>
 
 <script>
@@ -93,30 +94,64 @@ export default {
 
 <style scoped>
 .war-form {
-   display: flex;
-   flex-direction: column;
-   width: 100%;
-   align-items: center;
-   justify-content: space-between;
-   height: 45%;
-}
-
-.input-field {
-   border: 1px solid #ccc; /* Border style */
-   border-radius: 5px;
-   width: 250px;
-}
-.text-area {
-   border: 1px solid #ccc; /* Border style */
-   border-radius: 5px;
-   width: 250px;
-   height: 80px;
+   display: grid;
+   grid-template-columns: 1fr 1fr;
+   gap: 20px;
+   justify-content: center;
+   height: 60%;
 }
 
 .task {
    display: flex;
-   flex-direction: row;
-   justify-content: space-between;
-   width: 75%;
+   flex-direction: column;
+   margin-bottom: 20px;
+}
+
+.label {
+   margin-bottom: 5px;
+   width: 120px;
+   text-align: right;
+}
+
+.input-field,
+.text-area {
+   border: 1px solid #ccc;
+   border-radius: 8px;
+   padding: 8px;
+   background-color: rgba(255, 255, 255, 0.7);
+   margin-top: 5px;
+   color: black;
+}
+
+.text-area {
+   height: 80px;
+   /* Disable textarea resizing else its messing with everything*/
+   resize: none;
+}
+
+.input-field::placeholder,
+.text-area::placeholder {
+   text-align: center;
+}
+
+.add-button,
+.done-button {
+   width: 100%;
+   padding: 8px;
+   border: none;
+   border-radius: 12px;
+   color: white;
+   cursor: pointer;
+}
+
+button {
+   /*margin-top: 15px;*/
+   border-radius: 12px;
+}
+
+@media only screen and (max-width: 700px) {
+   .war-form {
+      grid-template-columns: 1fr;
+   }
 }
 </style>

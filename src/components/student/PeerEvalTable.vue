@@ -5,8 +5,15 @@
             <tr>
                <th scope="col">Team member</th>
                <th scope="col" v-for="item in rubric">
-                  <p class="crit-title">Criteria: {{ item.criterionName }}</p>
-                  <p class="crit-desc">Description: {{ item.criterionDesc }}</p>
+                  <p class="crit-title">{{ item.criterionName }}</p>
+                  <el-tooltip
+                     class="box-item"
+                     effect="dark"
+                     :content="item.criterionDesc"
+                     placement="bottom"
+                     >
+                     <el-button>Description</el-button>
+                     </el-tooltip>
                </th>
                <th scope="col">Private Comments</th>
                <th scope="col">Public Comments</th>
@@ -69,6 +76,12 @@
       </button>
    </form>
 
+   <div v-if="this.isLoading" class="popup-overlay">
+      <div class="loading">
+         <img src="/img/loading-gif.gif">
+      </div>
+   </div>
+
    <div v-if="this.submissionStatus == 200" class="popup-overlay">
       <div class="success">
          <p>Submitted!</p>
@@ -82,6 +95,8 @@ import apiClient from '@/axios-setup.js'
 import { storeUser } from '@/stores/store.js'
 import { storeWeek } from '@/stores/storeWeek.js'
 import { storeTeam } from '@/stores/storeTeam.js'
+import { ElButton, ElTooltip } from 'element-plus'
+
 export default {
    name: 'PeerEvalTable',
    props: {
@@ -89,6 +104,10 @@ export default {
       user: Object,
       isPastWeek: Boolean,
       rubricProp: Array,
+   },
+   components: {
+      // { ElButton },
+      // { ElTooltip },
    },
 
    data() {
@@ -98,6 +117,7 @@ export default {
          submissionStatus: 0,
          storeUser,
          isLoading: false,
+         showDesc: false,
       }
    },
    watch: {
@@ -165,7 +185,7 @@ table {
    left: 5%;
 }
 .comment {
-   height: 150px;
+   height: 75px;
    width: 150px;
 }
 th,
@@ -191,6 +211,10 @@ td {
 }
 form {
    margin-top: 2.5%;
+}
+
+p{
+   margin-block-end: 0;
 }
 
 button {

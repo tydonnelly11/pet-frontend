@@ -129,7 +129,6 @@ export default {
    grid-template-columns: 1fr 1fr;
    gap: 20px;
    justify-content: center;
-   height: 45%;
 }
 
 .task {

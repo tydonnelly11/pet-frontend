@@ -7,7 +7,7 @@
                :displayedWeeks="storeWeek.weeksForSemester"
                :selectWeek="storeWeek.currentWeekId"
                :currentWeekProp="storeWeek.currentWeek"
-               :style="'width: 100%;'"
+               :style="'width: 80%;'"
             >
             </WeekDropdown>
             <div class="profile">
@@ -93,7 +93,9 @@ export default {
 }
 .profile {
    position: relative;
-   right: 2.5%;
-   width: 20%;
+   top: 25px;
+   font-size: 1.25em;
+   right: -10%;
+   width: 30%;
 }
 </style>
