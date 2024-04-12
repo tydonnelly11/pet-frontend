@@ -66,6 +66,8 @@
          required class="team-name-input"/>
       </div>
       <button type="submit" class="small-button" style="max-width: 250px; margin-bottom: 20px;" @click="createTeams()">Create Team</button>
+      <button type="submit" class="small-button" style="max-width: 250px; margin-bottom: 20px;" @click="selectInviteTeam = false">Cancel</button>
+
       </div>
 </div>
    <div v-if="hasCreatedTeams" class="popup-overlay">
@@ -87,7 +89,7 @@
     
 
 
-   <div class="centered-text">
+   <div v-if="(students.length > 0)" class="centered-text">
   To add students to a team, please select a team, then select all the students you wish to add to that team and click the save button.
     </div>
 
@@ -104,35 +106,35 @@
       <div class="team-card" v-for="team in teams" :key="team.id">
         <div class="team-name-checkbox">   
             <div>
-                <h3>
-                    {{ team.name }}
-                </h3>
+                <button class="view-team-btn" @click="openTeam(team.name, team.id, team.students)">
+                   <h3> {{ team.name }} </h3>
+                </button>
             </div>
-            <input type="checkbox" 
+            <input type="checkbox"
+            class="team-checkbox"
             :value="team.id" 
             :checked="team.id === selectedTeamId" 
             @change="selectTeam(team)"
             >
         </div>
-        <button class="view-team-btn" v-if="team.students.length > 0" 
+        <!-- <button class="view-team-btn" v-if="team.students.length > 0" 
             @click="openTeam(team.name, team.id, team.students)">
             View Team
-        </button>
-        <div v-else>
+        </button> -->
+        <div v-if="team.students.length  == 0">
             No students assigned 
         </div>
 
-        <div v-for="student in team.students" :key="student.id">
-          <div style="margin-top: 20px;">
-            <h4>
-                {{ student.firstName }} {{ student.lastName }}
-            </h4>
-          </div>
+        <div :style="'width : 100%;'" class='student-in-team-container' v-for="student in team.students" :key="student.id">
+          <!-- <div style="margin-top: 20px;">
+          </div> -->
           <button class="view-team-btn" 
           v-if="student.teamId" 
-          @click="openWARAndEval(student, team)">View Student</button>
+          @click="openWARAndEval(student, team)">{{ student.firstName }} {{ student.lastName }}</button>
+          <p class='view-team-btn' v-else>{{ student.firstName }} {{ student.lastName }}</p>
           <button class="remove-btn"
-          @click="removeStudentOnTeam(student, team)">Remove</button>
+          :style="'width: 50px;'"
+          @click="removeStudentOnTeam(student, team)">X</button>
         </div>
         <div style="margin-top: 20px;">
             <h2>Assistant Instructor</h2>
@@ -155,13 +157,13 @@
       </div>
     </div>
   <!-- Students Section -->
-        <div v-if="students.length > 0" class="teams-container">
+        <div v-if="students.length > 0" class="students-container">
             <h2 class="teams-header">Students</h2>
             <div class="student-entry" v-for="student in students" :key="student.id">
-                <div class="team-name-checkbox">
+                <div class="student-name-checkbox">
                     <input style="margin-bottom: 5px;" 
                     type="checkbox" 
-                    class="student-checkbox" 
+                    class="team-checkbox" 
                     :value="student.id" 
                     @change="toggleStudent(student)">
                     <label class="student-name">
@@ -211,7 +213,7 @@
     <button type="submit" class="small-button" style="max-width: 400px; margin-top: 20px;" @click="saveAllTeams()" >Save All Teams</button>
     <div v-if="hasSavedTeam" class="popup-overlay">
       <div class="success">
-         <p>Team Successfully Saved!</p>
+         <p>Teams successfully saved!</p>
          <button @click="hasSavedTeam = false">Close</button>
       </div>
     </div>
@@ -288,8 +290,7 @@ export default {
             students: [],
 
         },
-        
-
+        newSectionName: storeSection.selectedSection.name,
         selectInviteTeam: false,
         studentIDToDelete : null,
         selectedTeamId: null,
@@ -556,30 +557,30 @@ export default {
         
     },
     selectTeam(teamProp) {
-        
-        // var team  = this.teams.find(item => item.id === this.selectedTeamId)
-        if(this.selectedStudent.length === 0){
-            this.selectedTeamId = teamProp.id
-            this.selectedStudent = [];
-
-        }
-        else{
-            for(const student of this.selectedStudent){
-                teamProp.students.push(student)
-                this.students = this.students.filter(stu => student.id !== stu.id)
-            }
-            this.selectedStudent = [];
-        }
-        if (this.selectedTeamId === team.id) {
-        // If the team is already selected, deselect it
+        if (this.selectedTeamId === teamProp.id) {
             this.selectedTeamId = null;
         } else {
         // Otherwise, select the new team and deselect others
-            this.selectedTeamId = team.id;
+            this.selectedTeamId = teamProp.id;
+            if(this.selectedStudent.length === 0){
+                this.selectedTeamId = teamProp.id
+                this.selectedStudent = [];
+
+            }
+            else{
+                for(const student of this.selectedStudent){
+                    teamProp.students.push(student)
+                    this.students = this.students.filter(stu => student.id !== stu.id)
+                }
+                this.selectedStudent = [];
+            }
             // this.updatedTeam.id = team.id;
             // this.updatedTeam.name = team.name;
             // this.updatedTeam.students = team.students;
         }
+        
+        // var team  = this.teams.find(item => item.id === this.selectedTeamId)
+       
         // }
           
       },
@@ -587,8 +588,10 @@ export default {
       // Method to add/remove a student from the updatedTeam.students array
       toggleStudent(student) {
       if(this.selectedTeamId === null){
-        console.log(this.selectedTeamId)
-          this.selectedStudent.push(student)
+        if(!(this.selectedStudent.includes(student))){
+            this.selectedStudent.push(student)
+        }
+       
           
       }
       else{
@@ -761,6 +764,12 @@ export default {
     align-items: center;
 }
 
+.student-in-team-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .conformation-popup{
     display: flex;
     flex-direction: column;
@@ -863,7 +872,8 @@ export default {
   border-radius: 20px;
   margin-top: 5px;
   cursor: pointer;
-  max-width: 200px;
+  width: 250px;
+  max-width: 400px;
   margin-right: 5px;
 }
 
@@ -901,13 +911,16 @@ export default {
   /* Rest of the styles */
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   padding: 20px;
+  
   background-color: #EDEDED;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
+
 
 .students-header {
   text-align: center;
@@ -921,6 +934,7 @@ export default {
   align-items: center; /* Vertical alignment */
   justify-content: space-between; /* Space between name and checkbox */
   padding: 10px 0; /* Padding for each entry */
+  width: 100%;
   border-bottom: 1px solid #EEE; /* Separator between entries */
 }
 
@@ -942,11 +956,37 @@ export default {
   }
 }
 
+.team-checkbox{
+width: 50px; /* New width */
+  height: 20px; /* New height */
+}
+
 .team-name-checkbox {
   display: flex; /* This will place child elements in a row */
   align-items: center; /* This will vertically center the items in the container */
   justify-content: center;
 }
+
+.student-name-checkbox {
+  display: flex; /* This will place child elements in a row */
+  align-items: flex-start; /* This will vertically center the items in the container */
+  justify-content: center;
+  width: 100%;
+}
+
+.student-name-checkbox > input{
+    flex-basis: 10%;
+  
+}
+.student-name-checkbox > label{
+    flex-basis: 70%;
+  
+}
+.student-name-checkbox > button{
+    flex-basis: 20%;
+  
+}
+
 .team-name-checkbox > *:not(:last-child) {
   margin-right: 10px; /* Add right margin to all child elements except the last one */
 }

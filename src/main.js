@@ -2,6 +2,9 @@ import { createApp } from 'vue'
 import './style.css'
 import App from './App.vue'
 import router from './router/router'
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
+
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
@@ -61,5 +64,6 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 // Add Font Awesome icons to the library
 library.add(fas)
 
+app.use(ElementPlus)
 // Add Font Awesome component globally
 app.component('font-awesome-icon', FontAwesomeIcon)

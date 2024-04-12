@@ -69,8 +69,9 @@ export default {
 
 .section-tile {
    /* ... other styles ... */
+   width: auto;
    flex: 0 0 auto; /* Increased flex-basis */
-   max-width: 50%; /* Increased max-width */
+   max-width: 100%; /* Increased max-width */
    max-height: 50%;
    padding: 20px;
    box-sizing: border-box;
@@ -86,6 +87,7 @@ export default {
    background-color: #4e2a84;
    color: aliceblue;
    border-radius: 4px;
+   flex-wrap: nowrap;
 }
 
 /* Hover effect */
