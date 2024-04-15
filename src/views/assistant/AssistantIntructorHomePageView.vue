@@ -12,6 +12,7 @@ import AssistantInstructorNavbarSide from '../../components/AssistantInstructorN
 import WeekDropdown from '../../components/WeekDropdown.vue'
 import { storeWeek } from '@/stores/storeWeek.js'
 import { storeSection } from '../../stores/storeSection'
+import apiClient from '../../axios-setup.js'
 </script>
 
 <script>
