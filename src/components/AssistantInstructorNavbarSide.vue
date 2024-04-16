@@ -10,8 +10,14 @@
       </div>
       <ul class="nav-links">
          <li class="nav-item">
-            <router-link @click="toggleSidebar" class="nav-link" to="/assistantinstructorhome/">
+            <router-link @click="toggleSidebar" class="nav-link" to="/assistantinstructorhome/showsection">
                <font-awesome-icon v-if="isSidebarOpen" :icon="['fas', 'house']" @click="logout" class="mr-2" style="padding-left: 10px;"/>
+               <span class="link-text">Homepage</span>
+            </router-link>
+          </li>
+         <li class="nav-item">
+            <router-link @click="toggleSidebar" class="nav-link" to="/assistantinstructorhome/">
+               <font-awesome-icon v-if="isSidebarOpen" :icon="['fas', 'fa-table']" @click="logout" class="mr-2" style="padding-left: 10px;"/>
                <span class="link-text">Peer Evaluation</span>
             </router-link>
          </li>
@@ -21,19 +27,14 @@
                <span class="link-text">Weekly Activity Reports (WAR)</span>
             </router-link>
          </li>
-         <li class="nav-item">
+         <!-- <li class="nav-item">
             <router-link @click="toggleSidebar" class="nav-link" to="/assistantinstructorhome/rubric">
                <font-awesome-icon v-if="isSidebarOpen" :icon="['fas', 'table-cells']" @click="logout" class="mr-2" style="padding-left: 10px;"/>
                <span class="link-text">Rubric</span>
             </router-link>
-         </li>
+         </li> -->
 
-         <li class="nav-item">
-            <router-link @click="toggleSidebar" class="nav-link" to="/assistantinstructorhome/showsection">
-               <font-awesome-icon v-if="isSidebarOpen" :icon="['fas', 'magnifying-glass']" @click="logout" class="mr-2" style="padding-left: 10px;"/>
-               <span class="link-text">View All Sections</span>
-            </router-link>
-          </li>
+        
          
           <!-- <li class="nav-item">
           <router-link class="nav-link" to="/instructorhome/section">
