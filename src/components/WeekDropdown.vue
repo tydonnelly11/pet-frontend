@@ -69,7 +69,7 @@ export default {
          }
       },
       isCurrentWeek(weekId) {
-         return weekId == storeWeek.currentWeek.id
+         return weekId === storeWeek.currentWeek.id
       },
       setPrevWeek() {
          var prevWeek =

@@ -24,6 +24,8 @@ import AssistantInstructorRubricView from '../views/assistant/AssistantInstructo
 import AssistantInstructorWARView from '../views/assistant/AssistantIntructorWARView.vue'
 import AssistantInstructorPeerEvalView from '../views/assistant/AssistantInstructorPeerEvalView.vue'
 import ManageAssistantInstructorView from '../views/instructor/ManageAssistantInstructorView.vue'
+import AssistantInstructorShowSectionView from '../views/assistant/AssistantInstructorShowSectionView.vue'
+import AssistantInstructorShowTeamView from '../views/assistant/AssistantInstructorShowTeamView.vue'
 
 const routes = [
    {
@@ -160,6 +162,16 @@ const routes = [
             name: 'AssistantInstructorWar',
             component: AssistantInstructorWARView,
          },
+         {
+            path: 'showsection',
+            name: 'AssistantInstructorShowSection',
+            component: AssistantInstructorShowSectionView,
+         },
+         {
+            path: 'showteam',
+            name: 'AssistantInstructorShowTeam',
+            component: AssistantInstructorShowTeamView,
+         }
       ],
    },
 ]

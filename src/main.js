@@ -49,7 +49,7 @@ const app = createApp(App)
 
 // useful for local testing
 app.config.globalProperties.$baseURL =
-   window.location.hostname === 'localhost'
+   window.location.protocol === 'http:'
       ? 'http://localhost:80'
       : 'https://www.peerevaltool.xyz'
 app.use(router).mount('#app')

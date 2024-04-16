@@ -64,7 +64,6 @@ export default {
    methods: {
       getRubric() {
          const auth = localStorage.getItem('auth')
-
          apiClient
             .get(
                `${this.$baseURL}/api/v1/section/getRubric/${storeSection.selectedSectionId}`,
