@@ -1,22 +1,16 @@
 <template>
    <div class="dropdowns">
-      <SectionDropdown :style="'width:50%'" />
       <WeekDropdown :style="'width:50%'" />
    </div>
 
    <div class="container">
       <div class="grid-container">
-         <button
-            v-for="team in teams"
-            :class="{
-               'selected-item': selectedTeam && team.id === selectedTeam.id,
-            }"
-            :key="team.id"
-            @click="getTeamWar(team)"
-         >
-            <p>{{ team.name }}</p>
+         <button v-for="team in this.teams" :class="{ 'selected-item': selectedTeam && team.id === selectedTeam.id }"
+            :key="team.id" @click="getTeamWar(team)" type="button" class="team-tile">
+            <p class="team">{{ team.name }}</p>
          </button>
       </div>
+
    </div>
 
    <WarTeamTable :teamProp="teamFormatted" v-if="hasSelectedTeam" />
@@ -153,17 +147,52 @@ export default {
 </script>
 
 <style scoped>
-.dropdowns {
+.team {
+   text-align: center;
+   margin: 0;
+}
+
+.team-tile .team {
+   color: white;
+}
+
+.button {
    display: flex;
-   flex-direction: row;
-   justify-content: space-between;
+   justify-content: center;
+   align-items: center;
+   padding: 10px 20px;
+   white-space: nowrap;
+   border-radius: 12px;
+   cursor: pointer;
+   min-width: 100px;
+   max-width: 200px;
+   margin: 5px;
+}
+
+.dropdowns {
+   margin-top: 20px;
+   display: flex;
+   flex-direction: column;
+   justify-content: center; /* Center vertically */
+   align-items: center; /* Center horizontally */
    margin-bottom: 20px;
 }
+
+.section-dropdown-container,
+.week-dropdown-container {
+   display: flex;
+   justify-content: center; /* Center horizontally */
+   align-items: center; /* Center vertically */
+   width: 100%; /* Ensure the containers take up full width */
+}
+
 .grid-container {
    display: grid;
    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
    gap: 10px;
+   padding-bottom: 15px;
 }
+
 .grid-item {
    padding: 10px;
    height: 100px;
@@ -172,7 +201,37 @@ export default {
    border: 1px solid #ccc;
    cursor: pointer;
 }
+
 .selected-item {
-   border: 4px solid red; /* Adjust the color and border size as needed */
+   border: 4px solid red;
+   /* Adjust the color and border size as needed */
 }
+
+.team-tile {
+   /* ... other styles ... */
+   flex: 0 0 auto;  /* Increased flex-basis */
+   max-width: 100%; /* Increased max-width */
+   max-height: 50%;
+   padding: 20px;
+   box-sizing: border-box;
+   word-wrap: break-word;
+   overflow-wrap: break-word;
+   font-size: 1em;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   min-height: 100px;
+   background-color: #4E2A84;
+   color: aliceblue;
+   border-radius: 4px;
+ }
+ 
+ /* Hover effect */
+ .team-tile:hover {
+   transform: translateY(-5px); /* lift tile up */
+   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* shadow effect */
+   cursor: pointer;
+ }
 </style>

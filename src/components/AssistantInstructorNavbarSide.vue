@@ -42,12 +42,12 @@
         </li>  -->
        
         
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <router-link class="nav-link" to="/assistantinstructorhome/editteams">
             <font-awesome-icon v-if="isSidebarOpen" :icon="['fas', 'circle-info']" @click="logout" class="mr-2" style="padding-left: 10px;"/>
             <span class="link-text">Section Information</span>
           </router-link>
-        </li>
+        </li> -->
 
          <li class="nav-item" style="margin-top: auto;">
             <router-link class="nav-link" to="/">

@@ -1,5 +1,5 @@
 <template>
-   <div class="home-container">
+   <div class="home-container" style="margin-top: 20px">
       <AssistantInstructorNavbarSide @update:sidebarState="toggleSidebar" />
       <div class="main-item" :class="{ shifted: isSidebarOpen }">
          <router-view> </router-view>
