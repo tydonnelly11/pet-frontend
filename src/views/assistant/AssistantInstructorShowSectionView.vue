@@ -103,19 +103,16 @@
     cursor: pointer;
  }
  
- @media (min-width: 600px) {
-    .sections-container {
-       justify-content: space-between;
-    }
- }
- 
- /* Responsive adjustments for smaller screens */
- @media (max-width: 600px) {
-    .section-tile {
-       flex-basis: calc(50% - 10px); /* adjust for smaller screens */
-       max-width: calc(50% - 10px); /* adjust for smaller screens */
-    }
- }
+ @media (max-width: 768px) {
+   .sections-container {
+       margin-left: 90px;
+   }
+   .section-tile {
+       flex-basis: calc(50% - 10px); /* Adjust for smaller screens */
+       max-width: calc(50% - 10px); /* Adjust for smaller screens */
+       margin-bottom: 20px; /* Add some bottom margin for spacing */
+   }
+}
  .section-tile h2 {
     font-size: 1.2em; /* Adjust the font size as needed */
     white-space: nowrap; /* Keep the text on one line */
@@ -125,5 +122,6 @@
     margin: 0 0 10px; /* Adjust margins as needed */
     word-wrap: break-word; /* Break the word to the next line if it's too long */
  }
+ 
  </style>
  

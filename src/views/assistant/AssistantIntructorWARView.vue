@@ -37,112 +37,111 @@ export default {
          teams: [],
          selectedTeam: null,
          hasSelectedTeam: false,
-         teamFormatted: [],
-         assistantTeamId: null,
+         teamFormated: [],
+         storeWeek
       }
    },
    methods: {
-      getTeams() {
-         this.isLoading = true
-         this.teams = []
-         const auth = localStorage.getItem('auth')
-         apiClient
-            .get(
-               `${this.$baseURL}/api/v1/section/getAllTeams/${storeSection.selectedSectionId}`,
-               {
-                  headers: { Authorization: `Bearer ${auth}` },
-               }
-            )
-            .then((response) => {
-               if (storeUser.role === 'assistant_instructor') {
-                  this.assistantTeamId = storeUser.assignedTeamId
-                  this.teams = response.data.data.filter(
-                     (team) => team.id === this.assistantTeamId
-                  )
-               } else {
-                  this.teams = response.data.data
-               }
-               this.hasLoaded = true
-            })
-            .catch((error) => {
-               console.log(error)
-               // Handle error
-            })
-      },
-      getTeamWar(team) {
-         if (storeUser.role === 'user') {
-            if (team.id !== this.assistantTeamId) {
-               console.log("You are not authorized to view this team's WAR.")
-               return
-            }
-         }
-         const auth = localStorage.getItem('auth')
-         apiClient
-            .get(`${this.$baseURL}/api/v1/war/get`, {
-               params: {
-                  teamId: team.id,
-                  weekId: storeWeek.selectedWeekId,
-               },
-               headers: { Authorization: `Bearer ${auth}` },
-            })
-            .then((response) => {
-               this.isLoading = false
-               console.log(response.data.data.activities)
-               this.formatActivities(response.data.data.activities)
+    getTeamWar(team){
+        this.selectedTeam = team
+        this.hasSelectedTeam = false;
+        const auth = localStorage.getItem('auth')
+
+        apiClient.get(`${this.$baseURL}/api/v1/war/get`,
+         {
+            params: {
+               teamId: team.id,
+               weekId: storeWeek.selectedWeekId,
+            },
+            headers: { 'Authorization': `Bearer ${auth}` }
+         }).then(response => {
+            this.isLoading = false
+            
+            console.log(response.data.data.activities)
+            this.formatActivities(response.data.data.activities)
+            this.hasSelectedTeam = true
+         }).catch(error => {
+            this.isLoading = false
+            console.log(error.response.data.code)
+            if(error.response.data.code == 500){
+               this.formatActivities([])
                this.hasSelectedTeam = true
-            })
-            .catch((error) => {
+            }}).catch(error => {
                this.isLoading = false
                console.log(error.response.data.code)
-               if (error.response.data.code === 500) {
+               if (error.response.data.code == 500) {
                   this.formatActivities([])
                   this.hasSelectedTeam = true
                }
             })
+
       },
       formatActivities(activities) {
-         const team = []
+         const team = [];
+
          for (const item of this.selectedTeam.students) {
             let student = {
                name: item.firstName + item.lastName,
                tasks: [],
                id: item.id,
+               weekStart: storeWeek.selectedWeek.start,
+               weekEnd: storeWeek.selectedWeek.end
             }
+
             for (const activity of activities) {
-               if (activity.studentId === student.id) {
+               if (activity.studentId == student.id) {
+
                   student.tasks.push(activity)
+               }
+               else {
+                  continue;
                }
             }
             team.push(student)
          }
-         this.teamFormatted = team
-         console.log(this.team)
+         this.teamFormated = team
+      },
+      getTeams() {
+         this.isLoading = true
+         this.teams = []
+         
+         apiClient.get(`${this.$baseURL}/api/v1/section/getAllTeams/${storeSection.selectedSectionId}`,)
+        .then(response => {
+            this.teams = response.data.data
+            this.hasLoaded = true
+
+        })
+        .catch(error => {
+            console.log(error)
+            if(error.response.data.code == 500){
+            }})
       },
    },
    computed: {
       watchedSectionId() {
-         return storeSection.selectedSectionId
+         return storeSection.selectedSectionId;
       },
       watchedWeekId() {
-         return storeWeek.selectedWeekId
-      },
+         return storeWeek.selectedWeekId;
+      }
    },
    watch: {
       watchedSectionId(newVal, oldVal) {
-         console.log(`sectionID changed from ${oldVal} to ${newVal}`)
-         this.getTeams()
+         this.getTeams();
          this.hasSelectedTeam = false
       },
       watchedWeekId(newVal, oldVal) {
-         console.log(`weekID changed from ${oldVal} to ${newVal}`)
          if (this.hasSelectedTeam) {
-            this.getTeamWar(this.selectedTeam)
+            this.getTeamWar(this.selectedTeam);
+            // this.hasSelectedTeam = false
          }
-      },
+         // this.getTeamWar(this.selectedTeam);
+         // this.hasSelectedTeam = false
+      }
    },
    created() {
       this.getTeams()
-   },
+   }
 }
 </script>
 
