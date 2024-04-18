@@ -219,31 +219,43 @@ export default {
                console.log(response)
 
                this.isLoading = false
+               storeUser.updateLoginStatus(
+                  response.data.data.userInfo.id,
+                  true
+               )
                localStorage.setItem('auth', response.data.data.token)
                let authToken = response.data.data.token
                localStorage.setItem('logginstatus', true)
                setAuthHeader(authToken)
-               storeUser.updateLoginStatus(response.data.data.userInfo.id, true)
+               if (response.data.data.userInfo.assignedSections.length === 0) {
+                  storeWeek.setWeekList([])
+               } else {
+                  for (const section of response.data.data.userInfo
+                     .assignedSections) {
+                     if (section.isCurrent === true) {
+                        this.getWeeksForSection(section.id)
 
-               storeUser.setTeamId(response.data.data.userInfo.teamId)
+                        storeSection.setSelectedSection(section)
+                        storeSection.activeSection = section
+                     }
+                  }
+                  storeSection.setSections(
+                     response.data.data.userInfo.assignedSections
+                  )
+               }
+
                storeUser.setName(
                   response.data.data.userInfo.firstName,
                   response.data.data.userInfo.lastName
                )
-               storeUser.setSectionId(response.data.data.userInfo.sectionId)
-               storeWeek.setWeekList(response.data.data.userInfo.weeks)
-               if (storeUser.teamId == null) {
-                  this.$router.push('/waitingroom')
-               } else {
-                  this.$router.push('/assistantinstructorhome')
-               }
-
+               console.log(response.data.data.userInfo.firstName)
                localStorage.setItem('storeUser', JSON.stringify(storeUser))
                localStorage.setItem(
                   'storeSection',
                   JSON.stringify(storeSection)
                )
                localStorage.setItem('storeWeek', JSON.stringify(storeWeek))
+               this.$router.push('/assistantinstructorhome/showsection')
             })
       },
 

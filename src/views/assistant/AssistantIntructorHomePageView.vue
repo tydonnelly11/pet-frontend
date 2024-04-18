@@ -1,5 +1,5 @@
 <template>
-   <div class="home-container">
+   <div class="home-container" style="margin-top: 20px">
       <AssistantInstructorNavbarSide @update:sidebarState="toggleSidebar" />
       <div class="main-item" :class="{ shifted: isSidebarOpen }">
          <router-view> </router-view>
@@ -12,6 +12,7 @@ import AssistantInstructorNavbarSide from '../../components/AssistantInstructorN
 import WeekDropdown from '../../components/WeekDropdown.vue'
 import { storeWeek } from '@/stores/storeWeek.js'
 import { storeSection } from '../../stores/storeSection'
+import apiClient from '../../axios-setup.js'
 </script>
 
 <script>

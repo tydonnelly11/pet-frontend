@@ -2,7 +2,7 @@
    <div class="sidebar" :class="{ open: isSidebarOpen }">
       <div class="logo-details" @click="toggleSidebar">
          <!-- Hamburger icon created with divs -->
-         <div class="icon" :class="{ open: isSidebarOpen }">
+         <div class="hamburger" :class="{ 'open': isSidebarOpen }">
             <div class="line"></div>
             <div class="line"></div>
             <div class="line"></div>
@@ -10,38 +10,53 @@
       </div>
       <ul class="nav-links">
          <li class="nav-item">
-            <router-link class="nav-link" to="/assistantinstructorhome/">
-               <span class="link-text">Instructor Peer Evaluation</span>
+            <router-link @click="toggleSidebar" class="nav-link" to="/assistantinstructorhome/showsection">
+               <font-awesome-icon v-if="isSidebarOpen" :icon="['fas', 'house']" @click="logout" class="mr-2"
+                  style="padding-left: 10px;" />
+               <span class="link-text">Homepage</span>
             </router-link>
          </li>
          <li class="nav-item">
-            <router-link class="nav-link" to="/assistantinstructorhome/war">
-               <span class="link-text">Instructor War</span>
+            <router-link @click="toggleSidebar" class="nav-link" to="/assistantinstructorhome/">
+               <font-awesome-icon v-if="isSidebarOpen" :icon="['fas', 'fa-table']" @click="logout" class="mr-2"
+                  style="padding-left: 10px;" />
+               <span class="link-text">Peer Evaluation</span>
             </router-link>
          </li>
          <li class="nav-item">
-            <router-link class="nav-link" to="/assistantinstructorhome/rubric">
+            <router-link @click="toggleSidebar" class="nav-link" to="/assistantinstructorhome/war">
+               <font-awesome-icon v-if="isSidebarOpen" :icon="['fas', 'list-check']" @click="logout" class="mr-2"
+                  style="padding-left: 10px;" />
+               <span class="link-text">Weekly Activity Reports (WAR)</span>
+            </router-link>
+         </li>
+         <!-- <li class="nav-item">
+            <router-link @click="toggleSidebar" class="nav-link" to="/assistantinstructorhome/rubric">
+               <font-awesome-icon v-if="isSidebarOpen" :icon="['fas', 'table-cells']" @click="logout" class="mr-2" style="padding-left: 10px;"/>
                <span class="link-text">Rubric</span>
             </router-link>
-         </li>
+         </li> -->
+
+
+
          <!-- <li class="nav-item">
           <router-link class="nav-link" to="/instructorhome/section">
             <span class="link-text">Section</span>
           </router-link>
-        </li>
-        <li class="nav-item">
-          <router-link class="nav-link" to="/instructorhome/showsection">
-            <span class="link-text">View All Sections</span>
-          </router-link>
-        </li>
-        
-        <li class="nav-item">
-          <router-link class="nav-link" to="/instructorhome/editteams">
+        </li>  -->
+
+
+         <!-- <li class="nav-item">
+          <router-link class="nav-link" to="/assistantinstructorhome/editteams">
+            <font-awesome-icon v-if="isSidebarOpen" :icon="['fas', 'circle-info']" @click="logout" class="mr-2" style="padding-left: 10px;"/>
             <span class="link-text">Section Information</span>
           </router-link>
         </li> -->
-         <li class="nav-item">
+
+         <li class="nav-item" style="margin-top: auto;">
             <router-link class="nav-link" to="/">
+               <font-awesome-icon v-if="isSidebarOpen" :icon="['fas', 'sign-out-alt']" @click="logout" class="mr-2"
+                  style="padding-left: 10px;" />
                <span @click="logout" class="link-text">Logout</span>
             </router-link>
          </li>
@@ -50,6 +65,8 @@
 </template>
 
 <script>
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { storeSection } from '../stores/storeSection'
 
 export default {
@@ -81,6 +98,7 @@ export default {
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
 
+
 *,
 *::before,
 *::after {
@@ -103,14 +121,15 @@ body {
    top: 0;
    height: 100vh;
    width: 78px;
-   background: #11101d;
-   transition: width 0.5s;
+   background: #11101D;
+   transition: top 300ms ease-in-out 300ms;
    overflow-x: hidden;
    z-index: 10000;
 }
 
+
 .sidebar.open {
-   width: 250px;
+   width: 400px;
 }
 
 .logo-details {
@@ -136,24 +155,12 @@ body {
 
 .line {
    width: 30px;
-   height: 3px;
+   height: 4px;
    background: #fff;
-   transition:
-      transform 0.3s ease,
-      opacity 0.3s ease;
+   transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-.sidebar.open .icon .line:nth-child(1) {
-   transform: translateY(9px) rotate(45deg);
-}
 
-.sidebar.open .icon .line:nth-child(2) {
-   opacity: 0;
-}
-
-.sidebar.open .icon .line:nth-child(3) {
-   transform: translateY(-9px) rotate(-45deg);
-}
 
 .nav-links {
    list-style: none;
@@ -163,6 +170,7 @@ body {
    flex-direction: column;
    align-items: flex-start;
    height: 90%;
+
 }
 
 .nav-item {
@@ -170,7 +178,10 @@ body {
    margin: 0;
    display: flex;
    align-items: center;
+   height: 60px;
+   /* Set a fixed height for each navbar item */
 }
+
 
 .nav-link {
    display: flex;
@@ -179,6 +190,12 @@ body {
    color: #fff;
    text-decoration: none;
    transition: background-color 0.3s;
+   font-weight: bold;
+   font-size: 20px;
+   width: 100%;
+   /* Ensure links take up the full width */
+   padding: 0 20px;
+   /* Adjust padding as needed */
 }
 
 .nav-link:hover {
@@ -193,12 +210,165 @@ body {
 .sidebar.open .link-text {
    display: initial;
 }
+
 .content {
    transition: margin-left 0.5s;
-   padding-left: 78px; /* Initial padding equal to the sidebar width */
+   padding-left: 78px;
+   /* Initial padding equal to the sidebar width */
 }
 
 .content.shifted {
-   padding-left: 250px; /* Padding equal to the expanded sidebar width */
+   padding-left: 250px;
+   /* Padding equal to the expanded sidebar width */
+}
+
+.nav-link font-awesome-icon {
+   padding-right: 100px;
+   /* Adjust this value as needed */
+}
+
+.hamburger {
+   width: 30px;
+   height: 24px;
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+   cursor: pointer;
+}
+
+.line {
+   width: 30px;
+   height: 4px;
+   background: #fff;
+   transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Adjustments for X icon */
+.hamburger.open .line:nth-child(1) {
+   transform: translateY(9.7px) rotate(45deg);
+}
+
+.hamburger.open .line:nth-child(2) {
+   opacity: 0;
+}
+
+.hamburger.open .line:nth-child(3) {
+   transform: translateY(-9.7px) rotate(-45deg);
+}
+
+@media (max-width: 768px) {
+   body {
+      overflow: auto; /* Enable scrolling by default */
+   }
+
+   .sidebar:not(.open) {
+      position: fixed; /* Fix the sidebar position when closed to prevent body scrolling */
+      overflow: hidden; /* Disable scrolling when sidebar is closed */
+   }
+
+   .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 78px;
+      background: #11101D;
+      overflow-x: hidden;
+      z-index: 10000;
+      transition: width 0.3s;
+      /* Add transition for width */
+   }
+
+   .sidebar {
+      height: 50px; /* Set a smaller height for mobile views */
+      width: 50px; /* Set a smaller width for mobile views */
+   }
+   .sidebar.open {
+      width: 100%;
+      height: 100%;
+   }
+
+   /* Styles for logo */
+   .logo-details {
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      z-index: 2;
+   }
+
+   /* Styles for hamburger icon */
+   .hamburger {
+      width: 30px;
+      height: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+   }
+
+   .line {
+      width: 30px;
+      height: 4px;
+      background: #fff;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+   }
+
+   /* Styles for navigation links */
+   .nav-links {
+      list-style: none;
+      padding-top: 70px;
+      margin-top: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      height: auto; /* Set height to auto to accommodate dynamic content */
+      /* Adjust height */
+   }
+
+   .nav-item {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      height: 60px;
+   }
+
+   .nav-link {
+      display: flex;
+      align-items: center;
+      height: 40px;
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 20px;
+      width: 100%;
+      padding: 0 20px;
+   }
+
+   .nav-link:hover {
+      background-color: #575757;
+   }
+
+   .link-text {
+      margin-left: 10px;
+   }
+
+   .hamburger.open .line:nth-child(1) {
+      transform: translateY(9.7px) translateX(-74.5px) rotate(45deg); /* Adjust translateX value */
+   }
+
+   .hamburger.open .line:nth-child(2) {
+      opacity: 0;
+   }
+
+   .hamburger.open .line:nth-child(3) {
+      transform: translateY(-9.7px) translateX(-74.5px) rotate(-45deg); /* Adjust translateX value */
+   }
+   body.sidebar-open {
+      overflow: hidden;
+   }
+
 }
 </style>
