@@ -1,8 +1,12 @@
 <template>
    <div class="section-info">
-      <h1>Teams assigned to you for {{ storeSection.selectedSectionName }}</h1>
-      <h3 v-if="isActiveSection" class="act-sctn">Active Section</h3>
-      <h3 v-else class="inact-sctn">Inactive Section</h3>
+      <div class="assign-container">
+         <h1 class="assign-txt">Teams assigned to you for {{ storeSection.selectedSectionName }}</h1>
+      </div>
+      <div class="status-container">
+         <h3 v-if="isActiveSection" class="act-sctn">Active Section</h3>
+         <h3 v-else class="inact-sctn">Inactive Section</h3>
+      </div>
    </div>
 
    <div v-if="hasLoaded" class="page" style="justify-content: center">
@@ -215,6 +219,12 @@ export default {
 </script>
 
 <style scoped>
+.status-container {
+   position: absolute;
+   top: 10px;
+   right: 10px;
+ }
+
 .act-sctn{
    margin-left: 20px;
    color: green;
@@ -299,13 +309,6 @@ export default {
    margin-right: 5px;
 }
 
-/* Media query for responsive design */
-@media (max-width: 768px) {
-   .team-card {
-      width: 90%; /* Full width on smaller screens */
-   }
-}
-
 .team-name-checkbox {
    display: flex; /* This will place child elements in a row */
    align-items: center; /* This will vertically center the items in the container */
@@ -333,17 +336,53 @@ export default {
    margin-right: 10px;
 }
 
-/* Additional responsive adjustments for smaller screens */
-@media (max-width: 768px) {
-   .team-card {
-      width: calc(50% - 20px); /* Adjusts to two columns on smaller screens */
+@media only screen and (max-width: 600px) {
+   .teams-container {
+     flex-direction: column; /* Display cards in a single column */
+     align-items: center; /* Center align cards */
    }
-}
 
-/* Further adjustments if needed for very small screens */
-@media (max-width: 480px) {
    .team-card {
-      width: calc(100% - 20px); /* Full width for very small devices */
+     width: 90%; /* Adjust card width to fit smaller screens */
+     margin-left: -65px;
    }
-}
+
+   .view-team-btn {
+     width: 100%; /* Make buttons full width on smaller screens */
+     font-size: 12px;
+   }
+
+   .teams-header {
+     font-size: 20px; /* Decrease font size for header */
+     margin-bottom: 20px; /* Decrease margin for header */
+     margin-right: 65px;
+     margin-top: 30px;
+   }
+
+   .section-info {
+      position: relative; /* Reset position to relative for the parent container */
+    }
+
+    .status-container {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+
+    .assign-container {
+      margin-top: 50px;
+      margin-right: 65px;
+    }
+
+    .act-sctn,
+   .inact-sctn {
+     font-size: 16px; /* Adjust font size for active/inactive section text */
+   }
+
+   .assign-txt {
+      font-size: 22px;
+   }
+
+ }
+
 </style>

@@ -41,6 +41,7 @@ import { storeWeek } from '../../stores/storeWeek.js'
 import { storeUser } from '../../stores/store.js'
 import WeekDropdown from '@/components/WeekDropdown.vue'
 import { storeSection } from '../../stores/storeSection'
+import { storeTeam } from '../../stores/storeTeam' 
 import CommentTable from '../../components/instructor/CommentTable.vue'
 export default {
    name: 'AssistantInstructorPeerEvalView',
@@ -58,6 +59,7 @@ export default {
          storeWeek,
          storeUser,
          storeSection,
+         storeTeam,
          rubric: null,
       }
    },
@@ -78,26 +80,27 @@ export default {
                console.error("Error fetching rubric:", error);
             });
       },
-
       async fetchEvaluationReports() {
-         this.isLoading = true
-         this.error = null
+         this.isLoading = true;
+         this.error = null;
          // Temporary container for the reports
-         let tempReports = []
+         let tempReports = [];
 
-         const auth = localStorage.getItem('auth')
-         // Fetch reports for each student
+         const auth = localStorage.getItem('auth');
+         const studentId = storeUser.studentId;
+
+         // Fetch reports for the student
          try {
             const response = await apiClient.get(
                `${this.$baseURL}/api/v1/peerEvaluation/getEvaluationReportWithPrivateComments`,
                {
                   params: {
                      week: storeWeek.selectedWeekId,
-                     sectionId: storeSection.selectedSectionId,
+                     studentId: studentId, // Pass the student ID to fetch reports for the student
                   },
                   headers: { Authorization: `Bearer ${auth}` },
                }
-            )
+            );
 
             if (
                response.data.flag &&
@@ -136,14 +139,17 @@ export default {
             }
          } catch (error) {
             this.error =
-               error.message || 'An error occurred while fetching data'
-            // Break the loop if one call fails or decide how to handle this case
+               error.message || 'An error occurred while fetching data';
+            // Handle errors
          }
 
-         // All requests are complete, update the reports data property
-         this.reports = tempReports
-         this.isLoading = false
+         // Update the reports data property
+         this.reports = tempReports;
+         this.isLoading = false;
       },
+
+
+
    },
    computed: {
       // This is a computed property that will return the total score
