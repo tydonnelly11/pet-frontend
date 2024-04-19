@@ -136,6 +136,28 @@ export default {
 @media screen and (max-width: 900px) {
    .button-container {
       flex-direction: column;
+      align-items: center; /* Centers items horizontally in the flex container */
+      justify-content: center; /* Centers items vertically in the flex container */
+      margin: 0; /* Removes any margin that might push the container */
+      padding: 0; /* Removes any padding that might push the container */
+      width: 100%; /* Ensures the container takes full width of its parent */
    }
+
+   .prev-week-btn, .next-week-btn {
+      margin-top: 7px;
+      margin-bottom: 20px;
+      width: 200px; /* Fixed width for buttons */
+      margin-right: 0; /* Remove right margin that might push the buttons */
+      margin-left: 150px; /* Remove left margin that might push the buttons */
+   }
+
+   .dropdown-center {
+      margin-top: 50px; /* Adjusted to only have a top margin */
+      margin-bottom: 10px; /* Adjusted to only have a bottom margin */
+      width: auto; /* Adjust width as needed or keep it auto */
+      margin-right: 0; /* Remove right margin */
+      margin-left: 150px; /* Remove left margin */
+   }
+
 }
 </style>

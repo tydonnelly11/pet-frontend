@@ -258,105 +258,58 @@ body {
 
 @media (max-width: 768px) {
    body {
-      overflow: auto; /* Enable scrolling by default */
+      overflow-x: hidden; /* Prevent horizontal scrolling */
    }
 
-   .sidebar:not(.open) {
-      position: fixed; /* Fix the sidebar position when closed to prevent body scrolling */
-      overflow: hidden; /* Disable scrolling when sidebar is closed */
-   }
-
+   /* Adjustments for the sidebar */
    .sidebar {
-      position: fixed;
-      left: 0;
-      top: 0;
-      height: 100%;
-      width: 78px;
-      background: #11101D;
-      overflow-x: hidden;
-      z-index: 10000;
-      transition: width 0.3s;
-      /* Add transition for width */
+      width: 100%; /* Sidebar covers the whole width */
+      height: 0; /* Initial height set to 0 */
+      top: 0; /* Start from the top */
+      left: 0; /* Align to the left */
+      position: fixed; /* Fixed position to cover the viewport */
+      background: #11101D; /* Background color of the sidebar */
+      overflow-y: hidden; /* No vertical scroll when closed */
+      z-index: 10000; /* High z-index to stay on top */
+      transition: height 0.3s; /* Smooth transition for the height */
    }
 
-   .sidebar {
-      height: 50px; /* Set a smaller height for mobile views */
-      width: 50px; /* Set a smaller width for mobile views */
-   }
+   /* Sidebar opens downwards from the top */
    .sidebar.open {
+      height: 100vh; /* Full viewport height */
       width: 100%;
-      height: 100%;
+      /* overflow-y: auto; */
    }
 
-   /* Styles for logo */
-   .logo-details {
-      height: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      position: relative;
-      z-index: 2;
-   }
-
-   /* Styles for hamburger icon */
+   /* Style adjustments for the hamburger icon */
    .hamburger {
-      width: 30px;
-      height: 24px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      cursor: pointer;
+      position: fixed; /* Fixed position to stay in place */
+      top: 0; /* Align to the top */
+      left: 0; /* Align to the left */
+      z-index: 10001; /* Above the sidebar */
+      cursor: pointer; /* Indicates it's clickable */
+
+      width: 100%; /* Full width */
+      height: auto; /* Height to fit content */
+      background-color: rgba(77, 25, 121, 0.5);
+      padding: 10px; /* Padding around the icon */
+      box-sizing: border-box; /* Include padding in width and height */
+      display: flex; /* Use flexbox for centering */
+      justify-content: flex-start; /* Align hamburger lines to the start */
+      align-items: center; /* Center items vertically */
    }
 
    .line {
-      width: 30px;
-      height: 4px;
-      background: #fff;
-      transition: transform 0.3s ease, opacity 0.3s ease;
+      width: 30px; /* Width of the hamburger lines */
+      height: 3px; /* Height of the hamburger lines */
+      background: #fff; /* Color of the hamburger lines */
+      transition: transform 0.3s ease, opacity 0.3s ease; /* Transition for animations */
+      margin: 5px 0; /* Space between lines */
    }
 
-   /* Styles for navigation links */
-   .nav-links {
-      list-style: none;
-      padding-top: 70px;
-      margin-top: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      height: auto; /* Set height to auto to accommodate dynamic content */
-      /* Adjust height */
-   }
-
-   .nav-item {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      height: 60px;
-   }
-
-   .nav-link {
-      display: flex;
-      align-items: center;
-      height: 40px;
-      color: #fff;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 20px;
-      width: 100%;
-      padding: 0 20px;
-   }
-
-   .nav-link:hover {
-      background-color: #575757;
-   }
-
-   .link-text {
-      margin-left: 10px;
-   }
-
+   /* Transformations for the hamburger icon when the sidebar is open */
    .hamburger.open .line:nth-child(1) {
-      transform: translateY(9.7px) translateX(-74.5px) rotate(45deg); /* Adjust translateX value */
+      transform: rotate(45deg) translate(5px, 5px);
    }
 
    .hamburger.open .line:nth-child(2) {
@@ -364,11 +317,8 @@ body {
    }
 
    .hamburger.open .line:nth-child(3) {
-      transform: translateY(-9.7px) translateX(-74.5px) rotate(-45deg); /* Adjust translateX value */
+      transform: rotate(-45deg) translate(5px, -5px);
    }
-   body.sidebar-open {
-      overflow: hidden;
-   }
-
 }
+
 </style>

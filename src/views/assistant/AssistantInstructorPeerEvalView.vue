@@ -2,7 +2,7 @@
    <WeekDropdown :displayedWeeks="storeWeek.weeksForSemester" :selectWeek="storeWeek.currentWeekId"
       :currentWeekProp="storeWeek.currentWeek">
    </WeekDropdown>
-   <div>
+   <div class="peereval-container">
       <h1>Assistant Instructor Peer Evaluation</h1>
       <!-- Display loading state or errors -->
       <div v-if="isLoading" class="popup-overlay">
@@ -93,7 +93,7 @@ export default {
                {
                   params: {
                      week: storeWeek.selectedWeekId,
-                     sectionId: storeSection.selectedSectionId,
+                     studentId: 1,
                   },
                   headers: { Authorization: `Bearer ${auth}` },
                }
@@ -198,5 +198,31 @@ td {
    /* Semi-transparent background */
    z-index: 1000;
    /* Ensure it's above other content */
+}
+
+@media screen and (max-width: 600px) {
+   
+}
+.popup-overlay {
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   background-color: rgba(0, 0, 0, 0.7); /* Adjusted transparency */
+}
+
+.error-message {
+   padding: 10px;
+   background-color: #fff; /* Ensures visibility against potentially dark backgrounds */
+   border: 1px solid red;
+}
+@media screen and (max-width: 600px) {
+   .container {
+      padding: 10px;
+   }
 }
 </style>
