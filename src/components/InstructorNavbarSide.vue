@@ -262,4 +262,68 @@ body {
   transform: translateY(-9.7px) rotate(-45deg);
 }
 
+@media (max-width: 768px) {
+  body {
+     overflow-x: hidden; /* Prevent horizontal scrolling */
+  }
+
+  /* Adjustments for the sidebar */
+  .sidebar {
+     width: 100%; /* Sidebar covers the whole width */
+     height: 0; /* Initial height set to 0 */
+     top: 0; /* Start from the top */
+     left: 0; /* Align to the left */
+     position: fixed; /* Fixed position to cover the viewport */
+     background: #11101D; /* Background color of the sidebar */
+     overflow-y: hidden; /* No vertical scroll when closed */
+     z-index: 10000; /* High z-index to stay on top */
+     transition: height 0.3s; /* Smooth transition for the height */
+  }
+
+  /* Sidebar opens downwards from the top */
+  .sidebar.open {
+     height: 100vh; /* Full viewport height */
+     width: 100%;
+     /* overflow-y: auto; */
+  }
+
+  /* Style adjustments for the hamburger icon */
+  .hamburger {
+     position: fixed; /* Fixed position to stay in place */
+     top: 0; /* Align to the top */
+     left: 0; /* Align to the left */
+     z-index: 10001; /* Above the sidebar */
+     cursor: pointer; /* Indicates it's clickable */
+
+     width: 100%; /* Full width */
+     height: auto; /* Height to fit content */
+     background-color: rgba(77, 25, 121, 0.5);
+     padding: 10px; /* Padding around the icon */
+     box-sizing: border-box; /* Include padding in width and height */
+     display: flex; /* Use flexbox for centering */
+     justify-content: flex-start; /* Align hamburger lines to the start */
+     align-items: center; /* Center items vertically */
+  }
+
+  .line {
+     width: 30px; /* Width of the hamburger lines */
+     height: 3px; /* Height of the hamburger lines */
+     background: #fff; /* Color of the hamburger lines */
+     transition: transform 0.3s ease, opacity 0.3s ease; /* Transition for animations */
+     margin: 5px 0; /* Space between lines */
+  }
+
+  .hamburger.open .line:nth-child(1) {
+    transform: translateY(13px) rotate(45deg);
+ }
+ 
+ .hamburger.open .line:nth-child(2) {
+    opacity: 0;
+ }
+ 
+ .hamburger.open .line:nth-child(3) {
+    transform: translateY(-13px) rotate(-45deg);
+ }
+}
+
 </style>

@@ -121,4 +121,35 @@ th {
    background-color: #3498db;
    color: #fff;
 }
+
+@media screen and (max-width: 768px) {
+   .WarList-container {
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      background-color: #f5f5f5;
+      border-radius: 10px;
+      overflow-x: auto; 
+      margin-bottom: 50px;
+   }
+
+   table {
+      writing-mode: vertical-rl; 
+      transform: rotate(180deg);
+      direction: rtl; 
+   }
+
+   th,
+   td {
+      writing-mode: horizontal-tb; 
+      transform: rotate(180deg); 
+      padding: 10px;
+      text-align: left;
+      border: 1px solid #ddd;
+   }
+}
+
+
+
+   
 </style>

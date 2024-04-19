@@ -1,6 +1,6 @@
 <template>
-    <button class="small-button" style="max-width: 200px; margin-top: 20px;" @click="this.$router.back()">Previous page</button>
-    <p>
+    <button class="small-button-1" style="max-width: 200px;" @click="this.$router.back()">Previous page</button>
+    <p class="student-text"> 
         Select dates to get WAR/Peer Evaluation for <h3>{{ studentName }}</h3>
     </p>
     <div style="margin-bottom: 20px;">
@@ -304,6 +304,26 @@ export default{
     background-color: #6f42c1; /* Lighter purple on hover for interaction feedback */
 }
 
+.small-button-1 {
+    padding: 10px 15px;
+    /* Ample padding for tap targets */
+    font-size: 1rem;
+    border-radius: 20px;
+    background-color: #5C4B93;
+    /* A slightly different purple shade for contrast */
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-bottom: 10px;
+    margin-top: 20px;
+}
+
+.small-button-1:hover {
+    background-color: #6f42c1;
+    /* Lighter purple on hover for interaction feedback */
+}
+
 .small-button:not(:first-child) {
    margin-left: 10px;
 }
@@ -332,5 +352,40 @@ export default{
 
 .remove-btn:hover {
   background-color: #c3352d;
+}
+
+@media (max-width: 768px) {
+    .date-inputs {
+        flex-direction: column;
+    }
+
+    .small-button,
+    .remove-btn {
+        font-size: 15px;
+        margin-left: -70px;
+    }
+
+    .small-button-1 {
+        margin-left: -70px;
+        margin-top: 60px;
+    }
+
+    .student-text {
+        margin-left: -70px;
+        margin-top: 12px;
+    }
+
+    .dates {
+        margin-left: -14px;
+        margin-bottom: 10px;
+    }
+    
+    .start {
+        margin-bottom: 10px;
+    }
+
+    .date-input {
+        margin-left: 0px;
+    }
 }
 </style>
