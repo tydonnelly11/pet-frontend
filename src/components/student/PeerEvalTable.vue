@@ -15,8 +15,8 @@
                      <el-button>Description</el-button>
                      </el-tooltip>
                </th>
-               <th scope="col">Private Comments</th>
-               <th scope="col">Public Comments</th>
+               <th scope="col"><p class="comm-title">Private Comments</p></th>
+               <th scope="col"><p class="comm-title">Public Comments</p></th>
                <!-- <th>Total</th> -->
             </tr>
          </thead>
@@ -180,9 +180,7 @@ export default {
 <style scoped>
 table {
    height: auto;
-   width: 90%;
    position: relative;
-   left: 5%;
 }
 .comment {
    height: 75px;
@@ -207,6 +205,12 @@ td {
 .crit-title {
    font-size: 1.25em;
    flex-basis: 60%;
+   position: relative;
+}
+.comm-title {
+   font-size: 1.25em;
+   flex-basis: 60%;
+   bottom: 25px;
    position: relative;
 }
 form {

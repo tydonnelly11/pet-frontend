@@ -4,7 +4,7 @@
           <WeekDropdown :style="{ width: '50%' }"/>
       </div>
   </div>
-
+  <h2>WAR for {{ storeSection.selectedSectionName }}</h2>
    <div class="container">
       <div class="grid-container">
          <button v-for="team in this.teams" :class="{ 'selected-item': selectedTeam && team.id === selectedTeam.id }"
@@ -40,7 +40,7 @@ export default {
          selectedTeam: null,
          hasSelectedTeam: false,
          teamFormated: [],
-         storeWeek
+         storeWeek, storeSection
       }
    },
    methods: {

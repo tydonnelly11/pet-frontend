@@ -1,13 +1,9 @@
 <template>
    <!-- <SectionDropdown/> -->
    <div class="invite-students-container">
-      <div class="invite-students-header">
-         <h1>Invite Students to {{ storeSection.selectedSectionName }}</h1>
-         <h2>Enter students' emails seperated by semi-colons</h2>
-      </div>
       <div class="form">
          <div class="input-field">
-            <label for="email">Email:</label>
+            <label :style="'color: white;'" for="email">Email:</label>
             <input
                class="team-name-input"
                type="email"
@@ -17,14 +13,14 @@
             />
          </div>
          <button class="small-button" type="submit" @click="inviteStudent">
-            Add Student
+            Add Students
          </button>
       </div>
+      <h2>List of Students</h2>
 
       <div class="list-of-students">
-         <h2>List of Students</h2>
          <div class="student" v-for="student in listOfStudents">
-            <p :style="'color: white;'">Email: {{ student.email }}</p>
+            <p :style="'color: white;'">{{ student.email }}</p>
          </div>
       </div>
       <button
@@ -142,16 +138,18 @@ export default {
    flex-direction: column;
    align-items: center;
    justify-content: center;
-   margin-bottom: 50px;
+   margin-bottom: 25px;
 }
 
 .input-field {
 }
 
 .list-of-students {
-   display: flex;
+   display: grid;
    flex-direction: column;
-   width: 100%;
+   width: 400%;
+   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Create a responsive grid */
+
 }
 
 .student {

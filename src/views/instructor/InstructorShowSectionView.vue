@@ -58,7 +58,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .sections-container {
    display: flex;
    flex-wrap: wrap;
@@ -69,7 +69,8 @@ export default {
 
 .section-tile {
    /* ... other styles ... */
-   width: auto;
+   width: 300px;
+   height: 175px;
    flex: 0 0 auto; /* Increased flex-basis */
    max-width: 100%; /* Increased max-width */
    max-height: 50%;
@@ -112,11 +113,11 @@ export default {
 }
 .section-tile h2 {
    font-size: 1.2em; /* Adjust the font size as needed */
-   white-space: nowrap; /* Keep the text on one line */
    overflow: hidden; /* Hide overflow */
    text-overflow: ellipsis; /* Add ellipsis for overflow */
    max-width: 100%; /* Set max width to 100% of the parent container */
    margin: 0 0 10px; /* Adjust margins as needed */
-   word-wrap: break-word; /* Break the word to the next line if it's too long */
+   word-wrap: normal;
+   white-space: normal;
 }
 </style>

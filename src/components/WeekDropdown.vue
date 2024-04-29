@@ -2,7 +2,7 @@
    <div class="week-dropdown-container" style="width: 100%">
       <div class="dropdown-center">
          <a
-            class="btn btn-primary dropdown-toggle"
+            class="btn btn-custom-color dropdown-toggle"
             href="#"
             role="button"
             data-bs-toggle="dropdown"
@@ -106,6 +106,17 @@ export default {
 </script>
 
 <style scoped>
+
+.btn-custom-color {
+    background-color: #743ae1; /* Custom background color */
+    color: white; /* Text color */
+}
+
+.btn-custom-color:hover, .btn-custom-color:focus {
+    background-color: #743ae1;
+    color: white; /* Darker shade for hover/focus */
+}
+
 .week-dropdown-container {
    margin-top: 10px;
    display: flex;
@@ -131,6 +142,21 @@ export default {
 .next-week-btn {
    width: 200px;
    border-radius: 12px;
+}
+
+.active{
+   display: block;
+    width: 100%;
+    padding: var(--bs-dropdown-item-padding-y) var(--bs-dropdown-item-padding-x);
+    clear: both;
+    font-weight: 400;
+    color: blue;
+    text-align: inherit;
+    text-decoration: underline;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
+    border-radius: var(--bs-dropdown-item-border-radius, 0);
 }
 
 @media screen and (max-width: 900px) {
