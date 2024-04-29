@@ -6,7 +6,7 @@
    >
    </WeekDropdown>
    <div>
-      <h1>Instructor Peer Evaluation</h1>
+      <h1>Peer Evaluation for {{ storeSection.selectedSectionName }}</h1>
       <!-- Display loading state or errors -->
       <div v-if="isLoading" class="popup-overlay">
          <img src="/img/loading-gif.gif" />

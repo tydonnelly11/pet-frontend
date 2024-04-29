@@ -7,13 +7,13 @@
                :displayedWeeks="storeWeek.weeksForSemester"
                :selectWeek="storeWeek.currentWeekId"
                :currentWeekProp="storeWeek.currentWeek"
-               :style="'width: 80%;'"
             >
             </WeekDropdown>
-            <div class="profile">
+            
+         </div>
+         <div class="profile">
                <p>{{ storeUser.userFullName }}</p>
             </div>
-         </div>
          <router-view></router-view>
       </div>
    </div>
@@ -89,13 +89,24 @@ export default {
    display: flex;
    flex-direction: row;
    position: relative;
-   right: 2.5%;
 }
 .profile {
-   position: relative;
+   position: absolute;
    top: 25px;
    font-size: 1.25em;
-   right: -10%;
-   width: 30%;
+   right: 4%;
+   background-color: #743ae1;
+   font-weight: 450;
+   color: white;
+   padding: 15px;
+   border-radius: 8px;
+   margin-bottom: 10px;
+   height: 75px;
+   text-align: center;
+   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.profile > p{
+   color: white;
 }
 </style>

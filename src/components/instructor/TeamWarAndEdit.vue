@@ -1,11 +1,11 @@
 <template>
-    <button class="small-button-1" style="max-width: 200px; " @click="this.$router.back()">Previous page</button>
+    <button class="small-button-1" style="max-width: 200px; " @click="this.$router.back()">Back</button>
     <p class="text-section">Select dates to get WAR for
     <h3>{{ teamname }}</h3>
     </p>
     <div class="dates" style="margin-bottom: 20px;">
         <label class="start" for="start-date" style="margin-right: 5px;">Start Date:</label>
-        <input class="date-input" type="date" id="start-date" v-model="startDate" />
+        <input class="date-input" style="margin-right: 5px;" type="date" id="start-date" v-model="startDate" />
 
         <label for="end-date" style="margin-right: 5px;">End Date:</label>
         <input class="date-input" type="date" id="end-date" v-model="endDate" />
@@ -20,9 +20,9 @@
     <div class="btn-group">
         <button class="small-button" @click="getWar">Get WAR</button>
         <button class="small-button" @click="editTeamName = true;">Edit Team name</button>
-        <button class="remove-btn" @click="hasSelectedDeleteTeam = true">Delete Team</button>
 
     </div>
+    <button class="remove-btn" @click="hasSelectedDeleteTeam = true">Delete Team</button>
 
     <div v-if="editTeamName">
         <label>Enter New Team name: </label>
@@ -267,8 +267,7 @@ export default {
 }
 
 .small-button-1 {
-    padding: 10px 15px;
-    /* Ample padding for tap targets */
+        /* Ample padding for tap targets */
     font-size: 1rem;
     border-radius: 20px;
     background-color: #5C4B93;
@@ -279,6 +278,10 @@ export default {
     transition: background-color 0.3s;
     margin-bottom: 10px;
     margin-top: 20px;
+    width: 100px;
+    position: absolute;
+    left: 6.5%;
+    top : 0px;
 }
 
 .small-button-1:hover {
@@ -297,17 +300,23 @@ export default {
 }
 
 .remove-btn {
-    background-color: #FF4136;
-    /* Bright red for remove buttons */
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 20px;
-    margin-top: 5px;
-    cursor: pointer;
-    max-width: 200px;
-    margin-left: 5px;
-    margin-right: 8px;
+  background-color: #FF4136; /* Bright red for remove buttons */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  margin-top: 5px;
+  cursor: pointer;
+  max-width: 200px;
+  margin-left: 5px;
+  margin-right: 8px;
+  position: absolute;
+  right: 50px;
+  top : 20px
+}
+
+.text-section{
+    margin-top: 75px;
 }
 
 .remove-btn:hover {

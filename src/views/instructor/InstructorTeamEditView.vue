@@ -1,15 +1,17 @@
 <template>
     <div class="section-info">
     <h1>Information For {{ storeSection.selectedSectionName }}</h1>
-    <h3 v-if="isActiveSection">Active Section</h3>
-    <h3 v-else>Inactive Section</h3>
+    <div class="active-box">
+        <h3 v-if="isActiveSection">Active Section</h3>
+        <h3 v-else>Inactive Section</h3>
+    </div>
     </div>
     <div class="section-btn">
         <button class="small-button" @click="inviteStudentPressed = true">Invite Students</button>
         <button class="small-button" @click="inviteInstructorPressed = true">Invite Instructors</button>
         <button class="small-button" @click="editSection = true">Edit Section</button>
-        <button class="small-button" @click="selectInviteTeam = true">Invite Teams</button>
-        <button class="small-button" @click="setCurrentSection">Click to set Section as Active</button>
+        <button class="small-button" @click="selectInviteTeam = true">Create Teams</button>
+        <button class="small-button" @click="setCurrentSection">Set Active</button>
 
 
     </div>
@@ -40,16 +42,18 @@
 
     
     <div class="popup-overlay" v-if="inviteStudentPressed">
-        <InstructorInviteStudents />
         <button class="small-button" 
-        style="max-width: 250px; margin-right: 10px;" 
-        @click="inviteStudentPressed = false">Done</button>
+        style="max-width: 75px; margin-right: 10px; position: relative; left: 75%; background-color: red;" 
+        @click="inviteStudentPressed = false">Exit</button>
+        <InstructorInviteStudents />
+       
     </div>
     <div class="popup-overlay" v-if="inviteInstructorPressed">
-        <InviteAssitInstructor />
         <button class="small-button" 
-        style="max-width: 250px; margin-right: 10px;"
-        @click="inviteInstructorPressed = false">Done</button>
+        style="max-width: 75px; margin-right: 10px; position: relative; left: 75%; background-color: red;" 
+        @click="inviteInstructorPressed = false">Exit</button>
+        <InviteAssitInstructor />
+        
     </div>
 <div v-if="selectInviteTeam" class="popup-overlay">
     <h2> Add Teams To {{ storeSection.selectedSectionName }}</h2>
@@ -100,9 +104,8 @@
     -->
     <div v-if="hasLoaded" class="page">
   <!-- Teams Section -->
-  <div class="teams">
-    <div class="teams-container">
-      <h2 class="teams-header">Teams</h2>
+  <div class="teams" :class="{'teams-with-students' : students.length != 0}">
+    <div class="teams-container" :class="{'teams-container-students' : students.length != 0}">
       <div class="team-card" v-for="team in teams" :key="team.id">
         <div class="team-name-checkbox">   
             <div>
@@ -159,6 +162,7 @@
   <!-- Students Section -->
         <div v-if="students.length > 0" class="students-container">
             <h2 class="teams-header">Students</h2>
+            <div class="student-entry-container">
             <div class="student-entry" v-for="student in students" :key="student.id">
                 <div class="student-name-checkbox">
                     <input style="margin-bottom: 5px;" 
@@ -171,8 +175,9 @@
                     </label>
                     <button class="remove-btn" 
                     @click="this.studentIDToDelete = student.id; 
-                    this.hasSelectedDeleteStudent = true;">Delete Student</button>
+                    this.hasSelectedDeleteStudent = true;">Delete</button>
                 </div>
+            </div>
             </div>
         </div>
     </div>
@@ -738,6 +743,16 @@ export default {
 </script>
 
 <style scoped>
+.active-box{
+    position: relative;
+    left: 5%;
+    background-color: #4E2A84;
+    color : white;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+
 .small-button:not(:first-child) {
    margin-left: 10px;
 }
@@ -794,11 +809,22 @@ export default {
     flex-wrap: wrap; /* Wrap items on smaller screens */
 }
 
-.teams, .students {
+.students {
     width: 100%; /* Take full width of the container */
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Create a responsive grid */
     gap: 10px; /* Space between tiles */
+}
+
+.teams{
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+}
+
+.teams-with-students{
+    flex-direction: row;
+    display: flex;
+    width: 100%;
 }
 
 .team, .student {
@@ -847,9 +873,20 @@ export default {
 
 /* Style for the overall Teams container */
 .teams-container {
-  display: flex;
+  display: grid;
   flex-direction: column;
   align-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Create a responsive grid */
+  gap: 10px;
+}
+
+.teams-container-students {
+  display: grid;
+  flex-direction: column;
+  align-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Create a responsive grid */
+  gap: 10px;
+  flex-basis: 50%;
 }
 
 /* Style for the team cards */
@@ -859,7 +896,8 @@ export default {
   padding: 15px;
   border-radius: 8px;
   margin-bottom: 10px;
-  width: 80%; /* Adjust the width as per your layout */
+  width: 100%; /* Adjust the width as per your layout */
+  height: 350px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
 }
 
@@ -906,15 +944,13 @@ export default {
   /* Use a percentage width for fluid responsiveness and max-width to cap the size */
   width: 90%;
   max-width: 700px; /* You can adjust this to what you feel is best for content */
-  margin: auto; /* This centers the container */
   
   /* Rest of the styles */
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: center;
   padding: 20px;
-  
+  flex-basis: 50%;
   background-color: #EDEDED;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -927,6 +963,12 @@ export default {
   color: #4E2A84; /* TCU purple */
   font-size: 2rem; /* Large, readable text */
   margin-bottom: 20px; /* Space below the header */
+}
+
+.student-entry-container{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    width: 100%;
 }
 
 .student-entry {
@@ -976,6 +1018,8 @@ width: 50px; /* New width */
 
 .student-name-checkbox > input{
     flex-basis: 10%;
+    position: relative;
+    top: 5px;
   
 }
 .student-name-checkbox > label{
@@ -984,6 +1028,8 @@ width: 50px; /* New width */
 }
 .student-name-checkbox > button{
     flex-basis: 20%;
+    position: relative;
+    bottom: 10px;
   
 }
 
@@ -1016,5 +1062,6 @@ width: 50px; /* New width */
     background-color: rgba(0, 0, 0, 0.90);
     z-index: 1000;
     flex-direction: column;
+    overflow: auto;
 }
 </style>

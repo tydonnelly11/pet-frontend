@@ -1,6 +1,6 @@
 <template>
-    <button class="small-button-1" style="max-width: 200px;" @click="this.$router.back()">Previous page</button>
-    <p class="student-text"> 
+    <button class="small-button-1" style="max-width: 200px;" @click="this.$router.back()">Back</button>
+    <p class="student-text" :style="'margin-top : 75px;'"> 
         Select dates to get WAR/Peer Evaluation for <h3>{{ studentName }}</h3>
     </p>
     <div style="margin-bottom: 20px;">
@@ -305,7 +305,6 @@ export default{
 }
 
 .small-button-1 {
-    padding: 10px 15px;
     /* Ample padding for tap targets */
     font-size: 1rem;
     border-radius: 20px;
@@ -317,6 +316,10 @@ export default{
     transition: background-color 0.3s;
     margin-bottom: 10px;
     margin-top: 20px;
+    width: 100px;
+    position: absolute;
+    left: 6.5%;
+    top : 0px;
 }
 
 .small-button-1:hover {
@@ -348,6 +351,9 @@ export default{
   max-width: 200px;
   margin-left: 5px;
   margin-right: 8px;
+  position: absolute;
+  right: 50px;
+  top : 20px
 }
 
 .remove-btn:hover {

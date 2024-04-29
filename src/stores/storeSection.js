@@ -13,6 +13,7 @@ export const storeSection = reactive({
          if (section.isCurrent === true) {
             this.selectedSectionId = section.id
             this.selectedSectionName = section.name
+            this.selectedSection = section;
             this.activeSection = section
          }
       }
@@ -37,7 +38,6 @@ export const storeSection = reactive({
       this.selectedSectionName = ''
    },
    getActiveSection() {
-      console.log(this.sections)
 
       if (
          this.sections.find(

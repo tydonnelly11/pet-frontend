@@ -110,6 +110,8 @@
       </div>
 
       <div>
+         <div class="date-container">
+            <div class="date">
          <label
             for="start-date"
             style="
@@ -117,12 +119,14 @@
                font-size: 20px;
                margin-top: 10px;
                color: #5d5076;
-               margin-bottom: 10px;
+               margin-bottom: 20px;
+               margin-right: 25px;
             "
             >Start Date:</label
          >
          <input type="date" id="start-date" v-model="startDate" />
-
+      </div>
+      <div class="date">
          <label
             for="end-date"
             style="
@@ -130,13 +134,15 @@
                font-size: 20px;
                margin-top: 10px;
                color: #5d5076;
-               margin-bottom: 10px;
+               margin-bottom: 20px;
                margin-left: 10px;
+               margin-right: 25px;
             "
             >End Date:</label
          >
          <input type="date" id="end-date" v-model="endDate" />
-
+      </div>
+      </div>
          <button @click="generateWeekList" style="border-radius: 12px">
             Calculate Weeks
          </button>
@@ -435,6 +441,12 @@ export default {
 
 * {
    font-family: 'Poppins', sans-serif;
+}
+
+
+.date-container{
+   display: flex;
+   justify-content: space-between;
 }
 
 .week-list {
