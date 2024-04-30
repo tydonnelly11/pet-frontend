@@ -1,7 +1,7 @@
 <template>
    <div class="dropdowns">
       <div class="week-dropdown-container">
-          <WeekDropdown :style="{ width: '50%' }"/>
+          <WeekDropdown/>
       </div>
   </div>
   <h2>WAR for {{ storeSection.selectedSectionName }}</h2>
