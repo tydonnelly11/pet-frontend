@@ -60,11 +60,14 @@ export default {
 
 <style scoped>
 .sections-container {
-   display: flex;
+   display: grid;
    flex-wrap: wrap;
    justify-content: center;
    gap: 10px; /* adjust the space between tiles */
    padding: 10px; /* space around the container */
+   grid-template-columns: repeat(4, minmax(300px, 1fr));
+   grid-auto-flow: row; /* This makes the grid fill up columns first before creating new rows */
+
 }
 
 .section-tile {
@@ -73,7 +76,6 @@ export default {
    height: 175px;
    flex: 0 0 auto; /* Increased flex-basis */
    max-width: 100%; /* Increased max-width */
-   max-height: 50%;
    padding: 20px;
    box-sizing: border-box;
    word-wrap: break-word;
@@ -89,6 +91,7 @@ export default {
    color: aliceblue;
    border-radius: 4px;
    flex-wrap: nowrap;
+   max-height: 100%;
 }
 
 /* Hover effect */

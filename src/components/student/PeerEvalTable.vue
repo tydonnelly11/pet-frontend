@@ -29,14 +29,10 @@
                   <p type="number" min="0">{{ item.score }}</p>
                </td>
                <td scope="col">
-                  <p
-                     v-for="(
-                        commentValue, commentKey
-                     ) in student.publicComments"
-                     type="text"
-                  >
-                     {{ commentKey }} {{ commentValue }}
-                  </p>
+                  <p>{{ student.privateComment }}</p>
+               </td>
+               <td scope="col">
+                  <p>{{ student.publicComment }}</p>
                </td>
             </tr>
             <tr v-else v-for="student in this.peerEval">
@@ -133,10 +129,10 @@ export default {
          this.isLoading = true
          const targetPayload = []
          for (const item of this.peerEval) {
-            if (item.publicComment == ' ' || item.publicComment == null) {
+            if (item.publicComment == ' ' || item.publicComment == null || item.privateComment == '') {
                item.publicComment = 'None'
             }
-            if (item.privateComment == ' ' || item.privateComment == null) {
+            if (item.privateComment == ' ' || item.privateComment == null || item.privateComment == '') {
                item.privateComment = 'None'
             }
             targetPayload.push({

@@ -58,19 +58,23 @@
                type="checkbox"
                id="defaultRubric"
                v-model="isRubricDefault"
+               @click="setCritera"
             />
          </div>
+         
+
+         
       </div>
 
       <div class="input-field">
-         <button @click="makeOwnRubric = true" style="border-radius: 12px">
+         <button @click="makeOwnRubric = true; this.criteria = [];" style="border-radius: 12px">
             Click to make own rubric
          </button>
       </div>
 
-      <div v-if="makeOwnRubric">
+      <div v-if="makeOwnRubric" style="flex-direction: column; background-color: rgba(256, 256, 256, 0.95);" class="popup-overlay">
          <h4>Enter Rubric Critera for Year</h4>
-         <div class="input-field">
+         <div class="input-field" :style="'width: 35%;'">
             <label>Criteria Name</label>
             <input
                type="text"
@@ -79,7 +83,7 @@
                required
             />
          </div>
-         <div class="input-field">
+         <div class="input-field" :style="'width: 35%;'">
             <label>Criteria Description</label>
             <input
                type="text"
@@ -88,25 +92,57 @@
                required
             />
          </div>
-         <div class="input-field">
+         <div class="input-field" :style="'width: 35%;'">
             <label>Criteria Max Score</label>
             <input type="text" id="maxScore" v-model="maxScore" required />
          </div>
-         <button type="submit" @click="addRubric" style="border-radius: 12px">
+         <button :style="'width : 50%;'" type="submit" @click="addRubric" style="border-radius: 12px">
             Add Criteria
          </button>
 
-         <div class="list-of-rubrics">
-            <h2>List of Criteria</h2>
-            <div class="rubric" v-for="rubric in criteria">
-               <p>Name: {{ rubric.criterionName }}</p>
-               <p>Description: {{ rubric.criterionDesc }}</p>
-               <p>Max Score: {{ rubric.maxScore }}</p>
-            </div>
-         </div>
-         <button @click="resetRubric()" style="border-radius: 12px">
+         <table :style="'margin: 25px 0'" v-if="this.criteria.length > 0">
+            <thead>
+               <tr>
+                  <th scope="col">Criteria Name</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Max Score</th>
+               </tr>
+            </thead>
+            <tbody>
+               <tr v-for="criterion of this.criteria">
+                  <td scope="col">{{ criterion.criterionName }}</td>
+                  <td scope="col">{{ criterion.criterionDesc }}</td>
+                  <td scope="col">{{ criterion.maxScore }}</td>
+               </tr>
+            </tbody>
+         </table>
+         <div class="button-group" :style="'margin-top: 50px;'">
+         <button class="criteria-button" @click="resetRubric()" style="border-radius: 12px">
             Cancel rubric creation
          </button>
+         <button class="criteria-button" @click="makeOwnRubric = false; hasCreatedRubric = true;" style="border-radius: 12px">
+            Finish rubric
+         </button>
+         </div>
+      </div>
+      
+      <div class="current-rubric" v-if="this.criteria.length > 0">
+         <table>
+            <thead>
+               <tr>
+                  <th scope="col">Criteria Name</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Max Score</th>
+               </tr>
+            </thead>
+            <tbody>
+               <tr v-for="criterion of this.criteria">
+                  <td scope="col">{{ criterion.criterionName }}</td>
+                  <td scope="col">{{ criterion.criterionDesc }}</td>
+                  <td scope="col">{{ criterion.maxScore }}</td>
+               </tr>
+            </tbody>
+         </table>
       </div>
 
       <div>
@@ -146,7 +182,7 @@
          <button @click="generateWeekList" style="border-radius: 12px">
             Calculate Weeks
          </button>
-         <div v-if="weeksCalculated">
+         <div v-if="weeksCalculated" :style="'margin: 20px 0'">
             <h4>
                Check the boxes for weeks you want to exclude from a section
             </h4>
@@ -176,7 +212,7 @@
       <button
          type="submit"
          @click="this.sectionConfirmation = true"
-         style="margin-top: 40px; border-radius: 12px"
+         style="margin-top: 20px;border-radius: 12px"
       >
          Create Section
       </button>
@@ -188,14 +224,16 @@
             <p>Do you want to create {{ this.sectionName }}</p>
             <div class="button-group">
                <button
-                  :style="'border: 1px solid black;'"
+                  class="confirmation-button"
                   @click="submitSection()"
+                  style="width: 125px;"
                >
                   Yes
                </button>
                <button
-                  :style="'border: 1px solid black;'"
+                  class="confirmation-button"
                   @click="this.sectionConfirmation = false"
+                  style="width: 125px;"
                >
                   No
                </button>
@@ -259,6 +297,7 @@ export default {
          sectionConfirmation: false,
          startDate: '',
          endDate: '',
+         activeSectionRubric : null
       }
    },
    methods: {
@@ -325,6 +364,10 @@ export default {
       },
 
       addRubric() {
+         if(this.criteriaDesc == "" || this.criteriaName == ""){
+            alert("Check criteron description/name for errors")
+            return;
+         }
          this.criteria.push({
             criterionName: this.criteriaName,
             criterionDesc: this.criteriaDesc,
@@ -355,13 +398,35 @@ export default {
                console.log(err)
             })
       },
+
+      getActiveSectionsRubric(){
+         var activeSectionId = storeSection.activeSection.id
+         apiClient.get(
+               `${this.$baseURL}/api/v1/section/getRubric/${activeSectionId}`,
+               {}
+            )
+            .then((response) => {
+               
+
+               this.activeSectionRubric =  response.data.data.criteria;
+               this.criteria = response.data.data.criteria;
+            })
+            .catch(error =>{
+               console.log(error)
+               this.activeSectionRubric = "NO ACTIVE SECTION"
+            })
+      },
+
       submitSection() {
          this.isLoading = true
-         let rubric = {
-            criteria: this.criteria,
-         }
+         let rubric = null;
          if (this.isRubricDefault) {
-            rubric = null
+            rubric = {criteria : this.activeSectionRubric};
+         }
+         else{
+            rubric = {
+               criteria: this.criteria,
+            }
          }
 
          const dto = {
@@ -429,11 +494,25 @@ export default {
                console.log(error)
             })
       },
+      setCritera(){
+         if(!this.isRubricDefault){
+            this.criteria = this.activeSectionRubric
+         }
+         else{
+            this.criteria = []
+         }
+      }
+      
    },
-   computed: {},
+   computed: {
+      
+   },
    watch: {
       'storeSection.selectedSectionId': function (newVal, oldVal) {},
    },
+   created(){
+      this.getActiveSectionsRubric();
+   }
 }
 </script>
 <style>
@@ -443,6 +522,26 @@ export default {
    font-family: 'Poppins', sans-serif;
 }
 
+.button-group{
+   display: flex;
+   justify-content: space-evenly;
+   width: 100%;
+}
+
+
+
+.criteria-button{
+   width: 35%;
+}
+
+.current-rubric{
+   margin-bottom: 5%;
+
+}
+
+.create-section{
+   width: 60vw;
+}
 
 .date-container{
    display: flex;
@@ -496,7 +595,7 @@ export default {
    background: #743ae1;
    color: white;
    border: none;
-   padding: 10px;
+   /* padding: 10px; */
    cursor: pointer;
    text-transform: uppercase;
    font-weight: bold;
@@ -524,6 +623,17 @@ export default {
    /* Ensure it's above other content */
 }
 
+.conformation-popup{
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+    color: black;
+    background-color: white; /* Adjusted to TCU purple */
+    padding: 50px; /* Adjust padding for better spacing */
+    border-radius: 8px; /* Add rounded corners */
+    align-items: center; /* Center the items horizontally */
+}
+
 /* Style for the success message box */
 .success {
    padding: 20px;
@@ -537,6 +647,7 @@ export default {
    z-index: 1001;
    /* Above the overlay */
 }
+
 
 .input-field input::placeholder {
    color: #aaa;
@@ -553,9 +664,9 @@ button {
    font-weight: bold;
    transition: background-color 0.3s;
    width: 100%;
-   margin-top: 20px;
    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
 }
+
 
 button:hover {
    background: #11101d;

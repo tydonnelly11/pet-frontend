@@ -111,7 +111,7 @@ export default {
                   if (name in student.privateComments) {
                      tempReports.push({
                         name: `${student.firstName} ${student.lastName}`,
-                        score: `${student.averageScore}/${this.totalScore}`,
+                        score: `${Math.floor(student.averageScore)}/${this.totalScore}`,
                         privateComments: student.privateComments,
                         publicComments: student.publicComments,
                      })

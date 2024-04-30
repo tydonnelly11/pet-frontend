@@ -1,9 +1,9 @@
 <template>
     <div class="section-info">
     <h1>Information For {{ storeSection.selectedSectionName }}</h1>
-    <div class="active-box">
-        <h3 v-if="isActiveSection">Active Section</h3>
-        <h3 v-else>Inactive Section</h3>
+    <div class="active-box" :class="{'inactive-box' : !isActiveSection == true}">
+        <h3 v-if="isActiveSection" class="active-text" >Active Section</h3>
+        <h3 v-else class="active-text">Inactive Section</h3>
     </div>
     </div>
     <div class="section-btn">
@@ -106,7 +106,7 @@
   <!-- Teams Section -->
   <div class="teams" :class="{'teams-with-students' : students.length != 0}">
     <div class="teams-container" :class="{'teams-container-students' : students.length != 0}">
-      <div class="team-card" v-for="team in teams" :key="team.id">
+      <div class="team-card" v-for="team in teams" :key="team.id" :style="{ height: team.students.length * 110 + 'px' }">
         <div class="team-name-checkbox">   
             <div>
                 <button class="view-team-btn" @click="openTeam(team.name, team.id, team.students)">
@@ -134,7 +134,7 @@
           <button class="view-team-btn" 
           v-if="student.teamId" 
           @click="openWARAndEval(student, team)">{{ student.firstName }} {{ student.lastName }}</button>
-          <p class='view-team-btn' v-else>{{ student.firstName }} {{ student.lastName }}</p>
+          <p class='view-team-btn' v-else :style="'margin-bottom : 0px;'">{{ student.firstName }} {{ student.lastName }}</p>
           <button class="remove-btn"
           :style="'width: 50px;'"
           @click="removeStudentOnTeam(student, team)">X</button>
@@ -171,7 +171,7 @@
                     :value="student.id" 
                     @change="toggleStudent(student)">
                     <label class="student-name">
-                        <h4>{{ student.firstName }} {{ student.lastName }}</h4>
+                        <h4 class="student-name">{{ student.firstName }} {{ student.lastName }}</h4>
                     </label>
                     <button class="remove-btn" 
                     @click="this.studentIDToDelete = student.id; 
@@ -229,6 +229,7 @@
 
       <div style="margin-top: 20px;">
         <h3>Assistant Instructors</h3>
+        <div class="instructors-list"> 
         <div v-for="instructor in activeInstructors">
             <label style="margin-bottom: 20px; margin-top: 20px;">
                 <h4>
@@ -237,17 +238,18 @@
             </label>
             <div v-for="team in teams">
                 <button class="small-button" 
-                style="max-width: 400px;" 
+                style="max-width: 350px;" 
                 v-if="(team.assistantInstructorDTO == null || instructor.id != team.assistantInstructorDTO.id) && team.name != null" 
-                @click="showConfirmationPopup(team, instructor)">Assign instructor to {{ team.name }}</button>
+                @click="showConfirmationPopup(team, instructor)">Add to {{ team.name }}</button>
                 
             </div>
             
             <!-- <button v-if="instructor.id != team.assistantInstructorDTO.id" @click="addInstructorToTeam(team, instructor)">{{ team.name }}</button> -->
             <button class="small-button" 
-            style="max-width: 400px; margin-right: 10px;" 
-            @click="addInstructorToSection(instructor)">Assign to {{this.selectedSectionInfo.name}}</button>
+            style="max-width: 350px; margin-right: 10px;" 
+            @click="addInstructorToSection(instructor)">Add to {{this.selectedSectionInfo.name}}</button>
         </div>
+    </div>
     </div>
     <div v-if="teamConformation" class="popup-overlay">
         <div class="conformation-popup">
@@ -745,12 +747,27 @@ export default {
 <style scoped>
 .active-box{
     position: relative;
-    left: 5%;
-    background-color: #4E2A84;
+    left: 2.5%;
+    background-color: #28a745;
     color : white;
     border-radius: 10px;
-    padding: 5px;
+    padding: 10px;
 }
+
+.inactive-box{
+    position: relative;
+    left: 2.5%;
+    background-color: #FF4136;
+    color : white;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.active-text{
+    font-size: 1.5em;
+    margin: 0;
+}
+
 
 
 .small-button:not(:first-child) {
@@ -790,7 +807,7 @@ export default {
     flex-direction: column;
     z-index: 1000;
     color: white;
-    background-color: #4E2A84; /* Adjusted to TCU purple */
+    background-color: white; /* Adjusted to TCU purple */
     padding: 30px; /* Adjust padding for better spacing */
     border-radius: 8px; /* Add rounded corners */
     align-items: center; /* Center the items horizontally */
@@ -875,9 +892,10 @@ export default {
 .teams-container {
   display: grid;
   flex-direction: column;
-  align-items: center;
+  align-items: start;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Create a responsive grid */
   gap: 10px;
+
 }
 
 .teams-container-students {
@@ -893,12 +911,19 @@ export default {
 .team-card {
   background-color: #4E2A84; /* TCU purple */
   color: white;
+  min-height: 350px;
   padding: 15px;
   border-radius: 8px;
+  max-height: 550px;
   margin-bottom: 10px;
   width: 100%; /* Adjust the width as per your layout */
   height: 350px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+.instructors-list{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 
 /* Style for individual buttons */
@@ -918,14 +943,12 @@ export default {
 .remove-btn {
   background-color: #FF4136; /* Bright red for remove buttons */
   color: white;
-  padding: 10px 20px;
+  padding: 8px;
   border: none;
   border-radius: 20px;
   margin-top: 5px;
   cursor: pointer;
   max-width: 200px;
-  margin-left: 5px;
-  margin-right: 8px;
 }
 
 /* Hover effects for buttons */
@@ -981,7 +1004,10 @@ export default {
 }
 
 .student-name {
-  margin-right: 5px; /* Space between name and checkbox */
+  margin-right: 5px; 
+  font-size: 1.3rem;
+  margin-bottom: 0px;
+  align-self: center;
 }
 
 .student-checkbox {
@@ -1019,7 +1045,7 @@ width: 50px; /* New width */
 .student-name-checkbox > input{
     flex-basis: 10%;
     position: relative;
-    top: 5px;
+    top: 15px;
   
 }
 .student-name-checkbox > label{
@@ -1029,12 +1055,12 @@ width: 50px; /* New width */
 .student-name-checkbox > button{
     flex-basis: 20%;
     position: relative;
-    bottom: 10px;
+    bottom: 2.5px;
   
 }
 
 .team-name-checkbox > *:not(:last-child) {
-  margin-right: 10px; /* Add right margin to all child elements except the last one */
+  margin-right: 0px; /* Add right margin to all child elements except the last one */
 }
 .section-btn {
     display: flex;
@@ -1063,5 +1089,6 @@ width: 50px; /* New width */
     z-index: 1000;
     flex-direction: column;
     overflow: auto;
+    
 }
 </style>

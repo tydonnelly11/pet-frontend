@@ -23,12 +23,16 @@
     </div>
 
     <div v-if="this.hasPeerEntry" v-for="student in studentListPeer">
-        <h4>Peer Evaluation for {{ student.weekStart }} - {{ student.weekEnd }}</h4>
+        <h4>Peer Evaluation for {{ student[0].weekStart + " - " + student[0].weekEnd}} </h4>
         <div >
-            <div v-if="student.averageScore == 'N/A'">
+            <div v-if="student[0].averageScore == 'N/A'">
                 <p>No Peer Eval submited</p>
             </div>
+
             <div class="table" v-else>
+                <PeerEvalTable :isPastWeek="true" :peerEvalProp="student" :rubricProp="this.rubric"/>
+            </div>
+            <!-- <div class="table" v-else>
                 <p>Student: {{ student.firstName }} {{ student.lastName}}</p>
                 <p>Grade: {{ student.averageScore }} / {{ this.totalScore }}</p>
                 <div class="comments-box">
@@ -41,7 +45,7 @@
                 </div>
             
 
-            </div>
+            </div> -->
             
             
         </div>
@@ -82,6 +86,7 @@ import WarTeamTable from '@/components/WarTeamTable.vue'
 import { storeWeek } from '@/stores/storeWeek.js'
 import { storeSection } from '@/stores/storeSection'
 import CommentTable from './CommentTable.vue'
+import PeerEvalTable from '@/components/student/PeerEvalTable.vue'
 
 
 export default{
@@ -104,13 +109,15 @@ export default{
             hasDeletedStudent: false,
             hasPeerEntry: false,
             hasSelectedDeleteStudent: false,
+            rubric : [],
         }
             
     },
     components: {
         WarList,
         WarTeamTable,
-        CommentTable
+        CommentTable,
+        PeerEvalTable
     },
     props: {
         teamid: String,
@@ -152,7 +159,7 @@ export default{
             this.getWeeks()
             this.studentList = []
             const auth = localStorage.getItem('auth')
-
+            this.isLoading = true;
             for (const week of this.weeksSelected) {
             try {
                 const response = await apiClient.get(`${this.$baseURL}/api/v1/war/get`, {
@@ -199,6 +206,7 @@ export default{
             }
         }
         this.hasEntry = true;
+        this.isLoading = false;
         },
         async getPeerEvaluationReport(){
             this.hasPeerEntry = false;
@@ -207,19 +215,33 @@ export default{
             this.studentListPeer = []
             for (const week of this.weeksSelected) {
                 try {
-                    const response = await apiClient.get(`${this.$baseURL}/api/v1/peerEvaluation/getEvaluationReportWithPrivateComments`, {
-                        params: {
-                            week: week.id,
-                            studentId: this.student.studentId,
-                        },
+                    const response = await apiClient.get(`${this.$baseURL}/api/v1/peerEvaluation/getDetailedScore/${this.student.studentId}/${week.id}`, {
+                        // params: {
+                        //     week: week.id,
+                        //     studentId: this.student.studentId,
+                        // },
                     });
-                    if(response.data.data[0] != null){
-                        response.data.data[0].weekStart = week.start
-                        response.data.data[0].weekEnd = week.end
-                        this.studentListPeer.push(response.data.data[0]);
+
+                   
+
+                    if(response.data.code == 200){
+                        const evaluations = [];
+                        console.log(response.data.data)
+                        for(const evaluation of response.data.data){
+                            evaluation.weekStart = week.start
+                            evaluation.weekEnd = week.end
+                            evaluations.push(evaluation);
+                        }
+                        this.studentListPeer.push(evaluations);
+                        console.log(this.studentListPeer)
                     }
-                    else{
-                        this.studentListPeer.push({
+                    
+                   
+                    
+                } catch (error) {
+                    console.error(error);
+                    const evaluations = [];
+                    evaluations.push({
                             weekStart: week.start,
                             weekEnd: week.end,
                             firstName: this.$route.params.studentName,
@@ -227,16 +249,14 @@ export default{
                             averageScore: "N/A",
                             privateComments: [],
                             publicComments: []
-                        })
-                    }
+                        });
                     
-                } catch (error) {
-                    console.error(error);
+                    evaluations.push({weekStart : week.start, weekEnd : week.end})
+                    this.studentListPeer.push(evaluations)
                 }
             }
             this.hasPeerEntry = true;
             this.isLoading = false
-
         },
 
         removeStudent(){
@@ -263,6 +283,7 @@ export default{
             let total = 0
             for(const criteria of response.data.data.criteria){
                 total = total + criteria.maxScore
+                this.rubric.push(criteria);
             }
             this.totalScore = total
          })
@@ -273,6 +294,7 @@ export default{
             }
             this.totalScore = total
         },
+            
 
     },
     mounted(){

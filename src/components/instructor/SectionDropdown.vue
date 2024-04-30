@@ -1,7 +1,7 @@
 <template>
    <div class="dropdown-center">
       <a
-         class="btn btn-primary dropdown-toggle"
+         class="btn btn-custom-color dropdown-toggle"
          href="#"
          role="button"
          data-bs-toggle="dropdown"
@@ -52,4 +52,16 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+
+.btn-custom-color {
+    background-color: #743ae1; /* Custom background color */
+    color: white; /* Text color */
+}
+
+.btn-custom-color:hover, .btn-custom-color:focus {
+    background-color: #743ae1;
+    color: white; /* Darker shade for hover/focus */
+}
+
+</style>
