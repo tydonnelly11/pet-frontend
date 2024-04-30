@@ -1,5 +1,8 @@
 <template>
-   <div class="week-dropdown-container" style="width: 100%">
+   <div class="week-dropdown-container">
+      <button class="prev-week-btn" @click="setPrevWeek()">
+            Previous Week
+         </button>
       <div class="dropdown-center">
          <a
             class="btn btn-custom-color dropdown-toggle"
@@ -31,12 +34,13 @@
             </li>
          </ul>
       </div>
-      <div class="button-container">
+      <button class="next-week-btn" @click="setNextWeek()">Next Week</button>
+      <!-- <div class="button-container">
          <button class="prev-week-btn" @click="setPrevWeek()">
             Previous Week
          </button>
          <button class="next-week-btn" @click="setNextWeek()">Next Week</button>
-      </div>
+      </div> -->
    </div>
 </template>
 
@@ -120,12 +124,14 @@ export default {
 .week-dropdown-container {
    margin-top: 10px;
    display: flex;
-   flex-direction: column;
+   flex-direction: row;
    align-items: center;
+   justify-content: center;
 }
 
 .dropdown-center {
    margin-bottom: 10px;
+   margin: 10px 10px;
 }
 
 .button-container {
@@ -135,12 +141,13 @@ export default {
 
 .prev-week-btn {
    width: 200px;
+   height: 50px;
    border-radius: 12px;
-   margin-right: 10px;
 }
 
 .next-week-btn {
    width: 200px;
+   height: 50px;
    border-radius: 12px;
 }
 

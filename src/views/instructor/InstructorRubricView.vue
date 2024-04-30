@@ -1,5 +1,6 @@
 <template>
-   <SectionDropdown />
+   <SectionDropdown :style="'position : relative; top : 50px;'"/>
+   <div class="rubric-container">
    <div v-if="isLoading" class="popup-overlay">
       <img src="/img/loading-gif.gif" />
    </div>
@@ -19,6 +20,7 @@
          </tr>
       </tbody>
    </table>
+   </div>
 </template>
 
 <script>
@@ -73,4 +75,19 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.rubric-container{
+   position: relative;
+   top: 15%;
+}
+
+td{
+   font-size: 1.25rem;
+   padding: 10px;
+}
+th{
+   font-size: 1.5rem;
+   padding: 25px;
+
+}
+</style>

@@ -89,7 +89,6 @@ export default {
    methods: {
       async getPeerEvalEntriesForWeek() {
          this.isLoading = true
-         const auth = localStorage.getItem('auth')
          apiClient
             .get(
                `${this.$baseURL}/api/v1/peerEvaluation/getPeerEvaluation/${storeUser.userID}/${storeWeek.selectedWeekId}`
