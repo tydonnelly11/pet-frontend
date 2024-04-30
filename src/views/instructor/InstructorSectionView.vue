@@ -126,7 +126,7 @@
          </div>
       </div>
       
-      <div class="current-rubric" v-if="this.criteria.length > 0">
+      <div class="current-rubric" v-if="this.criteria.length > 0 && (makeOwnRubric || isRubricDefault)">
          <table>
             <thead>
                <tr>
@@ -566,6 +566,7 @@ export default {
 .input-field {
    position: relative;
    margin-bottom: 30px;
+   padding: 0;
 }
 
 .input-field label {
