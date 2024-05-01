@@ -30,7 +30,7 @@
             </div>
 
             <div class="table" v-else>
-                <PeerEvalTable :isEvaltorView="true" :isPastWeek="true" :peerEvalProp="student" :rubricProp="this.rubric"/>
+                <PeerEvalTable :isEvalatorView="true" :isPastWeek="true" :peerEvalProp="student" :rubricProp="this.rubric"/>
             </div>
             <!-- <div class="table" v-else>
                 <p>Student: {{ student.firstName }} {{ student.lastName}}</p>
