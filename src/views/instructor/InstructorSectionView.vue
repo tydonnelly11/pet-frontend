@@ -126,7 +126,7 @@
          </div>
       </div>
       
-      <div class="current-rubric" v-if="this.criteria.length > 0 && (makeOwnRubric || isRubricDefault)">
+      <div class="current-rubric" v-if="this.criteria.length > 0 && (hasCreatedRubric || isRubricDefault)">
          <table>
             <thead>
                <tr>
@@ -297,7 +297,8 @@ export default {
          sectionConfirmation: false,
          startDate: '',
          endDate: '',
-         activeSectionRubric : null
+         activeSectionRubric : null,
+         hasCreatedRubric : false,
       }
    },
    methods: {
@@ -536,7 +537,13 @@ export default {
 
 .current-rubric{
    margin-bottom: 5%;
-
+   min-width: 300px;
+   display: flex;
+   justify-content: center;
+}
+.current-rubric > table{
+   min-width: 600px;
+   
 }
 
 .create-section{
