@@ -83,7 +83,7 @@ export default {
 
          for (const item of this.selectedTeam.students) {
             let student = {
-               name: item.firstName + item.lastName,
+               name: item.firstName + " " + item.lastName,
                tasks: [],
                id: item.id,
                weekStart: storeWeek.selectedWeek.start,

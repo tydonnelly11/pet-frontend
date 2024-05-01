@@ -89,6 +89,8 @@ export default {
    display: flex;
    flex-direction: row;
    position: relative;
+   right: 2%;
+   justify-content: center;
 }
 .profile {
    position: absolute;
