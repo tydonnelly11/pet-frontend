@@ -22,8 +22,11 @@
          </thead>
          <tbody>
             <tr v-if="this.isPastWeek" v-for="student in this.peerEval">
-               <td scope="col">
-                  {{ student.evaluateeFirstName + student.evaluateeLastName }}
+               <td v-if="this.isEvalatorView" scope="col">
+                  {{ student.evaluatorFirstName + " " + student.evaluatorLastName }}
+               </td>
+               <td v-else scope="col">
+                  {{ student.evaluateeFirstName + " " + student.evaluateeLastName }}
                </td>
                <td scope="col" v-for="item in student.ratings">
                   <p type="number" min="0">{{ item.score }}</p>
@@ -100,6 +103,7 @@ export default {
       user: Object,
       isPastWeek: Boolean,
       rubricProp: Array,
+      isEvalatorView: Boolean,
    },
    components: {
       // { ElButton },
